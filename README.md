@@ -1,4 +1,4 @@
-# Flare Stack Blog
+﻿# Flare Stack Blog
 
 > **注意**：本项目专为 Cloudflare Workers 生态设计，深度集成 D1、R2、KV、Workflows 等服务，**仅支持部署在 Cloudflare Workers**。
 
@@ -11,6 +11,8 @@
 ![首页](docs/assets/home.png)
 
 ![管理后台](docs/assets/admin.png)
+
+2026.2.26
 
 ## 核心功能
 
