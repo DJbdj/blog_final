@@ -1,4 +1,4 @@
-node_modules
+﻿node_modules
 .DS_Store
 dist
 dist-ssr
@@ -15,5 +15,5 @@ todos.json
 drizzle
 test.http
 .secrets
-wrangler.jsonc
+1wrangler.jsonc
 /.vs
