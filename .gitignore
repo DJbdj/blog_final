@@ -16,3 +16,4 @@ drizzle
 test.http
 .secrets
 wrangler.jsonc
+/.vs
