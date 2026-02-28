@@ -2,11 +2,7 @@ import { useState } from "react";
 import { Footer } from "./footer";
 import { MobileMenu } from "./mobile-menu";
 import { Navbar } from "./navbar";
-<<<<<<< HEAD
-import type { PublicLayoutProps, UserInfo } from "@/features/theme/contract/layouts";
-=======
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
->>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 
 export function PublicLayout({
   children,
