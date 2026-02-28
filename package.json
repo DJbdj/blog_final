@@ -29,6 +29,7 @@
     "release": "export GITHUB_TOKEN=$(gh auth token) && release-it"
   },
   "dependencies": {
+    "@better-auth/utils": "^0.3.1",
     "@hono/zod-validator": "^0.7.6",
     "@hookform/resolvers": "^5.2.2",
     "@noble/hashes": "^2.0.1",
