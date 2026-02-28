@@ -176,10 +176,6 @@ export function PostPage({ post }: { post: Post }) {
   );
 }
 
-<<<<<<< HEAD
-=======
-// Placeholder component for related posts
->>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 function RelatedPosts({ slug }: { slug: string }) {
   return (
     <div>
