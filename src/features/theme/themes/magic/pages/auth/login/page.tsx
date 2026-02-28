@@ -1,6 +1,10 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
+<<<<<<< HEAD
 import type { LoginPageProps } from "@/features/theme/contract/pages";
+=======
+import { LoginPageProps } from "@/features/theme/contract/pages";
+>>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 
 export function LoginPage({ form, turnstileElement, isEmailConfigured }: LoginPageProps) {
   const navigate = useNavigate();

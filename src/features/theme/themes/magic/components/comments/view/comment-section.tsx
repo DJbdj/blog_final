@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, Send } from "lucide-react";
+<<<<<<< HEAD
 interface Comment {
   id: string;
   postId: string;
@@ -13,6 +14,11 @@ interface Comment {
 }
 
 export interface CommentSectionProps {
+=======
+import { Comment as CommentType } from "@/features/comments/comments.schema";
+
+interface CommentSectionProps {
+>>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
   postId: string;
 }
 

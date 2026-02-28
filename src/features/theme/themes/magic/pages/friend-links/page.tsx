@@ -1,5 +1,9 @@
 import { ArrowUpRight } from "lucide-react";
+<<<<<<< HEAD
 import { FriendLinksPage, FriendLinksPageSkeleton } from "@/features/theme/themes/magic/pages/friend-links/page";
+=======
+import { FriendLinksPage, FriendLinksPageSkeleton } from "@/features/theme/themes/magic/pages/friend-links";
+>>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 import { FriendLinkCard } from "./friend-link-card";
 import type { FriendLinksPageProps } from "@/features/theme/contract/pages";
 

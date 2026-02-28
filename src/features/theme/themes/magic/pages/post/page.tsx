@@ -8,6 +8,7 @@ import { CommentSection } from "@/features/theme/themes/magic/components/comment
 import { config } from "../config";
 import { formatDate } from "@/lib/utils";
 
+<<<<<<< HEAD
 // Placeholder type for post
 interface Post {
   id: string;
@@ -23,6 +24,9 @@ interface Post {
 }
 
 export function PostPage({ post }: { post: Post }) {
+=======
+export function PostPage({ post }: { post: any }) {
+>>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
   const navigate = useNavigate();
   const { data: session } = authClient.useSession();
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -176,6 +180,10 @@ export function PostPage({ post }: { post: Post }) {
   );
 }
 
+<<<<<<< HEAD
+=======
+// Placeholder component for related posts
+>>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 function RelatedPosts({ slug }: { slug: string }) {
   return (
     <div>

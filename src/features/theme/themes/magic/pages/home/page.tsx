@@ -1,7 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
 import { useMemo } from "react";
+<<<<<<< HEAD
 import type { HomePageProps } from "@/features/theme/contract/pages";
+=======
+import { HomePageProps } from "@/features/theme/contract/pages";
+>>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 import { config } from "../config";
 import { formatDate } from "@/lib/utils";
 

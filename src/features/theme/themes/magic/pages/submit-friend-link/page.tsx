@@ -4,6 +4,7 @@ import { FriendLinkSubmitForm } from "./form";
 import type { SubmitFriendLinkPageProps } from "@/features/theme/contract/pages";
 import { formatDate } from "@/lib/utils";
 
+<<<<<<< HEAD
 interface FriendLink {
   id: string;
   siteName: string;
@@ -15,6 +16,8 @@ interface FriendLink {
   createdAt: string;
 }
 
+=======
+>>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 export function SubmitFriendLinkPage({
   myLinks,
   form,
