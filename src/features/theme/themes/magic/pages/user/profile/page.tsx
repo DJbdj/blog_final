@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Loader2, User, Mail, Link, Save } from "lucide-react";
-<<<<<<< HEAD
 import type { ProfilePageProps } from "@/features/theme/contract/pages";
-=======
-import { ProfilePageProps } from "@/features/theme/contract/pages";
->>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 
 export function ProfilePage({ form, user }: ProfilePageProps) {
   const [isEditing, setIsEditing] = useState(false);

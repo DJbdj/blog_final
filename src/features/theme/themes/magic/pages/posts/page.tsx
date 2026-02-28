@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Tag, Calendar, Eye } from "lucide-react";
-<<<<<<< HEAD
 import type { PostsPageProps } from "@/features/theme/contract/pages";
-=======
-import { PostsPageProps } from "@/features/theme/contract/pages";
->>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 import { config } from "../config";
 import { formatDate } from "@/lib/utils";
 
