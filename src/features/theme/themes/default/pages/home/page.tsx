@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Mail, Rss, Terminal } from "lucide-react";
+import { Github as GithubIcon, Mail, Rss, Terminal } from "lucide-react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { blogConfig } from "@/blog.config";
 import { PostItem } from "@/features/theme/themes/default/components/post-item";
@@ -33,7 +33,7 @@ export function HomePage({ posts }: HomePageProps) {
             className="hover:text-foreground transition-colors"
             aria-label="GitHub"
           >
-            <Github size={20} strokeWidth={1.5} />
+            <GithubIcon size={20} strokeWidth={1.5} />
           </a>
           <a
             href="/rss.xml"

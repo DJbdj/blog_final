@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
+import { Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
+import { Github as GithubIcon } from "lucide-react";
 import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { config } from "../config";
@@ -32,7 +33,7 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
         )}
 
         <h3 className="text-xl font-semibold line-clamp-2 group-hover:text-primary transition-colors">
-          <Link to={`/post/${post.slug}`} className="hover:underline">
+          <Link to="/post/$slug" params={{ slug: post.slug }} className="hover:underline">
             {post.title}
           </Link>
         </h3>
@@ -77,7 +78,8 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
         {/* Read More Button */}
         <div className="pt-2">
           <Link
-            to={`/post/${post.slug}`}
+            to="/post/$slug"
+            params={{ slug: post.slug }}
             className="inline-flex items-center gap-1 text-primary hover:underline"
           >
             阅读
@@ -165,13 +167,13 @@ export function HomePage({ posts }: HomePageProps) {
       <section className="text-center py-8 border-t border-border mt-16">
         <div className="flex items-center justify-center gap-6">
           <a
-            href={config.social?.github}
+            href={blogConfig.social.github}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
             aria-label="GitHub"
           >
-            <Github size={20} />
+            <GithubIcon size={20} />
           </a>
           <a
             href="/rss.xml"
@@ -183,7 +185,7 @@ export function HomePage({ posts }: HomePageProps) {
             <Rss size={20} />
           </a>
           <a
-            href={`mailto:${config.social?.email}`}
+            href={`mailto:${blogConfig.social.email}`}
             className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
             aria-label="Email"
           >
