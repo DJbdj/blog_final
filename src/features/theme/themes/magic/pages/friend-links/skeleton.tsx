@@ -24,8 +24,4 @@ export function FriendLinksPageSkeleton() {
       </div>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
