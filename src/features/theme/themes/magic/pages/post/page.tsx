@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { authClient } from "@/lib/auth/auth.client";
 import { ContentRenderer } from "@/features/theme/themes/magic/components/content/content-renderer";
 import { CommentSection } from "@/features/theme/themes/magic/components/comments/view/comment-section";
-import { config } from "../config";
+import { config } from "@/features/theme/themes/magic/config";
 import { formatDate } from "@/lib/utils";
 
 // Placeholder type for post

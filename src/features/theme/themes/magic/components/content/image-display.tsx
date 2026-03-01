@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ZoomIn, Download, X } from "lucide-react";
 import { createPortal } from "react-dom";
 

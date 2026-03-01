@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Tag, Calendar, Eye } from "lucide-react";
 import type { PostsPageProps } from "@/features/theme/contract/pages";
-import { config } from "../config";
+import { config } from "@/features/theme/themes/magic/config";
 import { formatDate } from "@/lib/utils";
 
 export function PostsPage({
