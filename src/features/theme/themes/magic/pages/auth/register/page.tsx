@@ -1,11 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
-<<<<<<< HEAD
 import type { RegisterPageProps } from "@/features/theme/contract/pages";
-=======
-import { RegisterPageProps } from "@/features/theme/contract/pages";
->>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 
 export function RegisterPage({ form, turnstileElement, isEmailConfigured }: RegisterPageProps) {
   const [showPassword, setShowPassword] = useState(false);
