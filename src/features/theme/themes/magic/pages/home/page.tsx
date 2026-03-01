@@ -3,6 +3,7 @@ import { Github, Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react"
 import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { config } from "../config";
+import { blogConfig } from "@/blog.config";
 import { formatDate } from "@/lib/utils";
 
 function PostCard({ post, featured = false }: { post: any; featured?: boolean }) {
@@ -164,7 +165,7 @@ export function HomePage({ posts }: HomePageProps) {
       <section className="text-center py-8 border-t border-border mt-16">
         <div className="flex items-center justify-center gap-6">
           <a
-            href={blogConfig.social.github}
+            href={config.social?.github}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
@@ -182,7 +183,7 @@ export function HomePage({ posts }: HomePageProps) {
             <Rss size={20} />
           </a>
           <a
-            href={`mailto:${blogConfig.social.email}`}
+            href={`mailto:${config.social?.email}`}
             className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
             aria-label="Email"
           >
