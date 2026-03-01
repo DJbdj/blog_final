@@ -3,7 +3,7 @@ import { Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
 import { Github as GithubIcon } from "lucide-react";
 import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
-import { config } from "../config";
+import { config } from "@/features/theme/themes/magic/config";
 import { blogConfig } from "@/blog.config";
 import { formatDate } from "@/lib/utils";
 
