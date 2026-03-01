@@ -1,11 +1,7 @@
 import { Link, useSearchParams } from "@tanstack/react-router";
 import { Loader2, Lock } from "lucide-react";
 import { useState } from "react";
-<<<<<<< HEAD
-import type { ResetPasswordPageProps } from "@/features/theme/contract/pages";
-=======
 import { ResetPasswordPageProps } from "@/features/theme/contract/pages";
->>>>>>> 93bfe12d60f5976d9dd4a72b0639dad9d7ff5861
 
 export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -158,4 +154,5 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
       </div>
     </div>
   );
+
 }
