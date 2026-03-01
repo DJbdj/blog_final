@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Loader2, Mail } from "lucide-react";
 import type { ForgotPasswordPageProps } from "@/features/theme/contract/pages";
-
 export function ForgotPasswordPage({ form, isEmailConfigured }: ForgotPasswordPageProps) {
   const navigate = useNavigate();
 
