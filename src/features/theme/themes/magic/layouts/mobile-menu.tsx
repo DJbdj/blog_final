@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { XIcon, UserIcon } from "lucide-react";
-import { authClient } from "@/lib/auth/auth.client";
 import { UserInfo } from "@/features/theme/contract/layouts";
 
 interface MobileMenuProps {
@@ -85,7 +84,6 @@ export function MobileMenu({
                     )}
                     <div>
                       <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">{user.email}</p>
                     </div>
                   </div>
                   <button

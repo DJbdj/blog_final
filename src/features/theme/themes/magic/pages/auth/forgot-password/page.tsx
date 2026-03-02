@@ -1,25 +1,12 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Loader2, Mail } from "lucide-react";
 import type { ForgotPasswordPageProps } from "@/features/theme/contract/pages";
-export function ForgotPasswordPage({ form, isEmailConfigured }: ForgotPasswordPageProps) {
-  const navigate = useNavigate();
+export function ForgotPasswordPage({
+  forgotPasswordForm,
+  turnstileElement,
+}: ForgotPasswordPageProps) {
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await form.handleSubmit();
-  };
-
-  if (!isEmailConfigured) {
-    return (
-      <div className="max-w-md mx-auto px-4 py-12 text-center">
-        <p className="text-muted-foreground">
-          邮箱服务未配置，请联系管理员
-        </p>
-      </div>
-    );
-  }
-
-  if (form.isSuccess) {
+  if (forgotPasswordForm.isSent) {
     return (
       <div className="max-w-md mx-auto px-4 py-12 text-center">
         <Mail className="w-12 h-12 text-primary mx-auto mb-4" />
@@ -47,13 +34,13 @@ export function ForgotPasswordPage({ form, isEmailConfigured }: ForgotPasswordPa
           </p>
         </div>
 
-        {form.error && (
+        {forgotPasswordForm.error && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
-            {form.error}
+            {forgotPasswordForm.error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <forgotPasswordForm onSubmit={handleSubmit} className="space-y-6">
           {/* Email */}
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
@@ -62,22 +49,22 @@ export function ForgotPasswordPage({ form, isEmailConfigured }: ForgotPasswordPa
             <input
               id="email"
               type="email"
-              {...form.register("email")}
+              {...forgotPasswordForm.register("email")}
               className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
               placeholder="your@email.com"
             />
-            {form.errors.email && (
-              <p className="text-sm text-red-500">{form.errors.email.message}</p>
+            {forgotPasswordForm.errors.email && (
+              <p className="text-sm text-red-500">{forgotPasswordForm.errors.email.message}</p>
             )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={form.isSubmitting}
+            disabled={forgotPasswordForm.isSubmitting}
             className="w-full magic-button flex items-center justify-center gap-2"
           >
-            {form.isSubmitting ? (
+            {forgotPasswordForm.isSubmitting ? (
               <>
                 <Loader2 className="animate-spin" size={16} />
                 发送中...
@@ -86,7 +73,7 @@ export function ForgotPasswordPage({ form, isEmailConfigured }: ForgotPasswordPa
               "发送重置链接"
             )}
           </button>
-        </form>
+        </forgotPasswordForm>
 
         <div className="text-center">
           <Link

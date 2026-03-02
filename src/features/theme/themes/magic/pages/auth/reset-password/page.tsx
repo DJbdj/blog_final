@@ -1,13 +1,15 @@
-import { Link, useSearchParams } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Loader2, Lock } from "lucide-react";
 import { useState } from "react";
 import { ResetPasswordPageProps } from "@/features/theme/contract/pages";
 
-export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
+export function ResetPasswordPage({
+  resetPasswordForm,
+  token,
+  error,
+}: ResetPasswordPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
 
   if (!token) {
     return (
@@ -27,10 +29,10 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await form.handleSubmit();
+    await resetPasswordForm.handleSubmit();
   };
 
-  if (form.isSuccess) {
+  if (resetPasswordForm.isSuccess) {
     return (
       <div className="max-w-md mx-auto px-4 py-12 text-center">
         <Lock className="w-12 h-12 text-primary mx-auto mb-4" />
@@ -58,13 +60,13 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
           </p>
         </div>
 
-        {form.error && (
+        {resetPasswordForm.error && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
-            {form.error}
+            {resetPasswordForm.error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <resetPasswordForm onSubmit={handleSubmit} className="space-y-6">
           {/* Password */}
           <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
@@ -74,7 +76,7 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                {...form.register("password")}
+                {...resetPasswordForm.register("password")}
                 className="w-full px-4 py-2 pr-10 border border-border rounded-lg focus:outline-none focus:border-primary"
                 placeholder="••••••••"
               />
@@ -95,8 +97,8 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
                 )}
               </button>
             </div>
-            {form.errors.password && (
-              <p className="text-sm text-red-500">{form.errors.password.message}</p>
+            {resetPasswordForm.errors.password && (
+              <p className="text-sm text-red-500">{resetPasswordForm.errors.password.message}</p>
             )}
           </div>
 
@@ -109,7 +111,7 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
               <input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                {...form.register("confirmPassword")}
+                {...resetPasswordForm.register("confirmPassword")}
                 className="w-full px-4 py-2 pr-10 border border-border rounded-lg focus:outline-none focus:border-primary"
                 placeholder="••••••••"
               />
@@ -130,18 +132,18 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
                 )}
               </button>
             </div>
-            {form.errors.confirmPassword && (
-              <p className="text-sm text-red-500">{form.errors.confirmPassword.message}</p>
+            {resetPasswordForm.errors.confirmPassword && (
+              <p className="text-sm text-red-500">{resetPasswordForm.errors.confirmPassword.message}</p>
             )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={form.isSubmitting}
+            disabled={resetPasswordForm.isSubmitting}
             className="w-full magic-button flex items-center justify-center gap-2"
           >
-            {form.isSubmitting ? (
+            {resetPasswordForm.isSubmitting ? (
               <>
                 <Loader2 className="animate-spin" size={16} />
                 重置中...
@@ -150,7 +152,7 @@ export function ResetPasswordPage({ form }: ResetPasswordPageProps) {
               "重置密码"
             )}
           </button>
-        </form>
+        </resetPasswordForm>
       </div>
     </div>
   );

@@ -2,9 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Search, UserIcon } from "lucide-react";
 import { useState } from "react";
 import type { NavOption, UserInfo } from "@/features/theme/contract/layouts";
-import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
-import { blogConfig } from "@/blog.config";
 
 interface NavbarProps {
   navOptions: Array<NavOption>;
@@ -19,7 +17,6 @@ export function Navbar({
   navOptions,
   isLoading,
 }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   const isActive = (path: string) => {
@@ -29,11 +26,7 @@ export function Navbar({
   return (
     <>
       <header
-        className={`magic-navbar fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? "shadow-md"
-            : ""
-        }`}
+        className="magic-navbar fixed top-0 left-0 right-0 z-40 transition-all duration-300"
       >
         <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-0 flex items-center justify-between h-16">
           {/* Left: Brand */}

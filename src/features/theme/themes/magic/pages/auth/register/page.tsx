@@ -3,17 +3,17 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import type { RegisterPageProps } from "@/features/theme/contract/pages";
 
-export function RegisterPage({ form, turnstileElement, isEmailConfigured }: RegisterPageProps) {
+export function RegisterPage({ registerForm, turnstileElement, isEmailConfigured }: RegisterPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await form.handleSubmit();
+    await registerForm.handleSubmit();
   };
 
-  if (form.isSuccess) {
+  if (registerForm.isSuccess) {
     navigate({ to: "/login" });
   }
 
@@ -27,7 +27,7 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <registerForm onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
@@ -36,12 +36,12 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
             <input
               id="name"
               type="text"
-              {...form.register("name")}
+              {...registerForm.register("name")}
               className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
               placeholder="输入用户名"
             />
-            {form.errors.name && (
-              <p className="text-sm text-red-500">{form.errors.name.message}</p>
+            {registerForm.errors.name && (
+              <p className="text-sm text-red-500">{registerForm.errors.name.message}</p>
             )}
           </div>
 
@@ -53,12 +53,12 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
             <input
               id="email"
               type="email"
-              {...form.register("email")}
+              {...registerForm.register("email")}
               className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
               placeholder="your@email.com"
             />
-            {form.errors.email && (
-              <p className="text-sm text-red-500">{form.errors.email.message}</p>
+            {registerForm.errors.email && (
+              <p className="text-sm text-red-500">{registerForm.errors.email.message}</p>
             )}
           </div>
 
@@ -71,7 +71,7 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                {...form.register("password")}
+                {...registerForm.register("password")}
                 className="w-full px-4 py-2 pr-10 border border-border rounded-lg focus:outline-none focus:border-primary"
                 placeholder="••••••••"
               />
@@ -87,8 +87,8 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
                 )}
               </button>
             </div>
-            {form.errors.password && (
-              <p className="text-sm text-red-500">{form.errors.password.message}</p>
+            {registerForm.errors.password && (
+              <p className="text-sm text-red-500">{registerForm.errors.password.message}</p>
             )}
           </div>
 
@@ -101,7 +101,7 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
               <input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                {...form.register("confirmPassword")}
+                {...registerForm.register("confirmPassword")}
                 className="w-full px-4 py-2 pr-10 border border-border rounded-lg focus:outline-none focus:border-primary"
                 placeholder="••••••••"
               />
@@ -117,8 +117,8 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
                 )}
               </button>
             </div>
-            {form.errors.confirmPassword && (
-              <p className="text-sm text-red-500">{form.errors.confirmPassword.message}</p>
+            {registerForm.errors.confirmPassword && (
+              <p className="text-sm text-red-500">{registerForm.errors.confirmPassword.message}</p>
             )}
           </div>
 
@@ -128,10 +128,10 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={form.isSubmitting || turnstilePending}
+            disabled={registerForm.isSubmitting || turnstilePending}
             className="w-full magic-button flex items-center justify-center gap-2"
           >
-            {form.isSubmitting ? (
+            {registerForm.isSubmitting ? (
               <>
                 <Loader2 className="animate-spin" size={16} />
                 注册中...
@@ -140,7 +140,7 @@ export function RegisterPage({ form, turnstileElement, isEmailConfigured }: Regi
               "注册"
             )}
           </button>
-        </form>
+        </registerForm>
 
         {/* Links */}
         <div className="text-center">

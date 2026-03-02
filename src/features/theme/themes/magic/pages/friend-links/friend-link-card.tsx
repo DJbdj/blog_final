@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import Link from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 interface FriendLink {
   id: string;
   siteName: string;

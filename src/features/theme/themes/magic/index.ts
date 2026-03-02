@@ -1,5 +1,29 @@
 import "./styles/index.css";
 
+type ThemeComponents = {
+  config: any;
+  HomePage: any;
+  HomePageSkeleton: any;
+  PostsPage: any;
+  PostsPageSkeleton: any;
+  PostPage: any;
+  PostPageSkeleton: any;
+  PublicLayout: any;
+  AuthLayout: any;
+  UserLayout: any;
+  FriendLinksPage: any;
+  FriendLinksPageSkeleton: any;
+  SearchPage: any;
+  SubmitFriendLinkPage: any;
+  LoginPage: any;
+  RegisterPage: any;
+  ForgotPasswordPage: any;
+  ResetPasswordPage: any;
+  VerifyEmailPage: any;
+  ProfilePage: any;
+  Toaster: any;
+};
+
 // Layouts
 import { PublicLayout } from "./layouts/public-layout";
 import { AuthLayout } from "./layouts/auth-layout";
@@ -21,7 +45,7 @@ import { ProfilePage } from "./pages/user/profile";
 
 // Components
 import { config } from "./config";
-import { Toaster } from "@/components/ui/toaster";
+import Toaster from "@/components/ui/toaster";
 
 export default {
   config,

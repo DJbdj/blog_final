@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, Send } from "lucide-react";
-import type { CommentSelectSchema } from "@/features/comments/comments.schema";
 
 interface CommentSectionProps {
   postId: string;
@@ -14,7 +13,7 @@ interface CommentFormData {
 }
 
 export function CommentSection({ postId }: CommentSectionProps) {
-  const [comments, setComments] = useState<CommentSelectSchema[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState<CommentFormData>({
@@ -44,7 +43,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
     setIsSubmitting(true);
     try {
       // Placeholder for comment submission
-      const newComment: CommentSelectSchema = {
+      const newComment: any = {
         id: Date.now().toString(),
         postId,
         content: form.content,

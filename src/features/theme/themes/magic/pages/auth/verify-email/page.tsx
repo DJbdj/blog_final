@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Mail, CheckCircle, AlertCircle } from "lucide-react";
 
 export function VerifyEmailPage({
@@ -12,7 +12,6 @@ export function VerifyEmailPage({
   isSuccess: boolean;
   error?: string;
 }) {
-  const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
   if (!token) {

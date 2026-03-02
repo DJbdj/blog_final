@@ -17,15 +17,7 @@ export const PostCard = memo(({ post, featured = false }: PostCardProps) => {
       className={`magic-post-card magic-card group overflow-hidden ${featured ? "min-w-[280px] sm:min-w-[320px] max-w-[350px]" : ""}`}
     >
       {/* Cover Image */}
-      {post.coverImage && (
-        <div className={`magic-post-image ${featured ? "aspect-video" : "aspect-[16/9]"} overflow-hidden`}>
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      )}
+      {/* Cover image not available in PostItemSchema */}
 
       {/* Content */}
       <div className="p-4 sm:p-5 flex flex-col flex-1">
@@ -59,8 +51,8 @@ export const PostCard = memo(({ post, featured = false }: PostCardProps) => {
             <Calendar size={12} className="inline mr-1" />
             {formatDate(post.publishedAt)}
           </time>
-          {post.readingTime && (
-            <span>{post.readingTime} 分钟阅读</span>
+          {post.readTimeInMinutes && (
+            <span>{post.readTimeInMinutes} 分钟阅读</span>
           )}
         </div>
       </div>

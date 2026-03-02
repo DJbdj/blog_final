@@ -15,7 +15,6 @@ interface Post {
   title: string;
   summary?: string;
   contentJson: any;
-  coverImage?: string;
   publishedAt?: string;
   updatedAt?: string;
   readTimeInMinutes?: number;
@@ -52,7 +51,7 @@ export function PostPage({ post }: { post: Post }) {
     );
   }
 
-  const imageUrl = post.coverImage || `/images/default-post.jpg`;
+  const imageUrl = `/images/default-post.jpg`;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">

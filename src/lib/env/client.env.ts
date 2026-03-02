@@ -20,6 +20,25 @@ const clientEnvSchema = z.object({
   VITE_DEFAULT_DARK_OPACITY: z.coerce.number().optional(),
   VITE_DEFAULT_BACKDROP_BLUR: z.coerce.number().optional(),
   VITE_DEFAULT_TRANSITION_DURATION: z.coerce.number().optional(),
+  // Magic 主题配置
+  VITE_MAGIC_POSTS_PER_PAGE: z.coerce.number().optional(),
+  VITE_MAGIC_POSTS_HERO_COUNT: z.coerce.number().optional(),
+  VITE_MAGIC_SHOW_LAST_UPDATED: z.coerce.number().optional(),
+  VITE_MAGIC_PROSE_SIZE: z.string().optional(),
+  VITE_MAGIC_ENABLE_IMAGE_ZOOM: z.coerce.number().optional(),
+  VITE_MAGIC_ENABLE_MATH_FORMULA: z.coerce.number().optional(),
+  VITE_MAGIC_SHOW_WORD_COUNT: z.coerce.number().optional(),
+  VITE_MAGIC_SHOW_READ_TIME: z.coerce.number().optional(),
+  VITE_MAGIC_ENABLE_HOVER_EFFECTS: z.coerce.number().optional(),
+  VITE_MAGIC_PRIMARY_COLOR: z.string().optional(),
+  VITE_MAGIC_ACCENT_COLOR: z.string().optional(),
+  VITE_MAGIC_ENABLE_FEATURED_POSTS: z.coerce.number().optional(),
+  VITE_MAGIC_FEATURED_POSTS_TITLE: z.string().optional(),
+  VITE_MAGIC_POSTS_LIST_TITLE: z.string().optional(),
+  VITE_MAGIC_SHOW_TAG_COUNT: z.coerce.number().optional(),
+  VITE_MAGIC_SHOW_CATEGORY: z.coerce.number().optional(),
+  VITE_MAGIC_ENABLE_SKELETON_LOADER: z.coerce.number().optional(),
+  VITE_MAGIC_DEFER_IMAGE_LOADING: z.coerce.number().optional(),
 });
 
 export function clientEnv() {

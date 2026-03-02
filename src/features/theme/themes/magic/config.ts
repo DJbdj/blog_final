@@ -1,4 +1,6 @@
-import { env } from "@/lib/env/client.env";
+import { clientEnv } from "@/lib/env/client.env";
+
+const env = clientEnv();
 
 export const config = {
   // General
