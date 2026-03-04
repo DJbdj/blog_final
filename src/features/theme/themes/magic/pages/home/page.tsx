@@ -3,7 +3,7 @@ import { Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
 import { Github as GithubIcon } from "lucide-react";
 import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
-import { config } from "@/features/theme/themes/magic/config";
+import { extendedConfig as config } from "@/features/theme/themes/magic/config";
 import { blogConfig } from "@/blog.config";
 import { formatDate } from "@/lib/utils";
 
@@ -93,11 +93,11 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
 
 export function HomePage({ posts }: HomePageProps) {
   const featuredPosts = useMemo(() => {
-    return posts.slice(0, config.postsHeroCount);
+    return posts.slice(0, config.home.featuredPostsLimit);
   }, [posts]);
 
   const recentPosts = useMemo(() => {
-    return posts.slice(config.postsHeroCount);
+    return posts.slice(config.home.featuredPostsLimit);
   }, [posts]);
 
   return (

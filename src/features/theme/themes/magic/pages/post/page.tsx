@@ -15,6 +15,7 @@ interface Post {
   title: string;
   summary?: string;
   contentJson: any;
+  coverImage?: string;
   publishedAt?: string;
   updatedAt?: string;
   readTimeInMinutes?: number;

@@ -32,23 +32,8 @@ export function ResetPasswordPage({
     await resetPasswordForm.handleSubmit();
   };
 
-  if (resetPasswordForm.isSuccess) {
-    return (
-      <div className="max-w-md mx-auto px-4 py-12 text-center">
-        <Lock className="w-12 h-12 text-primary mx-auto mb-4" />
-        <h2 className="text-xl font-bold mb-2">密码已重置</h2>
-        <p className="text-muted-foreground mb-6">
-          你的密码已成功更新，请使用新密码登录
-        </p>
-        <Link
-          to="/login"
-          className="magic-button"
-        >
-          返回登录
-        </Link>
-      </div>
-    );
-  }
+  // Note: isSuccess is not available in ResetPasswordFormData
+  // The form submission will handle the redirect
 
   return (
     <div className="max-w-md mx-auto px-4 py-12">
@@ -60,13 +45,13 @@ export function ResetPasswordPage({
           </p>
         </div>
 
-        {resetPasswordForm.error && (
+        {error && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
-            {resetPasswordForm.error}
+            {error}
           </div>
         )}
 
-        <resetPasswordForm onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={resetPasswordForm.handleSubmit} className="space-y-6">
           {/* Password */}
           <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
@@ -152,7 +137,7 @@ export function ResetPasswordPage({
               "重置密码"
             )}
           </button>
-        </resetPasswordForm>
+        </form>
       </div>
     </div>
   );

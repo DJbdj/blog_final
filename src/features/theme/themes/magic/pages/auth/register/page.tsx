@@ -27,7 +27,7 @@ export function RegisterPage({ registerForm, turnstileElement, isEmailConfigured
           </p>
         </div>
 
-        <registerForm onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={registerForm.handleSubmit} className="space-y-6">
           {/* Name */}
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
@@ -128,7 +128,7 @@ export function RegisterPage({ registerForm, turnstileElement, isEmailConfigured
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={registerForm.isSubmitting || turnstilePending}
+            disabled={registerForm.isSubmitting}
             className="w-full magic-button flex items-center justify-center gap-2"
           >
             {registerForm.isSubmitting ? (
@@ -140,7 +140,7 @@ export function RegisterPage({ registerForm, turnstileElement, isEmailConfigured
               "注册"
             )}
           </button>
-        </registerForm>
+        </form>
 
         {/* Links */}
         <div className="text-center">

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { Tag, Calendar, Eye } from "lucide-react";
 import type { PostsPageProps } from "@/features/theme/contract/pages";
-import { config } from "@/features/theme/themes/magic/config";
+import { extendedConfig as config } from "@/features/theme/themes/magic/config";
 import { formatDate } from "@/lib/utils";
 
 export function PostsPage({
@@ -84,7 +84,6 @@ export function PostsPage({
       {/* Posts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {posts.map((post) => {
-          const imageUrl = post.coverImage || `/images/default-post.jpg`;
           const primaryTag = post.tags?.[0];
 
           return (
@@ -97,7 +96,7 @@ export function PostsPage({
                 <div
                   className="magic-post-image group-hover:scale-105 transition-transform duration-300"
                   style={{
-                    backgroundImage: `url(${imageUrl})`,
+                    backgroundImage: `url(/images/default-post.jpg)`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                   }}

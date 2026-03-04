@@ -1,11 +1,10 @@
 import { ExternalLink } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 interface FriendLink {
-  id: string;
+  id: number;
   siteName: string;
   siteUrl: string;
-  description?: string;
-  logoUrl?: string;
+  description?: string | null;
+  logoUrl?: string | null;
 }
 
 export interface FriendLinkCardProps {

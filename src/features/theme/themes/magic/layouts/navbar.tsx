@@ -1,6 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Search, UserIcon } from "lucide-react";
-import { useState } from "react";
 import type { NavOption, UserInfo } from "@/features/theme/contract/layouts";
 import { Skeleton } from "@/components/ui/skeleton";
 

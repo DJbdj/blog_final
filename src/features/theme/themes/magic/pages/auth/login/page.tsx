@@ -10,7 +10,7 @@ export function LoginPage({ loginForm, turnstileElement, isEmailConfigured }: Lo
     await loginForm.handleSubmit();
   };
 
-  if (loginForm.isSuccess) {
+  if (loginForm.loginStep === "SUCCESS") {
     navigate({ to: "/" });
   }
 
@@ -24,7 +24,7 @@ export function LoginPage({ loginForm, turnstileElement, isEmailConfigured }: Lo
           </p>
         </div>
 
-        <loginForm onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={loginForm.handleSubmit} className="space-y-6">
           {/* Email */}
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
@@ -77,7 +77,7 @@ export function LoginPage({ loginForm, turnstileElement, isEmailConfigured }: Lo
               "登录"
             )}
           </button>
-        </loginForm>
+        </form>
 
         {/* Links */}
         <div className="space-y-4">
