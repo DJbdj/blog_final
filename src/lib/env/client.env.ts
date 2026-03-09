@@ -39,6 +39,22 @@ const clientEnvSchema = z.object({
   VITE_MAGIC_SHOW_CATEGORY: z.string().transform(val => val === 'true').optional(),
   VITE_MAGIC_ENABLE_SKELETON_LOADER: z.string().transform(val => val === 'true').optional(),
   VITE_MAGIC_DEFER_IMAGE_LOADING: z.string().transform(val => val === 'true').optional(),
+  // ZLu 主题配置
+  VITE_ZLU_AVATAR: z.string().optional(),
+  VITE_ZLU_HOME_IMAGE: z.string().optional(),
+  VITE_ZLU_FEATURED_COUNT: z.coerce.number().optional(),
+  VITE_ZLU_POSTS_PER_PAGE: z.coerce.number().optional(),
+  VITE_ZLU_ENABLE_FEATURED_POSTS: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_ENABLE_RIGHT_SIDEBAR: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_ENABLE_LEFT_SIDEBAR: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_PRIMARY_COLOR: z.string().optional(),
+  VITE_ZLU_ACCENT_COLOR: z.string().optional(),
+  VITE_ZLU_SHOW_LAST_UPDATED: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_SHOW_WORD_COUNT: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_SHOW_READ_TIME: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_ENABLE_IMAGE_ZOOM: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_ENABLE_HOVER_EFFECTS: z.string().transform(val => val === 'true').optional(),
+  VITE_ZLU_ENABLE_SKELETON_LOADER: z.string().transform(val => val === 'true').optional(),
 });
 
 export function clientEnv() {

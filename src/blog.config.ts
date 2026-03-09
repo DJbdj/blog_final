@@ -27,6 +27,10 @@ export const blogConfig = {
       homeBg: env.VITE_FUWARI_HOME_BG || "/images/home-bg.webp",
       avatar: env.VITE_FUWARI_AVATAR || "/images/avatar.png",
     },
+    zlu: {
+      avatar: env.VITE_ZLU_AVATAR || "/images/avatar.png",
+      homeImage: env.VITE_ZLU_HOME_IMAGE || "/images/home-bg.webp",
+    },
   },
 };
 
