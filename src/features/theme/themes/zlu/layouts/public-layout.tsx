@@ -32,7 +32,7 @@ export function PublicLayout({
         user={user}
         logout={logout}
       />
-      <main className="flex-1">
+      <main className="flex-1 relative">
         <div className="zlu-layout">
           {/* Left Sidebar - Profile & Navigation */}
           <aside className="zlu-left-sidebar hidden lg:block">

@@ -13,8 +13,10 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: MobileMenuProps) {
+  if (!isOpen) return null;
+
   return (
-    <div className={`zlu-mobile-menu ${isOpen ? "open" : ""}`} onClick={onClose}>
+    <div className="zlu-mobile-menu" onClick={onClose}>
       <div className="zlu-mobile-overlay" />
       <div className="zlu-mobile-panel" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
