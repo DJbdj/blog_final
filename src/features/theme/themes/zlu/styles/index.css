@@ -1,4 +1,6 @@
 /* ZLu Theme Styles - Dark Minimalist Design */
+@import "tailwindcss";
+@import "@/styles/shared.css";
 
 /* CSS Variables */
 .theme-zlu {
@@ -126,6 +128,13 @@
   border-radius: var(--zlu-radius-md);
   transition: all var(--zlu-transition-fast);
   text-decoration: none;
+}
+
+.zlu-nav-item svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  flex-shrink: 0;
+  display: block;
 }
 
 .zlu-nav-item:hover {
