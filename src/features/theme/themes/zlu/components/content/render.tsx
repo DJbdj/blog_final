@@ -1,9 +1,8 @@
-"use client";
-
 import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
 import { extensions } from "@/features/posts/editor/config";
 import { CodeBlock } from "./code-block";
 import { ImageDisplay } from "./image-display";
+import { MathFormula } from "@/components/content/math-formula";
 import { useMemo } from "react";
 
 function renderReact(content: any) {
@@ -25,15 +24,25 @@ function renderReact(content: any) {
             language={node.attrs.language || "text"}
           />
         ),
+        table: ({ node, children }) => (
+          <div className="overflow-x-auto my-4">
+            <table className="w-full border-collapse text-sm">
+              {children}
+            </table>
+          </div>
+        ),
+        tableRow: ({ node, children }) => (
+          <tr className="border-b border-gray-700">{children}</tr>
+        ),
+        tableHeader: ({ node }: any) => (
+          <th className="border border-gray-700 px-4 py-2 bg-gray-800 font-semibold text-left">
+            {node.content?.[0]?.text || ""}
+          </th>
+        ),
         tableCell: ({ node }: any) => (
           <td className="border border-gray-700 px-4 py-2">
             {node.content?.[0]?.text || ""}
           </td>
-        ),
-        tableHeader: ({ node }: any) => (
-          <th className="border border-gray-700 px-4 py-2 bg-gray-800 font-semibold">
-            {node.content?.[0]?.text || ""}
-          </th>
         ),
         blockquote: ({ node }: any) => (
           <blockquote className="border-l-4 border-blue-500 pl-4 my-4 italic text-gray-400">
@@ -69,6 +78,30 @@ function renderReact(content: any) {
             {node.content?.map((c: any) => c.text).join("") || ""}
           </p>
         ),
+        text: ({ node }: any) => {
+          const text = node.text || "";
+          const marks = node.marks || [];
+
+          let rendered = text;
+          for (const mark of marks) {
+            if (mark.type === "bold") {
+              rendered = <strong key={mark.type}>{rendered}</strong>;
+            } else if (mark.type === "italic") {
+              rendered = <em key={mark.type}>{rendered}</em>;
+            } else if (mark.type === "code") {
+              rendered = <code key={mark.type} className="bg-gray-800 px-1 py-0.5 rounded text-sm font-mono text-pink-400">{rendered}</code>;
+            } else if (mark.type === "underline") {
+              rendered = <u key={mark.type}>{rendered}</u>;
+            } else if (mark.type === "strike") {
+              rendered = <s key={mark.type}>{rendered}</s>;
+            } else if (mark.type === "link") {
+              rendered = <a key={mark.type} href={mark.attrs.href} className="text-blue-400 hover:text-blue-300 underline" target="_blank" rel="noopener noreferrer">{rendered}</a>;
+            }
+          }
+          return rendered;
+        },
+        hardBreak: () => <br />,
+        bullet: () => null,
       },
     },
   });

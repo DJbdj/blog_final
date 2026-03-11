@@ -1,11 +1,9 @@
-"use client";
-
 import { useMemo } from "react";
-import { ContentRenderer } from "./render";
+import { ContentRenderer as Renderer } from "./render";
 
 export function ContentRendererWrapper({ content }: { content: any }) {
   const rendered = useMemo(() => {
-    return <ContentRenderer content={content} />;
+    return <Renderer content={content} />;
   }, [content]);
 
   return rendered;

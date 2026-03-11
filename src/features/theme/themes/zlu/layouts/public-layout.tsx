@@ -1,6 +1,5 @@
 "use client";
 
-import "../styles/index.css";
 import { useState } from "react";
 import { BackgroundLayer } from "../components/background-layer";
 import { Footer } from "./footer";
