@@ -7,6 +7,9 @@ import { authClient } from "@/lib/auth/auth.client";
 import { CACHE_CONTROL } from "@/lib/constants";
 import { AUTH_KEYS } from "@/features/auth/queries";
 
+// Import theme CSS
+import "@/features/theme/themes/zlu/styles/index.css";
+
 export const Route = createFileRoute("/_public")({
   component: PublicLayout,
   headers: () => {
