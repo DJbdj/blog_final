@@ -17,7 +17,8 @@ const buildEnvSchema = z.object({
 
 const config = defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  const buildEnv = buildEnvSchema.parse(env);
+  // Force zlu theme for all builds
+  const buildEnv = buildEnvSchema.parse({ ...env, THEME: "zlu" });
   return {
     define: {
       __APP_VERSION__: JSON.stringify(packageJson.version),
