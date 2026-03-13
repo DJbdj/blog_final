@@ -4,9 +4,6 @@ import { emailConfiguredQuery, sessionQuery } from "@/features/auth/queries";
 import { CACHE_CONTROL } from "@/lib/constants";
 import { useNavigateBack } from "@/hooks/use-navigate-back";
 
-// Import theme CSS
-import "@/features/theme/themes/zlu/styles/index.css";
-
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context, location }) => {
     const session = await context.queryClient.fetchQuery(sessionQuery);
