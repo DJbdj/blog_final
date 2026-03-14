@@ -6,8 +6,6 @@ import theme from "@theme";
 import { authClient } from "@/lib/auth/auth.client";
 import { CACHE_CONTROL } from "@/lib/constants";
 import { AUTH_KEYS } from "@/features/auth/queries";
-// Import zlu theme CSS directly to ensure it's loaded
-import "@/features/theme/themes/zlu/styles/index.css";
 
 export const Route = createFileRoute("/_public")({
   component: PublicLayout,
