@@ -76,17 +76,17 @@ export function ThemeToggle({ className }: { className?: string }) {
       <div className="relative flex items-center justify-center w-4 h-4">
         {/* Light Mode Icon */}
         <span className="hidden [.light:not(.system)_&]:block">
-          <Sun size={14} strokeWidth={1.5} />
+          <Sun size={14} strokeWidth={1.5} className="w-[14px] h-[14px]" />
         </span>
 
         {/* Dark Mode Icon */}
         <span className="hidden [.dark:not(.system)_&]:block">
-          <Moon size={14} strokeWidth={1.5} />
+          <Moon size={14} strokeWidth={1.5} className="w-[14px] h-[14px]" />
         </span>
 
         {/* System Mode Icon */}
         <span className="hidden in-[.system]:block">
-          <Monitor size={14} strokeWidth={1.5} />
+          <Monitor size={14} strokeWidth={1.5} className="w-[14px] h-[14px]" />
         </span>
       </div>
     </button>

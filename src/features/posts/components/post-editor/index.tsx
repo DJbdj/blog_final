@@ -266,9 +266,9 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
                     className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 text-muted-foreground hover:text-foreground"
                   >
                     {isCalculatingReadTime ? (
-                      <Loader2 size={10} className="animate-spin" />
+                      <Loader2 size={10} className="w-[10px] h-[10px] animate-spin" />
                     ) : (
-                      <Sparkles size={10} />
+                      <Sparkles size={10} className="w-[10px] h-[10px]" />
                     )}
                   </button>
                 </div>
@@ -296,9 +296,9 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
                     className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 text-muted-foreground hover:text-foreground"
                   >
                     {isGeneratingSlug ? (
-                      <Loader2 size={10} className="animate-spin" />
+                      <Loader2 size={10} className="w-[10px] h-[10px] animate-spin" />
                     ) : (
-                      <Sparkles size={10} />
+                      <Sparkles size={10} className="w-[10px] h-[10px]" />
                     )}
                   </button>
                 </div>
@@ -316,9 +316,9 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
                     className="text-[9px] font-mono text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
                   >
                     {isGeneratingTags ? (
-                      <Loader2 size={8} className="animate-spin" />
+                      <Loader2 size={8} className="w-[8px] h-[8px] animate-spin" />
                     ) : (
-                      <Sparkles size={8} />
+                      <Sparkles size={8} className="w-[8px] h-[8px]" />
                     )}
                     自动生成
                   </button>
@@ -341,9 +341,9 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
                     className="text-[9px] font-mono text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
                   >
                     {isGeneratingSummary ? (
-                      <Loader2 size={8} className="animate-spin" />
+                      <Loader2 size={8} className="w-[8px] h-[8px] animate-spin" />
                     ) : (
-                      <Sparkles size={8} />
+                      <Sparkles size={8} className="w-[8px] h-[8px]" />
                     )}
                     自动生成
                   </button>

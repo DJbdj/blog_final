@@ -134,7 +134,7 @@ export function SideBar({
             onClick={closeMobileSidebar}
             className="md:hidden p-2 text-muted-foreground hover:text-foreground"
           >
-            <X size={20} strokeWidth={1.5} />
+            <X size={20} strokeWidth={1.5} className="w-[20px] h-[20px]" />
           </button>
         </div>
 
@@ -157,7 +157,7 @@ export function SideBar({
                       : "text-muted-foreground hover:text-foreground hover:border-border/30",
                   )}
                 >
-                  <item.icon size={14} strokeWidth={1.5} className="shrink-0" />
+                  <item.icon size={14} strokeWidth={1.5} className="w-[14px] h-[14px] shrink-0" />
                   <div className="flex flex-col">
                     <span className="uppercase tracking-widest font-medium leading-none">
                       {isActive ? `> ${item.label}` : item.label}
@@ -190,7 +190,7 @@ export function SideBar({
                     className="w-full h-full object-cover opacity-80"
                   />
                 ) : (
-                  <User size={14} className="opacity-50" />
+                  <User size={14} className="w-[14px] h-[14px] opacity-50" />
                 )}
               </div>
               <div className="flex flex-col">
@@ -208,7 +208,7 @@ export function SideBar({
               className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors border border-transparent hover:border-destructive/30"
               title="退出登录"
             >
-              <LogOut size={14} strokeWidth={1.5} />
+              <LogOut size={14} strokeWidth={1.5} className="w-[14px] h-[14px]" />
             </button>
           </div>
         </div>

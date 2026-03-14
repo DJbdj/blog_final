@@ -77,7 +77,7 @@ function FriendLinksAdminPage() {
           onClick={() => setShowAddModal(true)}
           className="rounded-none bg-foreground text-background hover:bg-foreground/90 font-mono text-[10px] uppercase tracking-widest h-9 px-4"
         >
-          <Plus size={14} className="mr-2" />
+          <Plus size={14} className="w-[14px] h-[14px] mr-2" />
           添加友链
         </Button>
       </div>

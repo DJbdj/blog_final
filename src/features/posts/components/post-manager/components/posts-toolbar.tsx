@@ -37,7 +37,7 @@ export function PostsToolbar({
       {/* Search Input Group */}
       <div className="relative flex-1 group">
         <Search
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-foreground transition-colors"
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-[14px] h-[14px] text-muted-foreground group-focus-within:text-foreground transition-colors"
           size={14}
           strokeWidth={1.5}
         />
@@ -55,7 +55,7 @@ export function PostsToolbar({
             onClick={() => onSearchChange("")}
             className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-muted-foreground hover:text-foreground rounded-none"
           >
-            <X size={14} />
+            <X size={14} className="w-[14px] h-[14px]" />
           </Button>
         )}
       </div>
@@ -81,7 +81,7 @@ export function PostsToolbar({
                     }
                 `}
             >
-              <Filter size={14} strokeWidth={1.5} />
+              <Filter size={14} strokeWidth={1.5} className="w-[14px] h-[14px]" />
               <span className="uppercase tracking-widest font-mono">
                 {
                   {
@@ -122,7 +122,7 @@ export function PostsToolbar({
                     }
                 `}
             >
-              <ArrowUpDown size={14} strokeWidth={1.5} />
+              <ArrowUpDown size={14} strokeWidth={1.5} className="w-[14px] h-[14px]" />
               <span className="uppercase tracking-widest font-mono">
                 {sortBy === "publishedAt" ? "发布时间" : "修改时间"}
               </span>
@@ -157,7 +157,7 @@ export function PostsToolbar({
             className="h-10 w-10 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors rounded-none"
             title="重置"
           >
-            <X size={16} strokeWidth={1.5} />
+            <X size={16} strokeWidth={1.5} className="w-[16px] h-[16px]" />
           </Button>
         )}
       </div>

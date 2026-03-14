@@ -97,9 +97,9 @@ function RouteComponent() {
             className="h-11 px-8 rounded-none bg-foreground text-background hover:bg-foreground/90 transition-all font-mono text-[11px] uppercase tracking-[0.2em] font-medium disabled:opacity-50 shadow-lg shadow-foreground/5"
           >
             {isSubmitting ? (
-              <Loader2 size={14} className="animate-spin mr-3" />
+              <Loader2 size={14} className="w-[14px] h-[14px] animate-spin mr-3" />
             ) : (
-              <Check size={14} className="mr-3" />
+              <Check size={14} className="w-[14px] h-[14px] mr-3" />
             )}
             {isSubmitting ? "正在同步" : "应用更改"}
           </Button>
@@ -117,7 +117,7 @@ function RouteComponent() {
             >
               <Server
                 size={14}
-                className="mr-3 shrink-0 opacity-40 group-data-[state=active]:opacity-100 group-data-[state=active]:text-foreground transition-opacity"
+                className="w-[14px] h-[14px] mr-3 shrink-0 opacity-40 group-data-[state=active]:opacity-100 group-data-[state=active]:text-foreground transition-opacity"
               />
               服务配置
             </TabsTrigger>
@@ -127,7 +127,7 @@ function RouteComponent() {
             >
               <Hammer
                 size={14}
-                className="mr-3 shrink-0 opacity-40 group-data-[state=active]:opacity-100 group-data-[state=active]:text-foreground transition-opacity"
+                className="w-[14px] h-[14px] mr-3 shrink-0 opacity-40 group-data-[state=active]:opacity-100 group-data-[state=active]:text-foreground transition-opacity"
               />
               系统维护
             </TabsTrigger>

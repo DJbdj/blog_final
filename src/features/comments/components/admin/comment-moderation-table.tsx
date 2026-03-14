@@ -114,7 +114,7 @@ export const CommentModerationTable = ({
   if (!response || response.items.length === 0) {
     return (
       <div className="py-24 flex flex-col items-center justify-center text-muted-foreground font-serif italic gap-4 border-t border-border">
-        <MessageSquareOff size={40} strokeWidth={1} className="opacity-20" />
+        <MessageSquareOff size={40} strokeWidth={1} className="w-[40px] h-[40px] opacity-20" />
         <p>未找到匹配的评论</p>
       </div>
     );
@@ -279,7 +279,7 @@ export const CommentModerationTable = ({
                   )}
                   {comment.aiReason && (
                     <div className="text-[10px] font-mono text-orange-500 flex items-center gap-2 px-2 py-0.5 border border-orange-500/20 bg-orange-500/5 self-start">
-                      <AlertTriangle size={10} />
+                      <AlertTriangle size={10} className="w-[10px] h-[10px]" />
                       <span>AI_FLAG: {comment.aiReason}</span>
                     </div>
                   )}
@@ -365,7 +365,7 @@ export const CommentModerationTable = ({
                 )}
                 {comment.aiReason && (
                   <div className="text-[10px] font-serif italic text-orange-600/80 flex items-center gap-2 pt-1">
-                    <AlertTriangle size={10} />
+                    <AlertTriangle size={10} className="w-[10px] h-[10px]" />
                     <span>{comment.aiReason}</span>
                   </div>
                 )}

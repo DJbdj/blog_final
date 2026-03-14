@@ -10,6 +10,7 @@ import {
   RefreshCw,
   Users,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import {
   useMutation,
@@ -151,7 +152,7 @@ function DashboardOverview() {
                 >
                   <RefreshCw
                     size={14}
-                    className={isFetching ? "animate-spin" : ""}
+                    className={cn("w-[14px] h-[14px]", isFetching ? "animate-spin" : "")}
                   />
                 </button>
               </TooltipTrigger>
@@ -169,7 +170,7 @@ function DashboardOverview() {
           <StatCard
             label="待审核评论"
             value={stats.pendingComments.toString()}
-            icon={<MessageSquare size={14} />}
+            icon={<MessageSquare size={14} className="w-[14px] h-[14px]" />}
             trend={stats.pendingComments > 0 ? "需要处理" : "一切正常"}
           />
         </Link>
@@ -177,21 +178,21 @@ function DashboardOverview() {
           <StatCard
             label="已发布文章"
             value={stats.publishedPosts.toString()}
-            icon={<FileText size={14} />}
+            icon={<FileText size={14} className="w-[14px] h-[14px]" />}
             trend="活跃内容"
           />
         </Link>
         <StatCard
           label="媒体库占用"
           value={formatBytes(stats.mediaSize)}
-          icon={<Database size={14} />}
+          icon={<Database size={14} className="w-[14px] h-[14px]" />}
           trend="存储使用"
         />
         <Link to="/admin/posts" search={{ status: "DRAFT" }}>
           <StatCard
             label="草稿箱"
             value={stats.drafts.toString()}
-            icon={<Activity size={14} />}
+            icon={<Activity size={14} className="w-[14px] h-[14px]" />}
             trend="进行中"
           />
         </Link>
@@ -212,7 +213,7 @@ function DashboardOverview() {
                 rel="noopener noreferrer"
                 className="text-[10px] font-mono text-muted-foreground/60 hover:text-foreground flex items-center gap-1 transition-colors uppercase tracking-widest"
               >
-                打开统计 <ArrowRight size={10} />
+                打开统计 <ArrowRight size={10} className="w-[10px] h-[10px]" />
               </a>
             )}
           </div>
@@ -224,19 +225,19 @@ function DashboardOverview() {
                 label="访客数"
                 value={overview.visitors.value}
                 prev={overview.visitors.prev}
-                icon={<Users size={12} />}
+                icon={<Users size={12} className="w-[12px] h-[12px]" />}
               />
               <MetricItem
                 label="浏览量"
                 value={overview.pageViews.value}
                 prev={overview.pageViews.prev}
-                icon={<Eye size={12} />}
+                icon={<Eye size={12} className="w-[12px] h-[12px]" />}
               />
               <MetricItem
                 label="总访问"
                 value={overview.visits.value}
                 prev={overview.visits.prev}
-                icon={<MousePointerClick size={12} />}
+                icon={<MousePointerClick size={12} className="w-[12px] h-[12px]" />}
               />
               <MetricItem
                 label="跳出率"
@@ -244,7 +245,7 @@ function DashboardOverview() {
                 prev={overview.bounces.prev}
                 total={overview.visits.value}
                 format="percent"
-                icon={<Activity size={12} />}
+                icon={<Activity size={12} className="w-[12px] h-[12px]" />}
               />
             </div>
           )}
@@ -254,7 +255,7 @@ function DashboardOverview() {
             {!umamiUrl ? (
               <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-3">
                 <div className="bg-muted/20 p-4 rounded-full">
-                  <Activity className="opacity-40" size={24} />
+                  <Activity className="w-[24px] h-[24px] opacity-40" size={24} />
                 </div>
                 <div className="text-center space-y-1">
                   <p className="text-sm font-mono text-foreground">
@@ -269,7 +270,7 @@ function DashboardOverview() {
               <TrafficChart data={traffic} />
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                <Activity className="opacity-20" size={32} />
+                <Activity className="w-[32px] h-[32px] opacity-20" size={32} />
                 <p className="text-[10px] font-mono uppercase tracking-widest">
                   暂无流量数据
                 </p>

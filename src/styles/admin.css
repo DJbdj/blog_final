@@ -20,21 +20,17 @@
   font-size: 16px !important;
 }
 
-/* Icon Scaling - Increase hardcoded small icons */
-.admin-layout svg {
-  /* Scale icons slightly if they are small */
-  transition: transform 0.2s ease;
-}
-
-/* Sidebar Specific Adjustments */
-.admin-layout aside nav .text-\[11px\] {
-  font-size: 13px !important;
-  letter-spacing: 0.1em !important;
-}
-
-.admin-layout aside .text-\[8px\],
-.admin-layout aside .text-\[9px\] {
-  font-size: 11px !important;
+/* Icon Scaling - Target lucide-react icons by their class names - Override inline styles */
+.admin-layout svg[class*="lucide-"],
+.admin-layout svg[width],
+.admin-layout svg[height] {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  display: inline-block !important;
 }
 
 /* Dashboard Metrics & StatCards */
@@ -48,12 +44,25 @@
   padding-bottom: 0.5rem !important;
 }
 
-/* Global Lucide Icon Overrides for tiny sizes */
-.admin-layout [size="10"],
-.admin-layout [size="12"],
-.admin-layout [size="14"] {
+/* Sidebar Specific Adjustments - Icons and Text */
+.admin-layout aside nav .text-\[11px\] {
+  font-size: 13px !important;
+  letter-spacing: 0.1em !important;
+}
+
+.admin-layout aside .text-\[8px\],
+.admin-layout aside .text-\[9px\] {
+  font-size: 11px !important;
+}
+
+.admin-layout aside svg {
   width: 16px !important;
   height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  display: inline-block !important;
 }
 
 /* Header Adjustments */

@@ -107,7 +107,7 @@ export const FriendLinkModerationTable = ({
   if (!response || response.items.length === 0) {
     return (
       <div className="py-24 flex flex-col items-center justify-center text-muted-foreground font-serif italic gap-4 border-t border-border">
-        <Link2Off size={40} strokeWidth={1} className="opacity-20" />
+        <Link2Off size={40} strokeWidth={1} className="w-[40px] h-[40px] opacity-20" />
         <p>暂无友链记录</p>
       </div>
     );
@@ -247,7 +247,7 @@ export const FriendLinkModerationTable = ({
                   rel="noopener noreferrer"
                   className="text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 truncate"
                 >
-                  <ExternalLink size={10} className="shrink-0" />
+                  <ExternalLink size={10} className="w-[10px] h-[10px] shrink-0" />
                   <span className="truncate">{item.siteUrl}</span>
                 </a>
               </div>
@@ -342,7 +342,7 @@ export const FriendLinkModerationTable = ({
                   rel="noopener noreferrer"
                   className="text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 truncate"
                 >
-                  <ExternalLink size={10} className="shrink-0" />
+                  <ExternalLink size={10} className="w-[10px] h-[10px] shrink-0" />
                   <span className="truncate">{item.siteUrl}</span>
                 </a>
               </div>
@@ -479,7 +479,7 @@ const FriendLinkActions = ({
         title="更多操作"
       >
         {isLoading ? (
-          <Loader2 size={12} className="animate-spin" />
+          <Loader2 size={12} className="w-[12px] h-[12px] animate-spin" />
         ) : (
           <span>[ 操作 ]</span>
         )}
@@ -627,7 +627,7 @@ const RejectModal = ({
               className="rounded-none bg-foreground text-background hover:bg-foreground/90 font-mono text-[10px] uppercase tracking-widest"
             >
               {isLoading ? (
-                <Loader2 size={12} className="animate-spin" />
+                <Loader2 size={12} className="w-[12px] h-[12px] animate-spin" />
               ) : (
                 "确认拒绝"
               )}
@@ -724,7 +724,7 @@ const EditModal = ({
               className="rounded-none bg-foreground text-background hover:bg-foreground/90 font-mono text-[10px] uppercase tracking-widest"
             >
               {isLoading ? (
-                <Loader2 size={12} className="animate-spin" />
+                <Loader2 size={12} className="w-[12px] h-[12px] animate-spin" />
               ) : (
                 "保存"
               )}

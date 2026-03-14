@@ -38,6 +38,9 @@ const config = defineConfig(({ mode }) => {
         viteEnvironment: {
           name: "ssr",
         },
+        assets: {
+          directory: "./dist/client",
+        },
       }),
       viteTsConfigPaths({
         projects: ["./tsconfig.json"],

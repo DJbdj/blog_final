@@ -55,7 +55,7 @@ export const CommentModerationActions = ({
         title="更多操作"
       >
         {isLoading ? (
-          <Loader2 size={12} className="animate-spin" />
+          <Loader2 size={12} className="w-[12px] h-[12px] animate-spin" />
         ) : (
           <span>[ 操作 ]</span>
         )}

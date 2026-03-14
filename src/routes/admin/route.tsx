@@ -64,7 +64,7 @@ function AdminLayout() {
               onClick={() => setIsMobileSidebarOpen(true)}
               className="md:hidden p-2 hover:bg-muted/50 rounded-sm transition-colors text-foreground"
             >
-              <Menu size={20} strokeWidth={1.5} />
+              <Menu size={20} strokeWidth={1.5} className="w-[20px] h-[20px]" />
             </button>
             <Breadcrumbs />
           </div>
@@ -78,7 +78,7 @@ function AdminLayout() {
               <Settings
                 size={18}
                 strokeWidth={1.5}
-                className="group-hover:rotate-45 transition-transform duration-500 ease-in-out"
+                className="w-[18px] h-[18px] group-hover:rotate-45 transition-transform duration-500 ease-in-out"
               />
             </Link>
             <div className="h-4 w-px bg-border/40" />
@@ -90,7 +90,7 @@ function AdminLayout() {
               <ArrowUpRight
                 size={10}
                 strokeWidth={1.5}
-                className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                className="w-[10px] h-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
               />
             </Link>
           </div>

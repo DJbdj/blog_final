@@ -163,7 +163,7 @@ export function TagManager() {
             size="sm"
             className="h-9 px-4 text-[10px] uppercase tracking-[0.2em] font-medium rounded-none gap-2 bg-foreground text-background hover:bg-foreground/90"
           >
-            <Hash size={12} />
+            <Hash size={12} className="w-[12px] h-[12px]" />
             新建标签
           </Button>
         </div>
@@ -291,7 +291,7 @@ export function TagManager() {
                         className="h-8 w-8 text-emerald-500"
                         onClick={() => updateTagMutation.mutate(tagToEdit)}
                       >
-                        <Check size={16} />
+                        <Check size={16} className="w-[16px] h-[16px]" />
                       </Button>
                       <Button
                         size="icon"
@@ -299,12 +299,12 @@ export function TagManager() {
                         className="h-8 w-8 text-muted-foreground"
                         onClick={() => setTagToEdit(null)}
                       >
-                        <X size={16} />
+                        <X size={16} className="w-[16px] h-[16px]" />
                       </Button>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <Hash size={14} className="text-muted-foreground/50" />
+                      <Hash size={14} className="w-[14px] h-[14px] text-muted-foreground/50" />
                       <span className="font-medium text-foreground">
                         {tag.name}
                       </span>

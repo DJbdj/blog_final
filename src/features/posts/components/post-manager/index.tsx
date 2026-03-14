@@ -142,7 +142,7 @@ export function PostManager({
             disabled={createMutation.isPending}
             className="h-10 px-6 text-[11px] uppercase tracking-[0.2em] font-medium rounded-none gap-2 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50"
           >
-            <Plus size={14} />
+            <Plus size={14} className="w-[14px] h-[14px]" />
             {createMutation.isPending ? "创建中..." : "新建文章"}
           </Button>
         </div>

@@ -222,7 +222,7 @@ export function TagSelector({
             variant="secondary"
             className="h-5 px-1.5 gap-1 text-[10px] items-center bg-secondary hover:bg-secondary/80 transition-colors"
           >
-            <Hash size={10} className="text-muted-foreground/50" />
+            <Hash size={10} className="w-[10px] h-[10px] text-muted-foreground/50" />
             <span className="truncate max-w-37.5">{tag.name}</span>
             <div
               role="button"
@@ -233,7 +233,7 @@ export function TagSelector({
                 if (!disabled) toggleTag(tag.id);
               }}
             >
-              <X size={10} />
+              <X size={10} className="w-[10px] h-[10px]" />
             </div>
           </Badge>
         ))}
@@ -257,7 +257,7 @@ export function TagSelector({
         {/* Loading Spinner */}
         {(isInitialLoading || createTagMutation.isPending) && (
           <div className="animate-spin text-muted-foreground mr-1">
-            <Loader2 size={12} />
+            <Loader2 size={12} className="w-[12px] h-[12px]" />
           </div>
         )}
       </div>

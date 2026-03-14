@@ -62,11 +62,11 @@ export function MetricItem({
             )}
           >
             {trend.direction === "up" ? (
-              <ArrowUp size={8} />
+              <ArrowUp size={8} className="w-[8px] h-[8px]" />
             ) : trend.direction === "down" ? (
-              <ArrowDown size={8} />
+              <ArrowDown size={8} className="w-[8px] h-[8px]" />
             ) : (
-              <Minus size={8} />
+              <Minus size={8} className="w-[8px] h-[8px]" />
             )}
             <span>{trend.percent}%</span>
           </div>
