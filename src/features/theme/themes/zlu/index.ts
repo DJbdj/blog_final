@@ -1,3 +1,5 @@
+import "./styles/index.css";
+
 import { HomePage, HomePageSkeleton } from "./pages/home";
 import { PostsPage, PostsPageSkeleton } from "./pages/posts";
 import { PostPage, PostPageSkeleton } from "./pages/post";
