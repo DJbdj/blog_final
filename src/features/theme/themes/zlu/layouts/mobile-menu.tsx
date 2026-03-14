@@ -3,6 +3,7 @@
 import { Link } from "@tanstack/react-router";
 import { blogConfig } from "@/blog.config";
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
+import { useTheme } from "@/components/common/theme-provider";
 
 interface MobileMenuProps {
   navOptions: Array<{ label: string; to: string; id: string }>;
@@ -13,7 +14,40 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: MobileMenuProps) {
+  const { userTheme, setTheme } = useTheme();
+
   if (!isOpen) return null;
+
+  const themeIcons = {
+    light: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+    ),
+    dark: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    ),
+    system: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    ),
+  };
+
+  const themeLabels = {
+    light: "浅色模式",
+    dark: "深色模式",
+    system: "跟随系统",
+  };
+
+  const cycleTheme = () => {
+    const order: Array<"light" | "dark" | "system"> = ["light", "dark", "system"];
+    const currentIndex = order.indexOf(userTheme as any);
+    const nextIndex = (currentIndex + 1) % order.length;
+    setTheme(order[nextIndex]);
+  };
 
   return (
     <div className="zlu-mobile-menu" onClick={onClose}>
@@ -47,6 +81,21 @@ export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: Mobile
             </Link>
           ))}
         </nav>
+
+        {/* Theme Switcher */}
+        <div className="mt-6 pt-6 border-t border-gray-700">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm text-gray-400">主题模式</span>
+            <button
+              onClick={cycleTheme}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors text-sm text-white"
+              aria-label={`切换主题 (当前：${themeLabels[userTheme]})`}
+            >
+              {themeIcons[userTheme]}
+              <span>{themeLabels[userTheme]}</span>
+            </button>
+          </div>
+        </div>
 
         <div className="mt-6 pt-6 border-t border-gray-700">
           {user ? (
