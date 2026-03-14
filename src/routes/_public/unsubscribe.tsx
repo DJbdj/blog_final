@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
 
@@ -52,7 +52,7 @@ function UnsubscribePage() {
               </p>
             </div>
             <Button asChild variant="outline" className="rounded-none">
-              <a href="/">返回首页</a>
+              <Link to="/">返回首页</Link>
             </Button>
           </div>
         ) : isLoading ? (
@@ -70,7 +70,7 @@ function UnsubscribePage() {
               </p>
             </div>
             <Button asChild variant="outline" className="rounded-none">
-              <a href="/">返回首页</a>
+              <Link to="/">返回首页</Link>
             </Button>
           </div>
         ) : (
@@ -83,7 +83,7 @@ function UnsubscribePage() {
               </p>
             </div>
             <Button asChild className="rounded-none px-8">
-              <a href="/">返回首页</a>
+              <Link to="/">返回首页</Link>
             </Button>
           </div>
         )}
