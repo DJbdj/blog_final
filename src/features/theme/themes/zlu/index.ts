@@ -5,7 +5,7 @@ import { PublicLayout } from "./layouts/public-layout";
 import { AuthLayout } from "./layouts/auth-layout";
 import { UserLayout } from "./layouts/user-layout";
 import { FriendLinksPage, FriendLinksPageSkeleton } from "./pages/friend-links";
-import { SearchPage } from "./pages/search";
+import { SearchPage, SearchPageSkeleton } from "./pages/search";
 import { SubmitFriendLinkPage } from "./pages/submit-friend-link";
 import { LoginPage } from "./pages/auth/login";
 import { RegisterPage } from "./pages/auth/register";
@@ -34,6 +34,7 @@ export default {
   FriendLinksPage,
   FriendLinksPageSkeleton,
   SearchPage,
+  SearchPageSkeleton,
   SubmitFriendLinkPage,
   LoginPage,
   RegisterPage,

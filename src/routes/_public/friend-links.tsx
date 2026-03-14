@@ -24,11 +24,15 @@ export const Route = createFileRoute("/_public/friend-links")({
       },
     ],
   }),
-  pendingComponent: theme.FriendLinksPageSkeleton,
+  pendingComponent: FriendLinksSkeleton,
 });
 
 function FriendLinksPage() {
   const { data: links } = useSuspenseQuery(approvedFriendLinksQuery());
 
   return <theme.FriendLinksPage links={links} />;
+}
+
+function FriendLinksSkeleton() {
+  return <theme.FriendLinksPageSkeleton />;
 }

@@ -30,6 +30,7 @@ export const Route = createFileRoute("/_public/search")({
       ],
     };
   },
+  pendingComponent: SearchSkeleton,
 });
 
 function SearchRoute() {
@@ -94,4 +95,8 @@ function SearchRoute() {
       onBack={handleBack}
     />
   );
+}
+
+function SearchSkeleton() {
+  return <theme.SearchPageSkeleton />;
 }
