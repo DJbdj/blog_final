@@ -4,7 +4,6 @@ import type { RegisterPageProps } from "@/features/theme/contract/pages";
 
 export function RegisterPage({
   registerForm,
-  turnstileElement,
 }: RegisterPageProps) {
   const {
     register,
@@ -140,9 +139,6 @@ export function RegisterPage({
             </p>
           )}
         </div>
-
-        {/* Turnstile */}
-        <div className="py-2">{turnstileElement}</div>
 
         {/* Submit */}
         <button

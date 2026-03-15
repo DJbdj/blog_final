@@ -15,7 +15,6 @@ export {
 } from "./use-register-form";
 export {
   useForgotPasswordForm,
-  type UseForgotPasswordFormOptions,
   type UseForgotPasswordFormReturn,
 } from "./use-forgot-password-form";
 export {

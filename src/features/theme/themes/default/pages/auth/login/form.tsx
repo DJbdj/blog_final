@@ -18,7 +18,6 @@ export function LoginForm({ form, isEmailConfigured }: LoginFormProps) {
     isUnverifiedEmail,
     rootError,
     handleResendVerification,
-    turnstilePending,
   } = form;
 
   return (
@@ -101,7 +100,7 @@ export function LoginForm({ form, isEmailConfigured }: LoginFormProps) {
 
       <button
         type="submit"
-        disabled={isSubmitting || loginStep !== "IDLE" || turnstilePending}
+        disabled={isSubmitting || loginStep !== "IDLE"}
         className="w-full py-4 bg-foreground text-background text-[10px] font-mono uppercase tracking-[0.3em] hover:opacity-80 transition-all disabled:opacity-30 flex items-center justify-center gap-3"
       >
         {loginStep === "VERIFYING" ? (

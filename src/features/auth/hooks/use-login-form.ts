@@ -17,15 +17,11 @@ const loginSchema = z.object({
 type LoginSchema = z.infer<typeof loginSchema>;
 
 export interface UseLoginFormOptions {
-  turnstileToken: string | null;
-  turnstilePending: boolean;
-  resetTurnstile: () => void;
   redirectTo?: string;
 }
 
-export function useLoginForm(options: UseLoginFormOptions) {
-  const { turnstileToken, turnstilePending, resetTurnstile, redirectTo } =
-    options;
+export function useLoginForm(options: UseLoginFormOptions = {}) {
+  const { redirectTo } = options;
 
   const [loginStep, setLoginStep] = useState<"IDLE" | "VERIFYING" | "SUCCESS">(
     "IDLE",
@@ -49,12 +45,7 @@ export function useLoginForm(options: UseLoginFormOptions) {
     const { error } = await authClient.signIn.email({
       email: data.email,
       password: data.password,
-      fetchOptions: {
-        headers: { "X-Turnstile-Token": turnstileToken || "" },
-      },
     });
-
-    resetTurnstile();
 
     if (error) {
       setLoginStep("IDLE");
@@ -68,13 +59,7 @@ export function useLoginForm(options: UseLoginFormOptions) {
           form.setError("root", { message: "无效的账号或密码" });
           break;
         default:
-          if (error.message?.includes("Turnstile")) {
-            form.setError("root", {
-              message: "人机验证失败，请等待验证完成后重试",
-            });
-          } else {
-            form.setError("root", { message: error.message || "登录失败" });
-          }
+          form.setError("root", { message: error.message || "登录失败" });
       }
 
       toast.error("登录失败", { description: error.message });
@@ -92,30 +77,18 @@ export function useLoginForm(options: UseLoginFormOptions) {
 
   const handleResendVerification = async () => {
     if (!emailValue) return;
-    if (turnstilePending) {
-      toast.error("请等待人机验证完成");
-      return;
-    }
 
     const loadingToast = toast.loading("正在发送验证邮件...");
 
     const { error } = await authClient.sendVerificationEmail({
       email: emailValue,
       callbackURL: `${window.location.origin}/verify-email`,
-      fetchOptions: {
-        headers: { "X-Turnstile-Token": turnstileToken || "" },
-      },
     });
 
-    resetTurnstile();
     toast.dismiss(loadingToast);
 
     if (error) {
-      if (error.message?.includes("Turnstile")) {
-        toast.error("人机验证失败", { description: "请等待验证完成后重试" });
-      } else {
-        toast.error("发送失败，请稍后重试", { description: error.message });
-      }
+      toast.error("发送失败，请稍后重试", { description: error.message });
       return;
     }
 

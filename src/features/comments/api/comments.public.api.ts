@@ -15,7 +15,6 @@ import {
   authMiddleware,
   createRateLimitMiddleware,
   sessionMiddleware,
-  turnstileMiddleware,
 } from "@/lib/middlewares";
 import { CACHE_CONTROL } from "@/lib/constants";
 
@@ -85,7 +84,6 @@ export const createCommentFn = createServerFn({
       interval: "1m",
       key: "comments:create",
     }),
-    turnstileMiddleware,
     authMiddleware,
   ])
   .inputValidator(CreateCommentInputSchema)

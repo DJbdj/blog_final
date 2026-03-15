@@ -11,15 +11,7 @@ const forgotPasswordSchema = z.object({
 
 type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
 
-export interface UseForgotPasswordFormOptions {
-  turnstileToken: string | null;
-  turnstilePending: boolean;
-  resetTurnstile: () => void;
-}
-
-export function useForgotPasswordForm(options: UseForgotPasswordFormOptions) {
-  const { turnstileToken, turnstilePending, resetTurnstile } = options;
-
+export function useForgotPasswordForm() {
   const [isSent, setIsSent] = useState(false);
   const [sentEmail, setSentEmail] = useState("");
 
@@ -31,19 +23,10 @@ export function useForgotPasswordForm(options: UseForgotPasswordFormOptions) {
     const { error } = await authClient.requestPasswordReset({
       email: data.email,
       redirectTo: `${window.location.origin}/reset-link`,
-      fetchOptions: {
-        headers: { "X-Turnstile-Token": turnstileToken || "" },
-      },
     });
 
-    resetTurnstile();
-
     if (error) {
-      if (error.message?.includes("Turnstile")) {
-        toast.error("人机验证失败", { description: "请等待验证完成后重试" });
-      } else {
-        toast.error("重置邮件发送失败", { description: error.message });
-      }
+      toast.error("重置邮件发送失败", { description: error.message });
       return;
     }
 
@@ -61,7 +44,6 @@ export function useForgotPasswordForm(options: UseForgotPasswordFormOptions) {
     isSubmitting: form.formState.isSubmitting,
     isSent,
     sentEmail,
-    turnstilePending,
   };
 }
 

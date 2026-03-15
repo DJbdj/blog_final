@@ -2,13 +2,8 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import type { LoginPageProps } from "@/features/theme/contract/pages";
 
-export function LoginPage({ loginForm, turnstileElement, isEmailConfigured }: LoginPageProps) {
+export function LoginPage({ loginForm }: LoginPageProps) {
   const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await loginForm.handleSubmit();
-  };
 
   if (loginForm.loginStep === "SUCCESS") {
     navigate({ to: "/" });
@@ -59,9 +54,6 @@ export function LoginPage({ loginForm, turnstileElement, isEmailConfigured }: Lo
             )}
           </div>
 
-          {/* Turnstile */}
-          {turnstileElement}
-
           {/* Submit Button */}
           <button
             type="submit"
@@ -81,14 +73,6 @@ export function LoginPage({ loginForm, turnstileElement, isEmailConfigured }: Lo
 
         {/* Links */}
         <div className="space-y-4">
-          {isEmailConfigured && (
-            <Link
-              to="/forgot-password"
-              className="block text-center text-sm text-primary hover:underline"
-            >
-              忘记密码？
-            </Link>
-          )}
           <div className="text-center">
             <span className="text-sm text-muted-foreground">
               还没有账户？

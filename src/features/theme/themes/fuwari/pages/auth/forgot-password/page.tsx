@@ -4,12 +4,11 @@ import type { ForgotPasswordPageProps } from "@/features/theme/contract/pages";
 
 export function ForgotPasswordPage({
   forgotPasswordForm,
-  turnstileElement,
 }: ForgotPasswordPageProps) {
-  const { register, errors, handleSubmit, isSubmitting, turnstilePending } =
+  const { register, errors, handleSubmit, isSubmitting } =
     forgotPasswordForm;
 
-  const isFormDisabled = isSubmitting || turnstilePending;
+  const isFormDisabled = isSubmitting;
 
   if (forgotPasswordForm.isSent) {
     return (
@@ -86,8 +85,6 @@ export function ForgotPasswordPage({
             )}
           </button>
         </form>
-
-        {turnstileElement}
 
         {/* Footer Link */}
         <div className="text-center pt-2">

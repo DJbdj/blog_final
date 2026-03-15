@@ -3,15 +3,10 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import type { RegisterPageProps } from "@/features/theme/contract/pages";
 
-export function RegisterPage({ registerForm, turnstileElement, isEmailConfigured }: RegisterPageProps) {
+export function RegisterPage({ registerForm }: RegisterPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await registerForm.handleSubmit();
-  };
 
   if (registerForm.isSuccess) {
     navigate({ to: "/login" });
@@ -121,9 +116,6 @@ export function RegisterPage({ registerForm, turnstileElement, isEmailConfigured
               <p className="text-sm text-red-500">{registerForm.errors.confirmPassword.message}</p>
             )}
           </div>
-
-          {/* Turnstile */}
-          {turnstileElement}
 
           {/* Submit Button */}
           <button

@@ -44,6 +44,33 @@
   --klu-transition-slow: 350ms ease;
 }
 
+/* Light mode */
+.klu-theme[data-theme="light"] {
+  --klu-bg-primary: #ffffff;
+  --klu-bg-secondary: #f6f8fa;
+  --klu-bg-tertiary: #eaeef2;
+  --klu-bg-elevated: #ffffff;
+  --klu-bg-card: #ffffff;
+
+  --klu-text-primary: #1f2328;
+  --klu-text-secondary: #656d76;
+  --klu-text-muted: #8b949e;
+  --klu-text-inverse: #ffffff;
+
+  --klu-accent-primary: #0969da;
+  --klu-accent-secondary: #0550ae;
+  --klu-accent-success: #1a7f37;
+  --klu-accent-warning: #9a6700;
+  --klu-accent-danger: #d1242f;
+
+  --klu-border-primary: #d0d7de;
+  --klu-border-secondary: #eaeef2;
+
+  --klu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --klu-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --klu-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
 /* Import theme specific styles */
 .klu-theme {
   background-color: var(--klu-bg-primary);

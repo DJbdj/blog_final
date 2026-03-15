@@ -6,7 +6,6 @@ export function LoginPage({
   isEmailConfigured,
   loginForm,
   socialLogin,
-  turnstileElement,
 }: LoginPageProps) {
   const {
     register,
@@ -17,18 +16,16 @@ export function LoginPage({
     isUnverifiedEmail,
     rootError,
     handleResendVerification,
-    turnstilePending: formTurnstilePending,
   } = loginForm;
 
   const {
     isLoading: socialIsLoading,
-    turnstilePending: socialTurnstilePending,
     handleGithubLogin,
   } = socialLogin;
 
   const isFormDisabled =
-    isSubmitting || loginStep !== "IDLE" || formTurnstilePending;
-  const isSocialDisabled = socialIsLoading || socialTurnstilePending;
+    isSubmitting || loginStep !== "IDLE";
+  const isSocialDisabled = socialIsLoading;
 
   return (
     <div className="flex flex-col gap-8">
@@ -149,22 +146,16 @@ export function LoginPage({
             !isEmailConfigured ? "fuwari-btn-primary" : "fuwari-btn-regular"
           }`}
         >
-          {socialIsLoading || socialTurnstilePending ? (
+          {socialIsLoading ? (
             <Loader2 size={16} className="animate-spin opacity-70" />
           ) : (
             <Github size={16} />
           )}
 
           <span className="tracking-wide">
-            {socialIsLoading
-              ? "正在连接..."
-              : socialTurnstilePending
-                ? "验证中..."
-                : "通过 GitHub 登录"}
+            {socialIsLoading ? "正在连接..." : "通过 GitHub 登录"}
           </span>
         </button>
-
-        {turnstileElement}
 
         {/* Footer Link */}
         {isEmailConfigured && (

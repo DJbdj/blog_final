@@ -6,7 +6,6 @@ import {
   cacheMiddleware,
   rateLimitMiddleware,
   shieldMiddleware,
-  turnstileMiddleware,
 } from "./middlewares";
 import { createRateLimiterIdentifier } from "./helper";
 import { handleImageRequest } from "@/features/media/media.service";
@@ -88,7 +87,7 @@ app.get("/api/auth/*", baseMiddleware, (c) => {
   return auth.handler(c.req.raw);
 });
 
-// 1. Protected auth endpoints (requires Turnstile)
+// 1. Protected auth endpoints (Turnstile disabled)
 const protectedPaths = [
   "/api/auth/sign-in/email",
   "/api/auth/sign-up/email",
@@ -101,7 +100,6 @@ protectedPaths.forEach((path) => {
   app.post(
     path,
     baseMiddleware,
-    turnstileMiddleware,
     rateLimitMiddleware({
       capacity: 5,
       interval: "1m",

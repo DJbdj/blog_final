@@ -6,7 +6,6 @@ export function LoginPage({
   isEmailConfigured,
   loginForm,
   socialLogin,
-  turnstileElement,
 }: LoginPageProps) {
   const {
     register,
@@ -15,10 +14,9 @@ export function LoginPage({
     isSubmitting,
     rootError,
     handleResendVerification,
-    turnstilePending,
   } = loginForm;
 
-  const { isLoading: isSocialLoading, handleGithubLogin, turnstilePending: socialTurnstilePending } = socialLogin;
+  const { isLoading: isSocialLoading, handleGithubLogin } = socialLogin;
 
   return (
     <div className="space-y-6">
@@ -34,10 +32,10 @@ export function LoginPage({
       {/* GitHub Login */}
       <button
         onClick={handleGithubLogin}
-        disabled={isSocialLoading || socialTurnstilePending}
+        disabled={isSocialLoading}
         className="klu-btn w-full border border-[var(--klu-border-primary)] hover:bg-[var(--klu-bg-tertiary)]"
       >
-        {isSocialLoading || socialTurnstilePending ? (
+        {isSocialLoading ? (
           <Loader2 size={18} className="animate-spin" />
         ) : (
           <Github size={18} />
@@ -112,9 +110,6 @@ export function LoginPage({
               )}
             </div>
 
-            {/* Turnstile */}
-            <div className="py-2">{turnstileElement}</div>
-
             {/* Resend Verification */}
             {loginForm.isUnverifiedEmail && (
               <button
@@ -130,7 +125,7 @@ export function LoginPage({
             {/* Submit */}
             <button
               type="submit"
-              disabled={isSubmitting || turnstilePending}
+              disabled={isSubmitting}
               className="klu-btn klu-btn-primary w-full"
             >
               {isSubmitting ? (

@@ -50,14 +50,14 @@ function Sidebar({
     <aside
       className={`${
         isMobile
-          ? "fixed inset-0 z-50 bg-[var(--klu-bg-primary)]"
+          ? "fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
           : "hidden lg:block w-[var(--klu-sidebar-width)] shrink-0"
       }`}
     >
       <div
         className={`${
           isMobile
-            ? "h-full overflow-y-auto p-6"
+            ? "absolute right-0 top-0 h-full w-4/5 max-w-xs bg-[var(--klu-bg-primary)] shadow-2xl overflow-y-auto"
             : "fixed top-0 left-0 h-screen w-[var(--klu-sidebar-width)] border-r border-[var(--klu-border-primary)] overflow-y-auto"
         }`}
       >

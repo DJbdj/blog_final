@@ -3,7 +3,6 @@ import { Loader2, Mail } from "lucide-react";
 import type { ForgotPasswordPageProps } from "@/features/theme/contract/pages";
 export function ForgotPasswordPage({
   forgotPasswordForm,
-  turnstileElement,
 }: ForgotPasswordPageProps) {
 
   if (forgotPasswordForm.isSent) {

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Mail, ArrowRight, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 import type { ForgotPasswordPageProps } from "@/features/theme/contract/pages";
 
-export function ForgotPasswordPage({ forgotPasswordForm, turnstileElement }: ForgotPasswordPageProps) {
+export function ForgotPasswordPage({ forgotPasswordForm }: ForgotPasswordPageProps) {
   const { register, errors, handleSubmit, isSubmitting, isSent } = forgotPasswordForm;
 
   if (isSent) {
@@ -57,9 +57,6 @@ export function ForgotPasswordPage({ forgotPasswordForm, turnstileElement }: For
             </p>
           )}
         </div>
-
-        {/* Turnstile */}
-        <div className="py-2">{turnstileElement}</div>
 
         {/* Submit */}
         <button

@@ -5,7 +5,6 @@ import {
   authMiddleware,
   createRateLimitMiddleware,
   dbMiddleware,
-  turnstileMiddleware,
 } from "@/lib/middlewares";
 
 export const submitFriendLinkFn = createServerFn({
@@ -17,7 +16,6 @@ export const submitFriendLinkFn = createServerFn({
       interval: "1h",
       key: "friend-links:submit",
     }),
-    turnstileMiddleware,
     authMiddleware,
   ])
   .inputValidator(SubmitFriendLinkInputSchema)

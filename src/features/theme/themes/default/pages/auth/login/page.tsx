@@ -7,7 +7,6 @@ export function LoginPage({
   isEmailConfigured,
   loginForm,
   socialLogin,
-  turnstileElement,
 }: LoginPageProps) {
   return (
     <div className="space-y-12">
@@ -32,12 +31,9 @@ export function LoginPage({
 
         <SocialLogin
           isLoading={socialLogin.isLoading}
-          turnstilePending={socialLogin.turnstilePending}
           handleGithubLogin={socialLogin.handleGithubLogin}
           showDivider={isEmailConfigured}
         />
-
-        {turnstileElement}
 
         {isEmailConfigured && (
           <div className="text-center pt-8">

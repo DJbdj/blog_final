@@ -7,7 +7,7 @@ interface RegisterFormProps {
 }
 
 export function RegisterForm({ form }: RegisterFormProps) {
-  const { register, errors, handleSubmit, isSubmitting, turnstilePending } =
+  const { register, errors, handleSubmit, isSubmitting } =
     form;
 
   return (
@@ -85,7 +85,7 @@ export function RegisterForm({ form }: RegisterFormProps) {
 
       <button
         type="submit"
-        disabled={isSubmitting || turnstilePending}
+        disabled={isSubmitting}
         className="w-full py-4 bg-foreground text-background text-[10px] font-mono uppercase tracking-[0.3em] hover:opacity-80 transition-all disabled:opacity-30 flex items-center justify-center gap-3"
       >
         {isSubmitting ? (

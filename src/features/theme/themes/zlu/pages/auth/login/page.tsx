@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import type { LoginPageProps } from "@/features/theme/contract/pages";
 import { SocialLogin } from "./social-login";
 
-export function LoginPage({ loginForm, socialLogin, turnstileElement, isEmailConfigured }: LoginPageProps) {
+export function LoginPage({ loginForm, socialLogin, isEmailConfigured }: LoginPageProps) {
   const navigate = useNavigate();
 
   if (loginForm.loginStep === "SUCCESS") {
@@ -77,14 +77,10 @@ export function LoginPage({ loginForm, socialLogin, turnstileElement, isEmailCon
         </p>
       )}
 
-      {/* Turnstile */}
-      {turnstileElement}
-
       {/* Social Login */}
       <div className="mt-6">
         <SocialLogin
           isLoading={socialLogin.isLoading}
-          turnstilePending={socialLogin.turnstilePending}
           handleGithubLogin={socialLogin.handleGithubLogin}
           showDivider={isEmailConfigured}
         />
@@ -92,14 +88,6 @@ export function LoginPage({ loginForm, socialLogin, turnstileElement, isEmailCon
 
       {/* Links */}
       <div className="space-y-4 mt-6">
-        {isEmailConfigured && (
-          <Link
-            to="/forgot-password"
-            className="block text-center text-sm text-blue-400 hover:text-blue-300"
-          >
-            忘记密码？
-          </Link>
-        )}
         <div className="text-center">
           <span className="text-sm text-gray-400">还没有账户？</span>
           <Link

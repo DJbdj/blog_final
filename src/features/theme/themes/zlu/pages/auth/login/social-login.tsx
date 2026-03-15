@@ -9,7 +9,6 @@ interface SocialLoginProps extends SocialLoginData {
 
 export function SocialLogin({
   isLoading,
-  turnstilePending,
   handleGithubLogin,
   showDivider = true,
 }: SocialLoginProps) {
@@ -28,21 +27,17 @@ export function SocialLogin({
       <button
         type="button"
         onClick={handleGithubLogin}
-        disabled={isLoading || turnstilePending}
+        disabled={isLoading}
         className="w-full py-2.5 px-4 border border-gray-600 rounded-lg flex items-center justify-center gap-2 transition-all hover:border-gray-500 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isLoading || turnstilePending ? (
+        {isLoading ? (
           <Loader2 size={16} className="text-gray-400 animate-spin" />
         ) : (
           <Github size={16} className="text-gray-300" />
         )}
 
         <span className="text-sm text-gray-300">
-          {isLoading
-            ? "正在连接..."
-            : turnstilePending
-              ? "验证中..."
-              : "GitHub 登录"}
+          {isLoading ? "正在连接..." : "GitHub 登录"}
         </span>
       </button>
     </div>

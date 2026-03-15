@@ -24,19 +24,11 @@ const registerSchema = z
 type RegisterSchema = z.infer<typeof registerSchema>;
 
 export interface UseRegisterFormOptions {
-  turnstileToken: string | null;
-  turnstilePending: boolean;
-  resetTurnstile: () => void;
   isEmailConfigured: boolean;
 }
 
 export function useRegisterForm(options: UseRegisterFormOptions) {
-  const {
-    turnstileToken,
-    turnstilePending,
-    resetTurnstile,
-    isEmailConfigured,
-  } = options;
+  const { isEmailConfigured } = options;
 
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
@@ -53,21 +45,12 @@ export function useRegisterForm(options: UseRegisterFormOptions) {
       password: data.password,
       name: data.name,
       callbackURL: `${window.location.origin}/verify-email`,
-      fetchOptions: {
-        headers: { "X-Turnstile-Token": turnstileToken || "" },
-      },
     });
 
-    resetTurnstile();
-
     if (error) {
-      if (error.message?.includes("Turnstile")) {
-        toast.error("人机验证失败", { description: "请等待验证完成后重试" });
-      } else {
-        toast.error("注册失败", {
-          description: error.message || "服务器连接异常，请稍后重试。",
-        });
-      }
+      toast.error("注册失败", {
+        description: error.message || "服务器连接异常，请稍后重试。",
+      });
       return;
     }
 
@@ -90,7 +73,6 @@ export function useRegisterForm(options: UseRegisterFormOptions) {
     handleSubmit: form.handleSubmit(onSubmit),
     isSubmitting: form.formState.isSubmitting,
     isSuccess,
-    turnstilePending,
   };
 }
 

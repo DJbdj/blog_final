@@ -4,13 +4,26 @@ import { blogConfig } from "@/blog.config";
 
 export function AuthLayout({ onBack, children }: AuthLayoutProps) {
   return (
-    <div className="klu-theme min-h-screen flex">
+    <div className="klu-theme min-h-screen flex relative overflow-hidden">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--klu-bg-primary)]/95 via-[var(--klu-bg-primary)]/90 to-[var(--klu-bg-primary)]/80" />
+      </div>
+
       {/* Left side - Decorative */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[var(--klu-accent-primary)]/20 to-[var(--klu-accent-secondary)]/10 items-center justify-center relative overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-[var(--klu-accent-primary)]/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[var(--klu-accent-secondary)]/10 rounded-full blur-3xl" />
+      <div className="hidden lg:flex lg:w-1/2 relative z-10 items-center justify-center">
+        {/* Background pattern with blur */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-[var(--klu-accent-primary)]/30 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[var(--klu-accent-secondary)]/20 rounded-full blur-3xl" />
         </div>
 
         {/* Content */}
@@ -28,7 +41,7 @@ export function AuthLayout({ onBack, children }: AuthLayoutProps) {
       </div>
 
       {/* Right side - Auth form */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative z-10">
         {/* Header */}
         <div className="flex items-center gap-4 p-6">
           <button
@@ -53,7 +66,12 @@ export function AuthLayout({ onBack, children }: AuthLayoutProps) {
               </h1>
             </div>
 
-            {children}
+            {/* Form Card */}
+            <div className="klu-card bg-[var(--klu-bg-card)]/50 backdrop-blur-xl border border-[var(--klu-border-primary)]/50 shadow-2xl">
+              <div className="p-6 lg:p-8">
+                {children}
+              </div>
+            </div>
           </div>
         </div>
       </div>

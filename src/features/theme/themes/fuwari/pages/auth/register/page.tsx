@@ -4,12 +4,11 @@ import type { RegisterPageProps } from "@/features/theme/contract/pages";
 
 export function RegisterPage({
   registerForm,
-  turnstileElement,
 }: RegisterPageProps) {
-  const { register, errors, handleSubmit, isSubmitting, turnstilePending } =
+  const { register, errors, handleSubmit, isSubmitting } =
     registerForm;
 
-  const isFormDisabled = isSubmitting || turnstilePending;
+  const isFormDisabled = isSubmitting;
 
   if (registerForm.isSuccess) {
     return (
@@ -147,8 +146,6 @@ export function RegisterPage({
             )}
           </button>
         </form>
-
-        {turnstileElement}
 
         {/* Footer Link */}
         <div className="text-center pt-2">
