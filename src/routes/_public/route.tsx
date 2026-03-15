@@ -3,7 +3,6 @@ import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import theme from "@theme";
-import "@/features/theme/themes/zlu/styles/index.css";
 import { authClient } from "@/lib/auth/auth.client";
 import { CACHE_CONTROL } from "@/lib/constants";
 import { AUTH_KEYS } from "@/features/auth/queries";

@@ -7,7 +7,6 @@ import { Footer } from "./footer";
 import { MobileMenu } from "./mobile-menu";
 import { Navbar } from "./navbar";
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
-import "../styles/index.css";
 
 export function PublicLayout({
   children,
