@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { BackgroundLayer } from "../components/background-layer";
 import { DesktopMenu } from "./desktop-menu";
@@ -17,6 +17,16 @@ export function PublicLayout({
   logout,
 }: PublicLayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   return (
     <div className="theme-zlu min-h-screen flex flex-col">
@@ -27,20 +37,23 @@ export function PublicLayout({
         user={user}
         isLoading={isSessionLoading}
       />
-      <DesktopMenu
-        navOptions={navOptions}
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        user={user}
-        logout={logout}
-      />
-      <MobileMenu
-        navOptions={navOptions}
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        user={user}
-        logout={logout}
-      />
+      {isMobile ? (
+        <MobileMenu
+          navOptions={navOptions}
+          isOpen={isMenuOpen}
+          onClose={() => setIsMenuOpen(false)}
+          user={user}
+          logout={logout}
+        />
+      ) : (
+        <DesktopMenu
+          navOptions={navOptions}
+          isOpen={isMenuOpen}
+          onClose={() => setIsMenuOpen(false)}
+          user={user}
+          logout={logout}
+        />
+      )}
       <main className="flex-1 relative">
         <div className="zlu-layout">
           {/* Left Sidebar - Profile & Navigation */}
@@ -92,7 +105,7 @@ export function PublicLayout({
           <aside className="zlu-right-sidebar">
             <div className="zlu-sidebar-card">
               <h3 className="zlu-sidebar-title">公告</h3>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-[var(--zlu-text-secondary)]">
                 欢迎来到我的博客！这里记录我的技术学习心得和生活感悟。
               </p>
             </div>

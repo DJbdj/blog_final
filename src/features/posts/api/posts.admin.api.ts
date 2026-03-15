@@ -12,11 +12,56 @@ import {
 } from "@/features/posts/posts.schema";
 import * as PostService from "@/features/posts/posts.service";
 import { adminMiddleware } from "@/lib/middlewares";
+import { z } from "zod";
 
 export const generateSlugFn = createServerFn()
   .middleware([adminMiddleware])
   .inputValidator(GenerateSlugInputSchema)
   .handler(({ data, context }) => PostService.generateSlug(context, data));
+
+/**
+ * Upload Markdown file to R2 and return its content
+ */
+export const uploadMarkdownFn = createServerFn({
+  method: "POST",
+})
+  .middleware([adminMiddleware])
+  .inputValidator(
+    z.object({
+      file: z.instanceof(File),
+    }),
+  )
+  .handler(async ({ data, context }) => {
+    const { file } = data;
+
+    // Generate key for markdown file
+    const timestamp = Date.now();
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+    const key = `markdowns/${timestamp}-${safeName}`;
+
+    // Upload to R2
+    await context.env.R2.put(key, file.stream(), {
+      httpMetadata: {
+        contentType: file.type || "text/markdown",
+      },
+      customMetadata: {
+        originalName: file.name,
+      },
+    });
+
+    // Read file content
+    const text = await file.text();
+
+    // Get public URL
+    const url = `/images/${key}`;
+
+    return {
+      url,
+      key,
+      fileName: file.name,
+      content: text,
+    };
+  });
 
 export const createEmptyPostFn = createServerFn({
   method: "POST",

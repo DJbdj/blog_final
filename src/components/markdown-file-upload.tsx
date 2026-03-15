@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Upload, FileText, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { uploadMarkdownFn } from "@/features/posts/api/posts.admin.api";
 
 interface MarkdownFileUploadProps {
   onContentLoad: (content: string, fileName?: string) => void;
@@ -20,15 +21,17 @@ export function MarkdownFileUpload({
   const parseMarkdown = useCallback(async (file: File) => {
     setIsLoading(true);
     try {
-      const text = await file.text();
-      setFileName(file.name);
-      onContentLoad(text, file.name);
+      // Upload to server and get content
+      const result = await uploadMarkdownFn({ data: { file } });
+      setFileName(result.fileName);
+      onContentLoad(result.content, result.fileName);
       toast.success("Markdown 文件已加载", {
-        description: `已加载 ${file.name}`,
+        description: `已加载 ${result.fileName}`,
       });
     } catch (error) {
+      console.error("Markdown upload error:", error);
       toast.error("加载失败", {
-        description: "无法解析 Markdown 文件",
+        description: error instanceof Error ? error.message : "无法上传 Markdown 文件",
       });
     } finally {
       setIsLoading(false);

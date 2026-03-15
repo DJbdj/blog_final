@@ -104,7 +104,7 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
                 {user.image ? (
                   <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full" />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 rounded-full bg-[var(--zlu-primary)] flex items-center justify-center text-white font-semibold">
                     {user.name[0].toUpperCase()}
                   </div>
                 )}
