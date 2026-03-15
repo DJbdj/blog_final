@@ -3,8 +3,54 @@
 
 /* ZLu Theme Styles - Dark Minimalist Design */
 
-/* CSS Variables */
-.theme-zlu {
+/* CSS Variables - Light Mode (Default) */
+.theme-zlu.light {
+  /* Primary Colors */
+  --zlu-primary: #2563eb;
+  --zlu-primary-hover: #1d4ed8;
+  --zlu-primary-glow: rgba(37, 99, 235, 0.3);
+
+  /* Background Colors */
+  --zlu-bg-primary: #ffffff;
+  --zlu-bg-secondary: #f6f8fa;
+  --zlu-bg-tertiary: #f0f2f5;
+  --zlu-bg-elevated: #ffffff;
+
+  /* Text Colors */
+  --zlu-text-primary: #1a1a1a;
+  --zlu-text-secondary: #4b5563;
+  --zlu-text-tertiary: #6b7280;
+
+  /* Border Colors */
+  --zlu-border: #e5e7eb;
+  --zlu-border-muted: #f3f4f6;
+
+  /* Shadow */
+  --zlu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --zlu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --zlu-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --zlu-shadow-glow: 0 0 20px rgba(37, 99, 235, 0.2);
+
+  /* Accent Colors */
+  --zlu-accent: #2563eb;
+  --zlu-success: #16a34a;
+  --zlu-warning: #d97706;
+  --zlu-danger: #dc2626;
+
+  /* Border Radius */
+  --zlu-radius-sm: 6px;
+  --zlu-radius-md: 8px;
+  --zlu-radius-lg: 12px;
+  --zlu-radius-xl: 16px;
+
+  /* Transitions */
+  --zlu-transition-fast: 150ms ease;
+  --zlu-transition-normal: 250ms ease;
+  --zlu-transition-slow: 350ms ease;
+}
+
+/* CSS Variables - Dark Mode */
+.theme-zlu.dark {
   /* Primary Colors */
   --zlu-primary: #3b82f6;
   --zlu-primary-hover: #2563eb;
@@ -49,13 +95,15 @@
   --zlu-transition-slow: 350ms ease;
 }
 
-/* Base Styles */
-.theme-zlu {
+/* Base Styles - applied to both light and dark modes */
+.theme-zlu.light,
+.theme-zlu.dark {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
   background: var(--zlu-bg-primary);
   color: var(--zlu-text-primary);
   line-height: 1.6;
   position: relative;
+  transition: background-color var(--zlu-transition-normal), color var(--zlu-transition-normal);
 }
 
 /* Layout */
@@ -94,6 +142,10 @@
   text-align: center;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--zlu-border-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .zlu-avatar {
@@ -101,7 +153,8 @@
   height: 80px;
   border-radius: 50%;
   border: 3px solid var(--zlu-primary);
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto;
+  display: block;
 }
 
 .zlu-site-title {
@@ -791,6 +844,97 @@
 
 .zlu-mobile-menu.open .zlu-mobile-panel {
   transform: translateX(0);
+}
+
+/* Desktop Menu Popup */
+.zlu-desktop-menu-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 150;
+  background: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.2s ease;
+}
+
+.zlu-desktop-menu {
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  width: 280px;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  background: var(--zlu-bg-secondary);
+  border: 1px solid var(--zlu-border);
+  border-radius: var(--zlu-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--zlu-shadow-lg);
+  animation: slideDown 0.2s ease;
+  z-index: 151;
+}
+
+.zlu-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--zlu-border-muted);
+}
+
+.zlu-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.zlu-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--zlu-radius-md);
+  color: var(--zlu-text-secondary);
+  text-decoration: none;
+  transition: all var(--zlu-transition-fast);
+}
+
+.zlu-menu-item:hover {
+  background: var(--zlu-bg-tertiary);
+  color: var(--zlu-text-primary);
+}
+
+.zlu-menu-item.active {
+  background: var(--zlu-primary);
+  color: white;
+}
+
+.zlu-menu-section {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--zlu-border-muted);
+  margin-top: 1.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Comments */

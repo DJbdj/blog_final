@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BackgroundLayer } from "../components/background-layer";
+import { DesktopMenu } from "./desktop-menu";
 import { Footer } from "./footer";
 import { MobileMenu } from "./mobile-menu";
 import { Navbar } from "./navbar";
@@ -25,6 +26,13 @@ export function PublicLayout({
         onMenuClick={() => setIsMenuOpen(true)}
         user={user}
         isLoading={isSessionLoading}
+      />
+      <DesktopMenu
+        navOptions={navOptions}
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        user={user}
+        logout={logout}
       />
       <MobileMenu
         navOptions={navOptions}
