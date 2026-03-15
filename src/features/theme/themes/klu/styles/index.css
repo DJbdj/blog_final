@@ -91,6 +91,13 @@
   box-shadow: var(--klu-shadow-md);
 }
 
+/* Navigation separators */
+.klu-nav-separator {
+  height: 1px;
+  background-color: var(--klu-border-secondary);
+  margin: 0.5rem 0;
+}
+
 /* Button styles */
 .klu-btn {
   display: inline-flex;

@@ -83,12 +83,12 @@ export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: Mobile
         </nav>
 
         {/* Theme Switcher */}
-        <div className="mt-6 pt-6 border-t border-gray-700">
+        <div className="mt-6 pt-6 border-t border-[var(--zlu-border)]">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm text-gray-400">主题模式</span>
+            <span className="text-sm text-[var(--zlu-text-secondary)]">主题模式</span>
             <button
               onClick={cycleTheme}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors text-sm text-white"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--zlu-bg-tertiary)] hover:bg-[var(--zlu-bg-elevated)] transition-colors text-sm text-[var(--zlu-text-primary)]"
               aria-label={`切换主题 (当前：${themeLabels[userTheme]})`}
             >
               {themeIcons[userTheme]}
@@ -97,21 +97,21 @@ export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: Mobile
           </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-gray-700">
+        <div className="mt-6 pt-6 border-t border-[var(--zlu-border)]">
           {user ? (
             <>
               <div className="flex items-center gap-3 mb-4 px-2">
                 {user.image ? (
                   <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full" />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 rounded-full bg-[var(--zlu-primary)] flex items-center justify-center text-white font-semibold">
                     {user.name[0].toUpperCase()}
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-medium text-white">{user.name}</p>
+                  <p className="text-sm font-medium text-[var(--zlu-text-primary)]">{user.name}</p>
                   {user.role && (
-                    <p className="text-xs text-gray-400">{user.role === "admin" ? "管理员" : "用户"}</p>
+                    <p className="text-xs text-[var(--zlu-text-secondary)]">{user.role === "admin" ? "管理员" : "用户"}</p>
                   )}
                 </div>
               </div>

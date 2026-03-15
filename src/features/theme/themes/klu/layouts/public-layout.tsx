@@ -95,22 +95,27 @@ function Sidebar({
 
         {/* Navigation */}
         <nav className="space-y-1 mb-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.id}
-              to={item.to}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--klu-text-secondary)] hover:text-[var(--klu-text-primary)] hover:bg-[var(--klu-bg-tertiary)] transition-all group"
-              activeProps={{
-                className:
-                  "!text-[var(--klu-accent-primary)] !bg-[var(--klu-accent-primary)]/10",
-              }}
-              onClick={isMobile ? onClose : undefined}
-            >
-              <span className="text-[var(--klu-text-muted)] group-hover:text-[var(--klu-text-primary)] transition-colors">
-                {item.icon}
-              </span>
-              <span className="font-medium">{item.label}</span>
-            </Link>
+          {navItems.map((item, index) => (
+            <>
+              <Link
+                key={item.id}
+                to={item.to}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--klu-text-secondary)] hover:text-[var(--klu-text-primary)] hover:bg-[var(--klu-bg-tertiary)] transition-all group"
+                activeProps={{
+                  className:
+                    "!text-[var(--klu-accent-primary)] !bg-[var(--klu-accent-primary)]/10",
+                }}
+                onClick={isMobile ? onClose : undefined}
+              >
+                <span className="text-[var(--klu-text-muted)] group-hover:text-[var(--klu-text-primary)] transition-colors">
+                  {item.icon}
+                </span>
+                <span className="font-medium">{item.label}</span>
+              </Link>
+              {index < navItems.length - 1 && (
+                <div className="h-px bg-[var(--klu-border-secondary)] mx-3" />
+              )}
+            </>
           ))}
         </nav>
 

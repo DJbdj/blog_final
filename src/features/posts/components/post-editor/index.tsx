@@ -140,6 +140,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
             <Dialog open={isMarkdownDialogOpen} onOpenChange={setIsMarkdownDialogOpen}>
               <DialogTrigger asChild>
                 <Button
+                  type="button"
                   variant="ghost"
                   className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors"
                 >
@@ -173,12 +174,14 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
                 />
                 <div className="flex justify-end gap-2 mt-4">
                   <Button
+                    type="button"
                     variant="outline"
                     onClick={() => setIsMarkdownDialogOpen(false)}
                   >
                     取消
                   </Button>
                   <Button
+                    type="button"
                     variant="default"
                     onClick={() => {
                       if (markdownContentRef.current && editorInstance) {
