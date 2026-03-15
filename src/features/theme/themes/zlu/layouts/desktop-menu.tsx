@@ -58,7 +58,7 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
           </Link>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] transition-colors"
             aria-label="关闭菜单"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,10 +84,10 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
         {/* Theme Switcher */}
         <div className="zlu-menu-section">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-400">主题模式</span>
+            <span className="text-sm text-[var(--zlu-text-secondary)]">主题模式</span>
             <button
               onClick={cycleTheme}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors text-sm text-white"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--zlu-bg-tertiary)] hover:bg-[var(--zlu-bg-elevated)] transition-colors text-sm text-[var(--zlu-text-primary)] border border-[var(--zlu-border)]"
               aria-label={`切换主题 (当前：${themeLabels[userTheme]})`}
             >
               {themeIcons[userTheme]}
@@ -109,9 +109,9 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-medium text-white">{user.name}</p>
+                  <p className="text-sm font-medium text-[var(--zlu-text-primary)]">{user.name}</p>
                   {user.role && (
-                    <p className="text-xs text-gray-400">{user.role === "admin" ? "管理员" : "用户"}</p>
+                    <p className="text-xs text-[var(--zlu-text-secondary)]">{user.role === "admin" ? "管理员" : "用户"}</p>
                   )}
                 </div>
               </div>

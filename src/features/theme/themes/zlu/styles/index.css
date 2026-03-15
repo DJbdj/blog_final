@@ -412,14 +412,26 @@
   color: white;
 }
 
+/* Navbar - Light Mode */
+.theme-zlu.light .zlu-navbar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+/* Navbar - Dark Mode */
+.theme-zlu.dark .zlu-navbar {
+  background: rgba(13, 17, 23, 0.95);
+  backdrop-filter: blur(8px);
+}
+
 /* Navbar */
 .zlu-navbar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(13, 17, 23, 0.95);
   border-bottom: 1px solid var(--zlu-border);
   padding: 0.75rem 2rem;
+  transition: background var(--zlu-transition-normal), border-color var(--zlu-transition-normal);
 }
 
 @media (max-width: 768px) {
@@ -820,26 +832,36 @@
   inset: 0;
   z-index: 200;
   pointer-events: none;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .zlu-mobile-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   pointer-events: auto;
+  opacity: 0;
+  transition: opacity var(--zlu-transition-normal);
+}
+
+.zlu-mobile-menu.open .zlu-mobile-overlay {
+  opacity: 1;
 }
 
 .zlu-mobile-panel {
-  position: absolute;
+  position: relative;
   top: 0;
-  left: 0;
+  right: 0;
   bottom: 0;
   width: 280px;
+  max-width: 85vw;
   background: var(--zlu-bg-secondary);
   padding: 1.5rem;
-  transform: translateX(-100%);
+  transform: translateX(100%);
   transition: transform var(--zlu-transition-normal);
   pointer-events: auto;
+  box-shadow: var(--zlu-shadow-lg);
 }
 
 .zlu-mobile-menu.open .zlu-mobile-panel {
@@ -854,24 +876,49 @@
   left: 0;
   bottom: 0;
   z-index: 150;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.2s ease;
+  pointer-events: none;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .zlu-desktop-menu {
-  position: absolute;
+  position: relative;
   top: 4rem;
   right: 1rem;
-  width: 280px;
-  max-height: calc(100vh - 6rem);
+  width: 320px;
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 8rem);
   overflow-y: auto;
   background: var(--zlu-bg-secondary);
   border: 1px solid var(--zlu-border);
   border-radius: var(--zlu-radius-lg);
   padding: 1.5rem;
   box-shadow: var(--zlu-shadow-lg);
-  animation: slideDown 0.2s ease;
+  animation: slideInRight 0.25s ease;
   z-index: 151;
+  pointer-events: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .zlu-menu-header {
@@ -926,14 +973,14 @@
   }
 }
 
-@keyframes slideDown {
+@keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateY(-1rem);
+    transform: translateX(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 

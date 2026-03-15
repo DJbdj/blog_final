@@ -1,7 +1,7 @@
 import { useBlocker } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, Sparkles } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Loader2, Sparkles, Upload, FileText } from "lucide-react";
+import { useCallback, useState, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { useAutoSave, usePostActions } from "./hooks";
 import { EditorTableOfContents } from "./editor-table-of-contents";
@@ -14,11 +14,21 @@ import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/ui/confirmation-modal";
 import DatePicker from "@/components/ui/date-picker";
 import { toLocalDateString } from "@/lib/utils";
+import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { POST_STATUSES } from "@/lib/db/schema";
 import { extensions } from "@/features/posts/editor/config";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { MarkdownFileUpload } from "@/components/markdown-file-upload";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function PostEditor({ initialData, onSave }: PostEditorProps) {
   // Initialize post state from initialData (always provided)
@@ -34,6 +44,9 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     isSynced: initialData.isSynced,
     hasPublicCache: initialData.hasPublicCache,
   }));
+
+  const [isMarkdownDialogOpen, setIsMarkdownDialogOpen] = useState(false);
+  const markdownContentRef = useRef<string>("");
 
   // Sync state when initialData updates (e.g. after background refetch/invalidation)
   const [prevInitialDataId, setPrevInitialDataId] = useState(initialData.id);
@@ -123,6 +136,70 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
 
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-4">
+            {/* Import Markdown Button */}
+            <Dialog open={isMarkdownDialogOpen} onOpenChange={setIsMarkdownDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors"
+                >
+                  <span className="mr-2 opacity-50">[</span>
+                  <Upload className="w-3 h-3 mr-1" />
+                  导入 Markdown
+                  <span className="ml-2 opacity-50">]</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <FileText className="w-5 h-5" />
+                    导入 Markdown 文件
+                  </DialogTitle>
+                  <DialogDescription>
+                    上传 Markdown 文件，内容将自动填充到编辑器
+                  </DialogDescription>
+                </DialogHeader>
+                <MarkdownFileUpload
+                  onContentLoad={(content, fileName) => {
+                    markdownContentRef.current = content;
+                    // Set title from filename if empty
+                    if (post.title === "" && fileName) {
+                      setPost((prev) => ({
+                        ...prev,
+                        title: fileName.replace(/\.md$/i, ""),
+                      }));
+                    }
+                  }}
+                />
+                <div className="flex justify-end gap-2 mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsMarkdownDialogOpen(false)}
+                  >
+                    取消
+                  </Button>
+                  <Button
+                    variant="default"
+                    onClick={() => {
+                      if (markdownContentRef.current && editorInstance) {
+                        const content = markdownContentRef.current;
+
+                        // Insert markdown content into editor
+                        editorInstance.commands.setContent(content);
+
+                        setIsMarkdownDialogOpen(false);
+                        toast.success("Markdown 内容已导入到编辑器");
+                      } else if (!editorInstance) {
+                        toast.error("编辑器尚未初始化");
+                      }
+                    }}
+                  >
+                    导入到编辑器
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
             <Button
               variant="ghost"
               onClick={() => {

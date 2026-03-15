@@ -49,7 +49,9 @@ export function AssetUploadField({
       const formData = new FormData();
       formData.append("file", file);
       formData.append("assetPath", assetPath);
-      return uploadSiteAssetFn({ data: formData }) as Promise<{ url: string }>;
+      // @ts-expect-error - FormData is dynamic
+      const result = await uploadSiteAssetFn({ data: formData });
+      return result as { url: string };
     },
     onSuccess: (result) => {
       register(name).onChange({ target: { value: result.url } });

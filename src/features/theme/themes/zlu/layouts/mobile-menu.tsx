@@ -50,7 +50,7 @@ export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: Mobile
   };
 
   return (
-    <div className="zlu-mobile-menu" onClick={onClose}>
+    <div className={`zlu-mobile-menu ${isOpen ? "open" : ""}`} onClick={onClose}>
       <div className="zlu-mobile-overlay" />
       <div className="zlu-mobile-panel" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
@@ -59,7 +59,7 @@ export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: Mobile
           </Link>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white"
+            className="text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] transition-colors"
             aria-label="关闭菜单"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

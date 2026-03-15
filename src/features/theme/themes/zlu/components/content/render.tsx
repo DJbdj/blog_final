@@ -3,7 +3,7 @@ import { extensions } from "@/features/posts/editor/config";
 import { CodeBlock } from "./code-block";
 import { ImageDisplay } from "./image-display";
 import { MathFormula } from "@/components/content/math-formula";
-import type { ReactNode, ReactElement } from "react";
+import type {} from "react";
 
 function renderReact(content: any) {
   return renderToReactElement({
@@ -11,16 +11,16 @@ function renderReact(content: any) {
     content,
     options: {
       nodeMapping: {
-        image: ({ node }: any) => (
+        image: ({ node: _node }: any) => (
           <ImageDisplay
-            src={node.attrs.src}
-            alt={node.attrs.alt || ""}
-            caption={node.attrs.caption}
+            src={_node.attrs.src}
+            alt={_node.attrs.alt || ""}
+            caption={_node.attrs.caption}
           />
         ),
-        codeBlock: ({ node }: any) => {
-          const code = node.textContent || "";
-          const language = node.attrs?.language || "text";
+        codeBlock: ({ node: _node }: any) => {
+          const code = _node.textContent || "";
+          const language = _node.attrs?.language || "text";
           return (
             <CodeBlock
               code={code}
@@ -28,18 +28,18 @@ function renderReact(content: any) {
             />
           );
         },
-        table: ({ node, children }) => (
+        table: ({ node: _node, children }) => (
           <div className="overflow-x-auto my-4">
             <table className="w-full border-collapse text-sm">
               {children}
             </table>
           </div>
         ),
-        tableRow: ({ node, children }) => (
+        tableRow: ({ node: _node, children }) => (
           <tr className="border-b border-gray-700">{children}</tr>
         ),
-        tableHeader: ({ node, children }: any) => {
-          const attrs = node.attrs as {
+        tableHeader: ({ node: _node, children }: any) => {
+          const attrs = _node.attrs as {
             colspan?: number;
             rowspan?: number;
             colwidth?: Array<number>;
@@ -56,8 +56,8 @@ function renderReact(content: any) {
             </th>
           );
         },
-        tableCell: ({ node, children }: any) => {
-          const attrs = node.attrs as {
+        tableCell: ({ node: _node, children }: any) => {
+          const attrs = _node.attrs as {
             colspan?: number;
             rowspan?: number;
             colwidth?: Array<number>;
@@ -74,26 +74,26 @@ function renderReact(content: any) {
             </td>
           );
         },
-        blockquote: ({ node, children }: any) => (
+        blockquote: ({ node: _node, children }: any) => (
           <blockquote className="border-l-4 border-blue-500 pl-4 my-4 italic text-gray-400">
             {children}
           </blockquote>
         ),
-        bulletList: ({ node, children }: any) => (
+        bulletList: ({ node: _node, children }: any) => (
           <ul className="list-disc list-inside my-4 space-y-1 text-gray-300">
             {children}
           </ul>
         ),
-        orderedList: ({ node, children }: any) => (
+        orderedList: ({ node: _node, children }: any) => (
           <ol className="list-decimal list-inside my-4 space-y-1 text-gray-300">
             {children}
           </ol>
         ),
-        listItem: ({ node, children }: any) => (
+        listItem: ({ node: _node, children }: any) => (
           <li className="my-2">{children}</li>
         ),
-        heading: ({ node, children }: any) => {
-          const level = node.attrs.level as number;
+        heading: ({ node: _node, children }: any) => {
+          const level = _node.attrs.level as number;
           if (level === 1) return <h1 className="text-white font-semibold text-3xl mt-6 mb-3">{children}</h1>;
           if (level === 2) return <h2 className="text-white font-semibold text-2xl mt-6 mb-3">{children}</h2>;
           if (level === 3) return <h3 className="text-white font-semibold text-xl mt-6 mb-3">{children}</h3>;
@@ -101,14 +101,14 @@ function renderReact(content: any) {
           if (level === 5) return <h5 className="text-white font-semibold text-base mt-6 mb-3">{children}</h5>;
           return <h6 className="text-white font-semibold text-sm mt-6 mb-3">{children}</h6>;
         },
-        paragraph: ({ node, children }: any) => (
+        paragraph: ({ node: _node, children }: any) => (
           <p className="text-gray-300 my-4 leading-relaxed">
             {children}
           </p>
         ),
-        text: ({ node }: any) => {
-          const text = node.text || "";
-          const marks = node.marks || [];
+        text: ({ node: _node }: any) => {
+          const text = _node.text || "";
+          const marks = _node.marks || [];
 
           let rendered: React.ReactNode = text;
           for (const mark of marks) {
@@ -128,12 +128,12 @@ function renderReact(content: any) {
           }
           return rendered;
         },
-        inlineMath: ({ node }: any) => {
-          const latex = node.attrs?.latex ?? "";
+        inlineMath: ({ node: _node }: any) => {
+          const latex = _node.attrs?.latex ?? "";
           return <MathFormula latex={latex} mode="inline" />;
         },
-        blockMath: ({ node }: any) => {
-          const latex = node.attrs?.latex ?? "";
+        blockMath: ({ node: _node }: any) => {
+          const latex = _node.attrs?.latex ?? "";
           return <MathFormula latex={latex} mode="block" />;
         },
         hardBreak: () => <br />,
