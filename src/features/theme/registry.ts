@@ -1,6 +1,6 @@
 // 主题注册表 — 列出所有可用主题及其路由级配置
 // 添加新主题时，需要在此文件中同步更新
-export const themeNames = ["default", "fuwari", "magic", "zlu"] as const;
+export const themeNames = ["default", "fuwari", "magic", "zlu", "klu"] as const;
 export type ThemeName = (typeof themeNames)[number];
 
 /**
@@ -32,5 +32,10 @@ export const themes: Record<ThemeName, ThemeRouterConfig> = {
   "zlu": {
     viewTransition: true,
     pendingMs: 500,
+  },
+  // Klu theme - dark minimalist card-based design
+  "klu": {
+    viewTransition: true,
+    pendingMs: 300,
   },
 };

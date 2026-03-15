@@ -1,0 +1,339 @@
+/* Klu Theme - Dark Minimalist Blog Theme
+ * Inspired by modern dark UI designs with card-based layouts
+ */
+
+/* CSS Variables for theming */
+:root {
+  /* Background colors - dark theme */
+  --klu-bg-primary: #0d1117;
+  --klu-bg-secondary: #161b22;
+  --klu-bg-tertiary: #21262d;
+  --klu-bg-elevated: #1c2128;
+  --klu-bg-card: #1a1f27;
+
+  /* Text colors */
+  --klu-text-primary: #e6edf3;
+  --klu-text-secondary: #8b949e;
+  --klu-text-muted: #6e7681;
+  --klu-text-inverse: #0d1117;
+
+  /* Accent colors */
+  --klu-accent-primary: #58a6ff;
+  --klu-accent-secondary: #79c0ff;
+  --klu-accent-success: #3fb950;
+  --klu-accent-warning: #d29922;
+  --klu-accent-danger: #f85149;
+
+  /* Border colors */
+  --klu-border-primary: #30363d;
+  --klu-border-secondary: #21262d;
+
+  /* Shadows */
+  --klu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --klu-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --klu-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+  /* Spacing */
+  --klu-sidebar-width: 260px;
+  --klu-sidebar-collapsed: 64px;
+  --klu-max-content-width: 1200px;
+
+  /* Transitions */
+  --klu-transition-fast: 150ms ease;
+  --klu-transition-normal: 250ms ease;
+  --klu-transition-slow: 350ms ease;
+}
+
+/* Import theme specific styles */
+.klu-theme {
+  background-color: var(--klu-bg-primary);
+  color: var(--klu-text-primary);
+  min-height: 100vh;
+}
+
+/* Card styles */
+.klu-card {
+  background-color: var(--klu-bg-card);
+  border: 1px solid var(--klu-border-primary);
+  border-radius: 12px;
+  transition: all var(--klu-transition-normal);
+}
+
+.klu-card:hover {
+  border-color: var(--klu-border-secondary);
+  box-shadow: var(--klu-shadow-md);
+}
+
+/* Button styles */
+.klu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all var(--klu-transition-fast);
+  cursor: pointer;
+}
+
+.klu-btn-primary {
+  background-color: var(--klu-accent-primary);
+  color: var(--klu-text-inverse);
+}
+
+.klu-btn-primary:hover {
+  background-color: var(--klu-accent-secondary);
+}
+
+.klu-btn-ghost {
+  background-color: transparent;
+  color: var(--klu-text-secondary);
+}
+
+.klu-btn-ghost:hover {
+  background-color: var(--klu-bg-tertiary);
+  color: var(--klu-text-primary);
+}
+
+/* Input styles */
+.klu-input {
+  background-color: var(--klu-bg-secondary);
+  border: 1px solid var(--klu-border-primary);
+  border-radius: 6px;
+  padding: 0.625rem 0.875rem;
+  color: var(--klu-text-primary);
+  transition: border-color var(--klu-transition-fast);
+}
+
+.klu-input:focus {
+  outline: none;
+  border-color: var(--klu-accent-primary);
+}
+
+/* Tag/Badge styles */
+.klu-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  background-color: var(--klu-bg-tertiary);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  color: var(--klu-text-secondary);
+  transition: all var(--klu-transition-fast);
+}
+
+.klu-tag:hover {
+  background-color: var(--klu-border-primary);
+  color: var(--klu-text-primary);
+}
+
+.klu-tag.active {
+  background-color: var(--klu-accent-primary);
+  color: var(--klu-text-inverse);
+}
+
+/* Link styles */
+.klu-link {
+  color: var(--klu-accent-primary);
+  text-decoration: none;
+  transition: color var(--klu-transition-fast);
+}
+
+.klu-link:hover {
+  color: var(--klu-accent-secondary);
+  text-decoration: underline;
+}
+
+/* Scrollbar styles */
+.klu-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.klu-theme ::-webkit-scrollbar-track {
+  background: var(--klu-bg-secondary);
+}
+
+.klu-theme ::-webkit-scrollbar-thumb {
+  background: var(--klu-border-primary);
+  border-radius: 4px;
+}
+
+.klu-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--klu-text-muted);
+}
+
+/* Animation keyframes */
+@keyframes klu-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes klu-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes klu-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Utility animations */
+.klu-animate-fade-in {
+  animation: klu-fade-in 0.3s ease-out;
+}
+
+.klu-animate-slide-in {
+  animation: klu-slide-in-left 0.3s ease-out;
+}
+
+/* Skeleton styles */
+.klu-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--klu-bg-tertiary) 25%,
+    var(--klu-bg-secondary) 50%,
+    var(--klu-bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: klu-skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes klu-skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Content typography */
+.klu-content h1,
+.klu-content h2,
+.klu-content h3,
+.klu-content h4,
+.klu-content h5,
+.klu-content h6 {
+  color: var(--klu-text-primary);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.klu-content h1 {
+  font-size: 1.75rem;
+  border-bottom: 1px solid var(--klu-border-primary);
+  padding-bottom: 0.5rem;
+}
+
+.klu-content h2 {
+  font-size: 1.5rem;
+}
+
+.klu-content h3 {
+  font-size: 1.25rem;
+}
+
+.klu-content p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.klu-content a {
+  color: var(--klu-accent-primary);
+  text-decoration: none;
+}
+
+.klu-content a:hover {
+  text-decoration: underline;
+}
+
+.klu-content code {
+  background-color: var(--klu-bg-tertiary);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+.klu-content pre {
+  background-color: var(--klu-bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.klu-content pre code {
+  background: none;
+  padding: 0;
+}
+
+.klu-content blockquote {
+  border-left: 3px solid var(--klu-accent-primary);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: var(--klu-text-secondary);
+}
+
+.klu-content ul,
+.klu-content ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.klu-content li {
+  margin: 0.25rem 0;
+}
+
+.klu-content img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.klu-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.klu-content th,
+.klu-content td {
+  border: 1px solid var(--klu-border-primary);
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.klu-content th {
+  background-color: var(--klu-bg-tertiary);
+  font-weight: 600;
+}
+
+/* Selection styles */
+.klu-theme ::selection {
+  background-color: var(--klu-accent-primary);
+  color: var(--klu-text-inverse);
+}
