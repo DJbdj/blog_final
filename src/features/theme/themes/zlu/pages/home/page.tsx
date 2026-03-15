@@ -3,7 +3,6 @@ import { Calendar, Clock, ArrowRight, Star } from "lucide-react";
 import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { config, extendedConfig } from "@/features/theme/themes/zlu/config";
-import { blogConfig } from "@/blog.config";
 import { formatDate } from "@/lib/utils";
 
 function FeaturedPostCard({ post }: { post: any }) {
@@ -118,12 +117,6 @@ export function HomePage({ posts }: HomePageProps) {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Section */}
-      <section className="text-center py-8">
-        <h1 className="text-3xl font-bold mb-3 text-white">{blogConfig.title}</h1>
-        <p className="text-gray-400 max-w-xl mx-auto">{blogConfig.description}</p>
-      </section>
-
       {/* Featured Posts - Horizontal Scroll */}
       {featuredPosts.length > 0 && (
         <section className="zlu-featured-section">
