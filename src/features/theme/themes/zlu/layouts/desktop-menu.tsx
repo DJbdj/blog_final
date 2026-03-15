@@ -50,90 +50,99 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
   };
 
   return (
-    <div className="zlu-desktop-menu-overlay" onClick={onClose}>
-      <div className="zlu-desktop-menu" onClick={(e) => e.stopPropagation()}>
-        <div className="zlu-menu-header">
-          <Link to="/" className="zlu-logo" onClick={onClose}>
-            {blogConfig.title}
-          </Link>
-          <button
-            onClick={onClose}
-            className="text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] transition-colors"
-            aria-label="关闭菜单"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] transition-opacity"
+        onClick={onClose}
+      />
 
-        <nav className="zlu-menu-nav">
-          {navOptions.map((item) => (
-            <Link
-              key={item.id}
-              to={item.to}
-              className="zlu-menu-item"
-              onClick={onClose}
-              activeProps={{ className: "active" }}
-            >
-              {item.label}
+      {/* Menu Panel */}
+      <div className="fixed top-[4.5rem] right-4 w-80 max-w-[calc(100vw-2rem)] z-[151] bg-[var(--zlu-bg-secondary)] border border-[var(--zlu-border)] rounded-xl shadow-2xl overflow-hidden">
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-4 pb-4 border-b border-[var(--zlu-border)]">
+            <Link to="/" className="zlu-logo font-semibold text-[var(--zlu-text-primary)]" onClick={onClose}>
+              {blogConfig.title}
             </Link>
-          ))}
-        </nav>
-
-        {/* Theme Switcher */}
-        <div className="zlu-menu-section">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[var(--zlu-text-secondary)]">主题模式</span>
             <button
-              onClick={cycleTheme}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--zlu-bg-tertiary)] hover:bg-[var(--zlu-bg-elevated)] transition-colors text-sm text-[var(--zlu-text-primary)] border border-[var(--zlu-border)]"
-              aria-label={`切换主题 (当前：${themeLabels[userTheme]})`}
+              onClick={onClose}
+              className="text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] transition-colors p-1 rounded-lg hover:bg-[var(--zlu-bg-tertiary)]"
+              aria-label="关闭菜单"
             >
-              {themeIcons[userTheme]}
-              <span>{themeLabels[userTheme]}</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
-        </div>
 
-        {/* User Section */}
-        <div className="zlu-menu-section">
-          {user ? (
-            <>
-              <div className="flex items-center gap-3 mb-4 px-2">
-                {user.image ? (
-                  <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full" />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-[var(--zlu-primary)] flex items-center justify-center text-white font-semibold">
-                    {user.name[0].toUpperCase()}
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm font-medium text-[var(--zlu-text-primary)]">{user.name}</p>
-                  {user.role && (
-                    <p className="text-xs text-[var(--zlu-text-secondary)]">{user.role === "admin" ? "管理员" : "用户"}</p>
-                  )}
-                </div>
-              </div>
-              <Link to="/admin" className="zlu-button zlu-button-primary w-full mb-2" onClick={onClose}>
-                控制台
+          <nav className="space-y-1 mb-4">
+            {navOptions.map((item) => (
+              <Link
+                key={item.id}
+                to={item.to}
+                className="block px-3 py-2.5 rounded-lg text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] hover:bg-[var(--zlu-bg-tertiary)] transition-all border border-transparent hover:border-[var(--zlu-border)]"
+                onClick={onClose}
+                activeProps={{ className: "active" }}
+              >
+                {item.label}
               </Link>
-              {logout && (
-                <button
-                  onClick={() => logout().then(onClose)}
-                  className="zlu-button zlu-button-secondary w-full"
-                >
-                  退出登录
-                </button>
-              )}
-            </>
-          ) : (
-            <Link to="/login" className="zlu-button zlu-button-primary w-full" onClick={onClose}>
-              登录
-            </Link>
-          )}
+            ))}
+          </nav>
+
+          {/* Theme Switcher */}
+          <div className="pt-4 mt-4 border-t border-[var(--zlu-border)]">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-[var(--zlu-text-secondary)]">主题模式</span>
+              <button
+                onClick={cycleTheme}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--zlu-bg-tertiary)] hover:bg-[var(--zlu-bg-elevated)] transition-colors text-sm text-[var(--zlu-text-primary)] border border-[var(--zlu-border)]"
+                aria-label={`切换主题 (当前：${themeLabels[userTheme]})`}
+              >
+                {themeIcons[userTheme]}
+                <span>{themeLabels[userTheme]}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* User Section */}
+          <div className="pt-4 mt-4 border-t border-[var(--zlu-border)]">
+            {user ? (
+              <>
+                <div className="flex items-center gap-3 mb-4 px-2 p-3 rounded-lg bg-[var(--zlu-bg-tertiary)] border border-[var(--zlu-border)]">
+                  {user.image ? (
+                    <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-[var(--zlu-primary)]" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[var(--zlu-primary)] flex items-center justify-center text-white font-semibold">
+                      {user.name[0].toUpperCase()}
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm font-medium text-[var(--zlu-text-primary)]">{user.name}</p>
+                    {user.role && (
+                      <p className="text-xs text-[var(--zlu-text-secondary)]">{user.role === "admin" ? "管理员" : "用户"}</p>
+                    )}
+                  </div>
+                </div>
+                <Link to="/admin" className="zlu-button zlu-button-primary w-full mb-2" onClick={onClose}>
+                  控制台
+                </Link>
+                {logout && (
+                  <button
+                    onClick={() => logout().then(onClose)}
+                    className="zlu-button zlu-button-secondary w-full"
+                  >
+                    退出登录
+                  </button>
+                )}
+              </>
+            ) : (
+              <Link to="/login" className="zlu-button zlu-button-primary w-full" onClick={onClose}>
+                登录
+              </Link>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
