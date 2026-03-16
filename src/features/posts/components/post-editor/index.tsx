@@ -139,16 +139,15 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
             {/* Import Markdown Button */}
             <Dialog open={isMarkdownDialogOpen} onOpenChange={setIsMarkdownDialogOpen}>
               <DialogTrigger asChild>
-                <Button
+                <button
                   type="button"
-                  variant="ghost"
-                  className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors"
+                  className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors inline-flex items-center justify-center gap-1"
                 >
                   <span className="mr-2 opacity-50">[</span>
-                  <Upload className="w-3 h-3 mr-1" />
+                  <Upload className="w-3 h-3" />
                   导入 Markdown
                   <span className="ml-2 opacity-50">]</span>
-                </Button>
+                </button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>

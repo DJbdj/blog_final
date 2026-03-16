@@ -4,7 +4,7 @@
 /* ZLu Theme Styles - Dark Minimalist Design */
 
 /* CSS Variables - Light Mode (Default) */
-.theme-zlu.light {
+html.light {
   /* Primary Colors */
   --zlu-primary: #2563eb;
   --zlu-primary-hover: #1d4ed8;
@@ -50,7 +50,7 @@
 }
 
 /* CSS Variables - Dark Mode */
-.theme-zlu.dark {
+html.dark {
   /* Primary Colors */
   --zlu-primary: #3b82f6;
   --zlu-primary-hover: #2563eb;
@@ -96,8 +96,8 @@
 }
 
 /* Base Styles - applied to both light and dark modes */
-.theme-zlu.light,
-.theme-zlu.dark {
+html.light,
+html.dark {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
   background: var(--zlu-bg-primary);
   color: var(--zlu-text-primary);
@@ -431,13 +431,13 @@
 }
 
 /* Navbar - Light Mode */
-.theme-zlu.light .zlu-navbar {
+html.light .zlu-navbar {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
 }
 
 /* Navbar - Dark Mode */
-.theme-zlu.dark .zlu-navbar {
+html.dark .zlu-navbar {
   background: rgba(13, 17, 23, 0.95);
   backdrop-filter: blur(8px);
 }
