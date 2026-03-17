@@ -71,9 +71,7 @@ function preprocessMathInMarkdown(markdown: string): string {
 /**
  * Markdown → JSONContent 转换
  *
- * NOTE: @tiptap/html checks for browser (window) or Node (process.versions.node)
- * and neither is available in Cloudflare Workers. We bypass this by calling
- * ProseMirror's DOMParser directly with linkedom as the DOM implementation.
+ * 使用与编辑器相同的扩展配置，确保解析结果与编辑器兼容。
  */
 export async function markdownToJsonContent(
   markdown: string,
@@ -87,6 +85,7 @@ export async function markdownToJsonContent(
   const { DOMParser: PMDOMParser } = await import("@tiptap/pm/model");
   const { parseHTML } = await import("linkedom");
 
+  // 使用与编辑器相同的扩展配置
   const { default: StarterKit } = await import("@tiptap/starter-kit");
   const { default: ImageExt } = await import("@tiptap/extension-image");
   const { default: Mathematics } =
@@ -97,14 +96,76 @@ export async function markdownToJsonContent(
     await import("@tiptap/extension-table-header");
   const { default: TableCell } = await import("@tiptap/extension-table-cell");
 
+  // 导入自定义扩展
+  const { ImageExtension } = await import(
+    "@/features/posts/editor/extensions/images"
+  );
+  const { CodeBlockExtension } = await import(
+    "@/features/posts/editor/extensions/code-block"
+  );
+  const { HeadingExtension } = await import(
+    "@/features/posts/editor/extensions/typography/heading"
+  );
+  const { BlockQuoteExtension } = await import(
+    "@/features/posts/editor/extensions/typography/block-quote"
+  );
+  const {
+    BulletListExtension,
+    OrderedListExtension,
+    ListItemExtension,
+  } = await import("@/features/posts/editor/extensions/typography/list");
+
   const schema = getSchema([
-    StarterKit,
-    ImageExt,
-    Mathematics.configure({ katexOptions: { throwOnError: false } }),
+    StarterKit.configure({
+      orderedList: false,
+      bulletList: false,
+      listItem: false,
+      heading: false,
+      codeBlock: false,
+      blockquote: false,
+      code: {
+        HTMLAttributes: {
+          class:
+            "font-mono text-sm px-1 text-foreground/80 bg-muted/40 rounded-sm",
+          spellCheck: false,
+        },
+      },
+      underline: {
+        HTMLAttributes: {
+          class: "underline underline-offset-4 decoration-border/60",
+        },
+      },
+      strike: {
+        HTMLAttributes: {
+          class: "line-through opacity-50 decoration-foreground/40",
+        },
+      },
+      link: {
+        autolink: true,
+        openOnClick: false,
+        HTMLAttributes: {
+          class:
+            "font-normal underline underline-offset-4 decoration-border hover:decoration-foreground transition-all duration-300 cursor-pointer text-foreground",
+          target: "_blank",
+        },
+      },
+    }),
+    BulletListExtension,
+    OrderedListExtension,
+    ListItemExtension,
+    HeadingExtension.configure({
+      levels: [1, 2, 3, 4],
+    }),
+    BlockQuoteExtension,
+    CodeBlockExtension,
+    Mathematics.configure({
+      katexOptions: { throwOnError: false },
+    }),
     Table,
     TableRow,
     TableHeader,
     TableCell,
+    ImageExtension,
   ]);
 
   const { document } = parseHTML(
