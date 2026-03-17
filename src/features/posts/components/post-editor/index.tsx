@@ -28,6 +28,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { markdownToJsonContent } from "@/features/import-export/utils/markdown-parser";
 
 export function PostEditor({ initialData, onSave }: PostEditorProps) {
   // Initialize post state from initialData (always provided)
@@ -180,15 +181,28 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
                   <Button
                     type="button"
                     variant="default"
-                    onClick={() => {
+                    onClick={async () => {
                       if (markdownContentRef.current && editorInstance) {
-                        const content = markdownContentRef.current;
+                        try {
+                          // Parse markdown to JSONContent
+                          const jsonContent = await markdownToJsonContent(
+                            markdownContentRef.current,
+                          );
 
-                        // Insert markdown content into editor
-                        editorInstance.commands.setContent(content);
+                          // Set content in editor
+                          editorInstance.commands.setContent(jsonContent);
 
-                        setIsMarkdownDialogOpen(false);
-                        toast.success("Markdown 内容已导入到编辑器");
+                          setIsMarkdownDialogOpen(false);
+                          toast.success("Markdown 内容已导入到编辑器");
+                        } catch (error) {
+                          console.error("Markdown parse error:", error);
+                          toast.error("解析失败", {
+                            description:
+                              error instanceof Error
+                                ? error.message
+                                : "无法解析 Markdown 文件",
+                          });
+                        }
                       } else if (!editorInstance) {
                         toast.error("编辑器尚未初始化");
                       }
