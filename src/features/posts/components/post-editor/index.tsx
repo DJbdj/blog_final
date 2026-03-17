@@ -27,7 +27,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 export function PostEditor({ initialData, onSave }: PostEditorProps) {
@@ -138,17 +137,16 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
           <div className="flex items-center gap-4">
             {/* Import Markdown Button */}
             <Dialog open={isMarkdownDialogOpen} onOpenChange={setIsMarkdownDialogOpen}>
-              <DialogTrigger asChild>
-                <button
-                  type="button"
-                  className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors inline-flex items-center justify-center gap-1"
-                >
-                  <span className="mr-2 opacity-50">[</span>
-                  <Upload className="w-3 h-3" />
-                  导入 Markdown
-                  <span className="ml-2 opacity-50">]</span>
-                </button>
-              </DialogTrigger>
+              <button
+                type="button"
+                onClick={() => setIsMarkdownDialogOpen(true)}
+                className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors inline-flex items-center justify-center gap-1"
+              >
+                <span className="mr-2 opacity-50">[</span>
+                <Upload className="w-3 h-3" />
+                导入 Markdown
+                <span className="ml-2 opacity-50">]</span>
+              </button>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
