@@ -69,9 +69,22 @@
     border-radius: var(--fuwari-radius-large);
     overflow: hidden;
     background-color: var(--fuwari-card-bg);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     transition:
       background-color 0.3s,
-      color 0.3s;
+      color 0.3s,
+      box-shadow 0.3s,
+      border-color 0.3s;
+  }
+  .fuwari-card-base:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: transparent;
+  }
+  .dark .fuwari-card-base {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .dark .fuwari-card-base:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 
   .fuwari-btn-regular {
@@ -171,14 +184,12 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    scale: 0.85;
+    background-color: transparent;
     z-index: -1;
     transition:
-      scale 0.2s ease-out,
-      background-color 0.2s;
+      background-color 0.2s ease;
   }
   .fuwari-expand-animation:hover::before {
-    scale: 1;
     background-color: var(--fuwari-btn-plain-bg-hover);
   }
   .fuwari-expand-animation:active::before {
