@@ -36,7 +36,7 @@ function renderReact(content: any) {
           </div>
         ),
         tableRow: ({ node: _node, children }) => (
-          <tr className="border-b border-gray-700">{children}</tr>
+          <tr className="border-b border-[var(--zlu-border)]">{children}</tr>
         ),
         tableHeader: ({ node: _node, children }: any) => {
           const attrs = _node.attrs as {
@@ -47,7 +47,7 @@ function renderReact(content: any) {
           };
           return (
             <th
-              className="border border-gray-700 px-4 py-2 bg-gray-800 font-semibold text-left"
+              className="border border-[var(--zlu-border)] px-4 py-2 bg-[var(--zlu-bg-tertiary)] font-semibold text-left"
               colSpan={attrs.colspan}
               rowSpan={attrs.rowspan}
               style={attrs.style ? { width: attrs.style } : undefined}
@@ -65,7 +65,7 @@ function renderReact(content: any) {
           };
           return (
             <td
-              className="border border-gray-700 px-4 py-2"
+              className="border border-[var(--zlu-border)] px-4 py-2"
               colSpan={attrs.colspan}
               rowSpan={attrs.rowspan}
               style={attrs.style ? { width: attrs.style } : undefined}
@@ -75,17 +75,17 @@ function renderReact(content: any) {
           );
         },
         blockquote: ({ node: _node, children }: any) => (
-          <blockquote className="border-l-4 border-blue-500 pl-4 my-4 italic text-gray-400">
+          <blockquote className="border-l-4 border-[var(--zlu-primary)] pl-4 my-4 italic text-[var(--zlu-text-secondary)]">
             {children}
           </blockquote>
         ),
         bulletList: ({ node: _node, children }: any) => (
-          <ul className="list-disc list-inside my-4 space-y-1 text-gray-300">
+          <ul className="list-disc list-inside my-4 space-y-1 text-[var(--zlu-text-secondary)]">
             {children}
           </ul>
         ),
         orderedList: ({ node: _node, children }: any) => (
-          <ol className="list-decimal list-inside my-4 space-y-1 text-gray-300">
+          <ol className="list-decimal list-inside my-4 space-y-1 text-[var(--zlu-text-secondary)]">
             {children}
           </ol>
         ),
@@ -94,15 +94,15 @@ function renderReact(content: any) {
         ),
         heading: ({ node: _node, children }: any) => {
           const level = _node.attrs.level as number;
-          if (level === 1) return <h1 className="text-white font-semibold text-3xl mt-6 mb-3">{children}</h1>;
-          if (level === 2) return <h2 className="text-white font-semibold text-2xl mt-6 mb-3">{children}</h2>;
-          if (level === 3) return <h3 className="text-white font-semibold text-xl mt-6 mb-3">{children}</h3>;
-          if (level === 4) return <h4 className="text-white font-semibold text-lg mt-6 mb-3">{children}</h4>;
-          if (level === 5) return <h5 className="text-white font-semibold text-base mt-6 mb-3">{children}</h5>;
-          return <h6 className="text-white font-semibold text-sm mt-6 mb-3">{children}</h6>;
+          if (level === 1) return <h1 className="text-[var(--zlu-text-primary)] font-semibold text-3xl mt-6 mb-3">{children}</h1>;
+          if (level === 2) return <h2 className="text-[var(--zlu-text-primary)] font-semibold text-2xl mt-6 mb-3">{children}</h2>;
+          if (level === 3) return <h3 className="text-[var(--zlu-text-primary)] font-semibold text-xl mt-6 mb-3">{children}</h3>;
+          if (level === 4) return <h4 className="text-[var(--zlu-text-primary)] font-semibold text-lg mt-6 mb-3">{children}</h4>;
+          if (level === 5) return <h5 className="text-[var(--zlu-text-primary)] font-semibold text-base mt-6 mb-3">{children}</h5>;
+          return <h6 className="text-[var(--zlu-text-primary)] font-semibold text-sm mt-6 mb-3">{children}</h6>;
         },
         paragraph: ({ node: _node, children }: any) => (
-          <p className="text-gray-300 my-4 leading-relaxed">
+          <p className="text-[var(--zlu-text-secondary)] my-4 leading-relaxed">
             {children}
           </p>
         ),
@@ -117,13 +117,13 @@ function renderReact(content: any) {
             } else if (mark.type === "italic") {
               rendered = <em key={mark.type}>{rendered}</em>;
             } else if (mark.type === "code") {
-              rendered = <code key={mark.type} className="bg-gray-800 px-1 py-0.5 rounded text-sm font-mono text-pink-400">{rendered}</code>;
+              rendered = <code key={mark.type} className="bg-[var(--zlu-bg-tertiary)] px-1 py-0.5 rounded text-sm font-mono text-[var(--zlu-primary)]">{rendered}</code>;
             } else if (mark.type === "underline") {
               rendered = <u key={mark.type}>{rendered}</u>;
             } else if (mark.type === "strike") {
               rendered = <s key={mark.type}>{rendered}</s>;
             } else if (mark.type === "link") {
-              rendered = <a key={mark.attrs.href} href={mark.attrs.href} className="text-blue-400 hover:text-blue-300 underline" target="_blank" rel="noopener noreferrer">{rendered}</a>;
+              rendered = <a key={mark.attrs.href} href={mark.attrs.href} className="text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)] underline" target="_blank" rel="noopener noreferrer">{rendered}</a>;
             }
           }
           return rendered;

@@ -15,7 +15,7 @@ export function ResetPasswordPage({ resetPasswordForm, error }: ResetPasswordPag
           </svg>
         </div>
         <h1 className="zlu-auth-title mb-2">重置失败</h1>
-        <p className="text-gray-400 mb-6">{error}</p>
+        <p className="text-[var(--zlu-text-secondary)] mb-6">{error}</p>
       </div>
     );
   }

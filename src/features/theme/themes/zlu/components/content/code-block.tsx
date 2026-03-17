@@ -21,10 +21,10 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
     <div className="relative my-4 rounded-lg overflow-hidden border border-gray-700 bg-gray-900">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
-        <span className="text-xs text-gray-400 font-mono">{language}</span>
+        <span className="text-xs text-[var(--zlu-text-tertiary)] font-mono">{language}</span>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 text-xs text-gray-400 hover:text-white transition-colors"
+          className="flex items-center gap-1 text-xs text-[var(--zlu-text-tertiary)] hover:text-[var(--zlu-text-primary)] transition-colors"
         >
           {copied ? (
             <>

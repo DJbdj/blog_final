@@ -72,7 +72,7 @@ export function RegisterPage({ registerForm }: RegisterPageProps) {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)]"
             >
               {showPassword ? (
                 <EyeOff size={18} />
@@ -102,7 +102,7 @@ export function RegisterPage({ registerForm }: RegisterPageProps) {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)]"
             >
               {showConfirmPassword ? (
                 <EyeOff size={18} />
@@ -135,10 +135,10 @@ export function RegisterPage({ registerForm }: RegisterPageProps) {
 
       {/* Links */}
       <div className="text-center mt-6">
-        <span className="text-sm text-gray-400">已有账户？</span>
+        <span className="text-sm text-[var(--zlu-text-secondary)]">已有账户？</span>
         <Link
           to="/login"
-          className="ml-2 text-sm text-blue-400 hover:text-blue-300"
+          className="ml-2 text-sm text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)]"
         >
           立即登录
         </Link>

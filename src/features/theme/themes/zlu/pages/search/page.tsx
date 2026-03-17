@@ -14,7 +14,7 @@ export function SearchPage({
       {/* Back Button */}
       <button
         onClick={onBack}
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+        className="inline-flex items-center gap-2 text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         返回
@@ -36,12 +36,12 @@ export function SearchPage({
       {/* Results */}
       {isSearching ? (
         <div className="text-center py-12">
-          <div className="inline-block w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-400 mt-4">搜索中...</p>
+          <div className="inline-block w-8 h-8 border-2 border-[var(--zlu-primary)] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[var(--zlu-text-secondary)] mt-4">搜索中...</p>
         </div>
       ) : results.length > 0 ? (
         <div className="space-y-4">
-          <p className="text-gray-400 text-sm">
+          <p className="text-[var(--zlu-text-secondary)] text-sm">
             找到 {results.length} 个结果
           </p>
           {results.map((result) => (
@@ -58,7 +58,7 @@ export function SearchPage({
                   {result.matches.title || result.post.title}
                 </Link>
               </h3>
-              <p className="text-gray-400 text-sm mb-4">
+              <p className="text-[var(--zlu-text-secondary)] text-sm mb-4">
                 {result.matches.summary || result.post.summary || ""}
               </p>
               {result.post.tags && result.post.tags.length > 0 && (
@@ -70,7 +70,7 @@ export function SearchPage({
                   ))}
                 </div>
               )}
-              <div className="flex items-center gap-2 text-xs text-gray-500">
+              <div className="flex items-center gap-2 text-xs text-[var(--zlu-text-tertiary)]">
                 {result.post.tags && result.post.tags.length > 0 && (
                   <span>
                     {result.post.tags.slice(0, 3).map((tag: string) => (
@@ -86,16 +86,16 @@ export function SearchPage({
         </div>
       ) : query ? (
         <div className="text-center py-12">
-          <Search className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400">未找到相关结果</p>
-          <p className="text-gray-500 text-sm mt-2">
+          <Search className="w-12 h-12 text-[var(--zlu-text-tertiary)] mx-auto mb-4" />
+          <p className="text-[var(--zlu-text-secondary)]">未找到相关结果</p>
+          <p className="text-[var(--zlu-text-tertiary)] text-sm mt-2">
             尝试其他关键词或浏览全部文章
           </p>
         </div>
       ) : (
         <div className="text-center py-12">
-          <Search className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400">输入关键词开始搜索</p>
+          <Search className="w-12 h-12 text-[var(--zlu-text-tertiary)] mx-auto mb-4" />
+          <p className="text-[var(--zlu-text-secondary)]">输入关键词开始搜索</p>
         </div>
       )}
     </div>

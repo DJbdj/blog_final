@@ -11,7 +11,7 @@ export function SubmitFriendLinkPage({ form }: SubmitFriendLinkPageProps) {
       {/* Back Button */}
       <Link
         to="/friend-links"
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+        className="inline-flex items-center gap-2 text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         返回友链列表
@@ -19,8 +19,8 @@ export function SubmitFriendLinkPage({ form }: SubmitFriendLinkPageProps) {
 
       {/* Header */}
       <div className="text-center py-6">
-        <h1 className="text-3xl font-bold mb-2 text-white">申请友链</h1>
-        <p className="text-gray-400">填写以下信息，审核通过后将展示在友链页面</p>
+        <h1 className="text-3xl font-bold mb-2 text-[var(--zlu-text-primary)]">申请友链</h1>
+        <p className="text-[var(--zlu-text-secondary)]">填写以下信息，审核通过后将展示在友链页面</p>
       </div>
 
       {/* Form */}
@@ -29,7 +29,7 @@ export function SubmitFriendLinkPage({ form }: SubmitFriendLinkPageProps) {
       </div>
 
       {/* Info */}
-      <div className="text-center text-sm text-gray-400">
+      <div className="text-center text-sm text-[var(--zlu-text-secondary)]">
         <p>我们会在 1-3 个工作日内完成审核</p>
         <p>审核结果将通过邮件通知</p>
       </div>

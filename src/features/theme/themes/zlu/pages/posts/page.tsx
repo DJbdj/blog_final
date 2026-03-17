@@ -68,8 +68,8 @@ export function PostsPage({
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center py-6">
-        <h1 className="text-3xl font-bold mb-2 text-white">全部文章</h1>
-        <p className="text-gray-400">共 {posts.length} 篇文章</p>
+        <h1 className="text-3xl font-bold mb-2 text-[var(--zlu-text-primary)]">全部文章</h1>
+        <p className="text-[var(--zlu-text-secondary)]">共 {posts.length} 篇文章</p>
       </div>
 
       {/* Tags Filter */}
@@ -80,7 +80,7 @@ export function PostsPage({
             <button
               onClick={() => onTagClick("")}
               className={`zlu-tag cursor-pointer transition-all ${
-                !selectedTag ? "bg-blue-600 text-white border-blue-600" : ""
+                !selectedTag ? "bg-[var(--zlu-primary)] text-white border-[var(--zlu-primary)]" : ""
               }`}
             >
               全部
@@ -90,7 +90,7 @@ export function PostsPage({
                 key={tag.id}
                 onClick={() => onTagClick(tag.name)}
                 className={`zlu-tag cursor-pointer transition-all ${
-                  selectedTag === tag.name ? "bg-blue-600 text-white border-blue-600" : ""
+                  selectedTag === tag.name ? "bg-[var(--zlu-primary)] text-white border-[var(--zlu-primary)]" : ""
                 }`}
               >
                 #{tag.name}
@@ -109,7 +109,7 @@ export function PostsPage({
           ))
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-400">暂无文章</p>
+            <p className="text-[var(--zlu-text-tertiary)]">暂无文章</p>
           </div>
         )}
       </div>

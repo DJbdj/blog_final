@@ -16,8 +16,8 @@ export function ProfilePage({ profileForm, user, logout }: ProfilePageProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center py-6">
-        <h1 className="text-3xl font-bold mb-2 text-white">个人资料</h1>
-        <p className="text-gray-400">管理你的账户信息</p>
+        <h1 className="text-3xl font-bold mb-2 text-[var(--zlu-text-primary)]">个人资料</h1>
+        <p className="text-[var(--zlu-text-secondary)]">管理你的账户信息</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -32,11 +32,11 @@ export function ProfilePage({ profileForm, user, logout }: ProfilePageProps) {
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                <User size={32} className="text-blue-500" />
+                <User size={32} className="text-[var(--zlu-primary)]" />
               )}
             </div>
-            <h2 className="text-xl font-bold mb-1 text-white">{user.name}</h2>
-            <p className="text-gray-400 text-sm mb-4">{user.email}</p>
+            <h2 className="text-xl font-bold mb-1 text-[var(--zlu-text-primary)]">{user.name}</h2>
+            <p className="text-[var(--zlu-text-secondary)] text-sm mb-4">{user.email}</p>
             <button
               onClick={() => setIsEditing(!isEditing)}
               className="zlu-button zlu-button-secondary text-sm w-full"
@@ -109,17 +109,17 @@ export function ProfilePage({ profileForm, user, logout }: ProfilePageProps) {
               {/* Info Fields */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <Mail size={20} className="text-gray-400" />
+                  <Mail size={20} className="text-[var(--zlu-text-secondary)]" />
                   <div>
-                    <p className="text-sm text-gray-400">邮箱</p>
-                    <p className="font-medium text-white">{user.email}</p>
+                    <p className="text-sm text-[var(--zlu-text-secondary)]">邮箱</p>
+                    <p className="font-medium text-[var(--zlu-text-primary)]">{user.email}</p>
                   </div>
                 </div>
 
                 {user.role && (
                   <div>
-                    <p className="text-sm text-gray-400 mb-2">角色</p>
-                    <p className="text-white">{user.role === "admin" ? "管理员" : "用户"}</p>
+                    <p className="text-sm text-[var(--zlu-text-secondary)] mb-2">角色</p>
+                    <p className="text-[var(--zlu-text-primary)]">{user.role === "admin" ? "管理员" : "用户"}</p>
                   </div>
                 )}
               </div>

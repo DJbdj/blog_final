@@ -20,18 +20,18 @@ function FeaturedPostCard({ post }: { post: any }) {
       </div>
       <div className="zlu-featured-content">
         <div className="flex items-center gap-2 mb-2">
-          <span className="inline-flex items-center gap-1 text-xs text-blue-400">
+          <span className="inline-flex items-center gap-1 text-xs text-[var(--zlu-primary)]">
             <Star className="w-3 h-3" fill="currentColor" />
             精选
           </span>
         </div>
         <h3 className="zlu-featured-title-text">
-          <Link to="/post/$slug" params={{ slug: post.slug }} className="hover:text-blue-400 transition-colors">
+          <Link to="/post/$slug" params={{ slug: post.slug }}>
             {post.title}
           </Link>
         </h3>
         {post.summary && (
-          <p className="text-xs text-gray-400 line-clamp-2 mb-3">
+          <p className="text-xs text-[var(--zlu-text-tertiary)] line-clamp-2 mb-3">
             {post.summary}
           </p>
         )}
@@ -135,13 +135,13 @@ export function HomePage({ posts }: HomePageProps) {
       {/* Recent Posts List */}
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-            <ArrowRight className="w-5 h-5 text-blue-500" />
+          <h2 className="text-xl font-semibold text-[var(--zlu-text-primary)] flex items-center gap-2">
+            <ArrowRight className="w-5 h-5 text-[var(--zlu-primary)]" />
             {extendedConfig.postsListTitle || "最新文章"}
           </h2>
           <Link
             to="/posts"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
+            className="text-sm text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)] transition-colors flex items-center gap-1"
           >
             查看全部
             <ArrowRight className="w-4 h-4" />
@@ -155,7 +155,7 @@ export function HomePage({ posts }: HomePageProps) {
             ))
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-400">暂无文章</p>
+              <p className="text-[var(--zlu-text-tertiary)]">暂无文章</p>
             </div>
           )}
         </div>

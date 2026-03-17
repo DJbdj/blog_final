@@ -42,7 +42,7 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
           onClick={() => setIsZoomed(false)}
         >
           <button
-            className="absolute top-4 right-4 p-2 text-white hover:text-gray-300 transition-colors"
+            className="absolute top-4 right-4 p-2 text-white hover:text-[var(--zlu-text-tertiary)] transition-colors"
             onClick={() => setIsZoomed(false)}
             aria-label="关闭"
           >

@@ -72,7 +72,7 @@ export function LoginPage({ loginForm, socialLogin, isEmailConfigured }: LoginPa
           </button>
         </form>
       ) : (
-        <p className="text-center text-sm text-gray-400 mb-6">
+        <p className="text-center text-sm text-[var(--zlu-text-secondary)] mb-6">
           请使用以下方式登录
         </p>
       )}
@@ -89,10 +89,10 @@ export function LoginPage({ loginForm, socialLogin, isEmailConfigured }: LoginPa
       {/* Links */}
       <div className="space-y-4 mt-6">
         <div className="text-center">
-          <span className="text-sm text-gray-400">还没有账户？</span>
+          <span className="text-sm text-[var(--zlu-text-secondary)]">还没有账户？</span>
           <Link
             to="/register"
-            className="ml-2 text-sm text-blue-400 hover:text-blue-300"
+            className="ml-2 text-sm text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)]"
           >
             立即注册
           </Link>

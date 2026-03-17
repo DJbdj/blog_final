@@ -21,11 +21,11 @@ export function ForgotPasswordPage({ forgotPasswordForm }: ForgotPasswordPagePro
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-white">邮件已发送</h2>
-          <p className="text-gray-400 text-sm">
+          <h2 className="text-lg font-semibold text-[var(--zlu-text-primary)]">邮件已发送</h2>
+          <p className="text-[var(--zlu-text-secondary)] text-sm">
             请检查邮箱 {sentEmail} 中的重置链接
           </p>
-          <p className="text-gray-500 text-xs">
+          <p className="text-[var(--zlu-text-tertiary)] text-xs">
             如果没有收到邮件，请检查垃圾邮件箱
           </p>
         </div>
@@ -65,7 +65,7 @@ export function ForgotPasswordPage({ forgotPasswordForm }: ForgotPasswordPagePro
       )}
 
       <div className="text-center mt-6">
-        <Link to="/login" className="text-sm text-blue-400 hover:text-blue-300">
+        <Link to="/login" className="text-sm text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)]">
           返回登录
         </Link>
       </div>

@@ -31,7 +31,7 @@ export function ImageDisplay({ src, alt, caption }: ImageDisplayProps) {
           </button>
         </div>
         {caption && (
-          <figcaption className="text-center text-sm text-gray-400 mt-2">
+          <figcaption className="text-center text-sm text-[var(--zlu-text-secondary)] mt-2">
             {caption}
           </figcaption>
         )}

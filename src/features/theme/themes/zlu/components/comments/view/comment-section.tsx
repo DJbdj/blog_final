@@ -43,7 +43,7 @@ interface CommentListProps {
 function CommentList({ rootComments }: CommentListProps) {
   if (rootComments.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400">
+      <div className="text-center py-8 text-[var(--zlu-text-secondary)]">
         暂无评论，快来抢沙发吧！
       </div>
     );
@@ -61,12 +61,12 @@ function CommentList({ rootComments }: CommentListProps) {
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-medium text-white">{comment.author?.name || "匿名"}</span>
-                <span className="text-xs text-gray-500">
+                <span className="font-medium text-[var(--zlu-text-primary)]">{comment.author?.name || "匿名"}</span>
+                <span className="text-xs text-[var(--zlu-text-tertiary)]">
                   {new Date(comment.createdAt).toLocaleDateString()}
                 </span>
               </div>
-              <p className="text-gray-300 text-sm">{comment.content}</p>
+              <p className="text-[var(--zlu-text-secondary)] text-sm">{comment.content}</p>
             </div>
           </div>
         </div>
@@ -98,9 +98,9 @@ export function CommentSection({ className }: CommentSectionProps) {
   };
 
   return (
-    <section className={`space-y-8 mt-12 pt-8 border-t border-gray-700 ${className || ""}`}>
+    <section className={`space-y-8 mt-12 pt-8 border-t border-[var(--zlu-border)] ${className || ""}`}>
       <header>
-        <p className="text-xl font-semibold text-white">{comments.length} 条评论</p>
+        <p className="text-xl font-semibold text-[var(--zlu-text-primary)]">{comments.length} 条评论</p>
       </header>
 
       <div className="space-y-4">

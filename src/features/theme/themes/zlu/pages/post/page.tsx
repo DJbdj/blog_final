@@ -10,7 +10,7 @@ export function PostPage({ post }: PostPageProps) {
       {/* Back Button */}
       <Link
         to="/"
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-[var(--zlu-text-secondary)] hover:text-[var(--zlu-text-primary)] mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         返回首页
@@ -21,7 +21,7 @@ export function PostPage({ post }: PostPageProps) {
         <h1 className="zlu-article-title">{post.title}</h1>
 
         {post.summary && (
-          <p className="text-gray-400 mb-6 text-lg">{post.summary}</p>
+          <p className="text-[var(--zlu-text-secondary)] mb-6 text-lg">{post.summary}</p>
         )}
 
         <div className="zlu-article-meta">
@@ -61,18 +61,18 @@ export function PostPage({ post }: PostPageProps) {
       </div>
 
       {/* Article Footer */}
-      <footer className="mt-8 pt-6 border-t border-gray-700">
+      <footer className="mt-8 pt-6 border-t border-[var(--zlu-border)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             {post.tags && post.tags.length > 0 && (
-              <div className="flex items-center gap-2 text-sm text-gray-400">
+              <div className="flex items-center gap-2 text-sm text-[var(--zlu-text-secondary)]">
                 <Tag className="w-4 h-4" />
                 {post.tags.map((tag: any) => (
                   <Link
                     key={tag.id}
                     to="/posts"
                     search={{ tagName: tag.name }}
-                    className="text-blue-400 hover:text-blue-300"
+                    className="text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)]"
                   >
                     #{tag.name}
                   </Link>
