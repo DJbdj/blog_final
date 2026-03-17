@@ -27,8 +27,10 @@ export const uploadMarkdownFn = createServerFn({
 })
   .middleware([adminMiddleware])
   .inputValidator(
-    z.object({
-      file: z.instanceof(File),
+    z.instanceof(FormData).transform((formData) => {
+      const file = formData.get("file");
+      if (!(file instanceof File)) throw new Error("Markdown file is required");
+      return { file };
     }),
   )
   .handler(async ({ data, context }) => {
