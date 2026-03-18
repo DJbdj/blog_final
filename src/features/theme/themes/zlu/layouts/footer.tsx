@@ -11,7 +11,6 @@ export function Footer({ navOptions }: FooterProps) {
       <div className="zlu-footer-content">
         <div className="zlu-footer-section">
           <h4>{blogConfig.title}</h4>
-          <p className="text-sm text-[var(--zlu-text-secondary)]">{blogConfig.description}</p>
         </div>
 
         <div className="zlu-footer-section">

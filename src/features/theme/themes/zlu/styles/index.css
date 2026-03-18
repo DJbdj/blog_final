@@ -459,7 +459,7 @@ html.light .zlu-sidebar-card {
 }
 
 .zlu-post-card:hover {
-  border-color: var(--zlu-border-muted);
+  border-color: var(--zlu-primary);
   background: var(--zlu-bg-elevated);
   box-shadow: var(--zlu-shadow-md), 0 0 30px rgba(96, 165, 250, 0.08);
   transform: translateY(-3px);
@@ -569,13 +569,15 @@ html.light .zlu-sidebar-card {
   font-size: 0.75rem;
   transition: all var(--zlu-transition-fast);
   border: 1px solid var(--zlu-border-muted);
+  cursor: pointer;
 }
 
 .zlu-tag:hover {
   background: rgba(96, 165, 250, 0.15);
   border-color: rgba(96, 165, 250, 0.3);
   color: var(--zlu-primary);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.15);
 }
 
 /* Navbar - Enhanced Glassmorphism */

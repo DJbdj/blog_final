@@ -65,7 +65,6 @@ export function PublicLayout({
                 className="zlu-avatar"
               />
               <h2 className="zlu-site-title">{import.meta.env.VITE_BLOG_TITLE || "我的博客"}</h2>
-              <p className="zlu-site-description">{import.meta.env.VITE_BLOG_DESCRIPTION || "记录技术与生活"}</p>
             </div>
 
             <nav className="zlu-nav-menu">
