@@ -28,9 +28,19 @@ export async function getDraftsCount(db: DB) {
 export async function getRecentComments(db: DB, limit = 5) {
   const results = await db
     .select({
-      comment: CommentsTable,
+      id: CommentsTable.id,
+      content: CommentsTable.content,
+      root_id: CommentsTable.root_id,
+      reply_to_comment_id: CommentsTable.reply_to_comment_id,
+      status: CommentsTable.status,
+      ai_reason: CommentsTable.ai_reason,
+      post_id: CommentsTable.postId,
+      user_id: CommentsTable.userId,
+      createdAt: CommentsTable.createdAt,
+      updatedAt: CommentsTable.updatedAt,
       user: UserTable,
-      post: PostsTable,
+      postTitle: PostsTable.title,
+      postSlug: PostsTable.slug,
     })
     .from(CommentsTable)
     .leftJoin(UserTable, eq(CommentsTable.userId, UserTable.id))
@@ -40,9 +50,18 @@ export async function getRecentComments(db: DB, limit = 5) {
 
   // Transform to flat structure for easier consumption
   return results.map((r) => ({
-    ...r.comment,
+    id: r.id,
+    content: r.content,
+    root_id: r.root_id,
+    reply_to_comment_id: r.reply_to_comment_id,
+    status: r.status,
+    ai_reason: r.ai_reason,
+    post_id: r.post_id,
+    user_id: r.user_id,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
     user: r.user,
-    post: r.post,
+    post: r.postTitle ? { title: r.postTitle, slug: r.postSlug } : null,
   }));
 }
 
