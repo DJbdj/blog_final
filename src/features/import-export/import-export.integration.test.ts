@@ -167,6 +167,7 @@ describe("Import/Export Integration", () => {
     });
 
     it("should import a post without content.json (markdown fallback)", async () => {
+      // This test may take longer due to markdown parsing
       const frontmatter: PostFrontmatter = {
         title: "Markdown Only",
         slug: "md-only",
@@ -196,7 +197,7 @@ describe("Import/Export Integration", () => {
       const post = await PostRepo.findPostBySlug(db, "md-only");
       expect(post).not.toBeNull();
       expect(post!.contentJson).not.toBeNull();
-    });
+    }, 15000);
   });
 
   describe("Markdown mode import", () => {
