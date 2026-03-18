@@ -456,9 +456,36 @@ html.light .zlu-sidebar-card {
   );
   opacity: 0;
   transition: opacity var(--zlu-transition-normal);
+  z-index: 1;
 }
 
-.zlu-post-card:hover {
+.zlu-post-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--zlu-radius-lg);
+  box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.1);
+  opacity: 0;
+  transition: opacity var(--zlu-transition-normal);
+  pointer-events: none;
+}
+
+/* Light mode hover - enhanced to prevent edge separation */
+html.light .zlu-post-card:hover {
+  border-color: rgba(96, 165, 250, 0.5);
+  background: var(--zlu-bg-elevated);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(96, 165, 250, 0.2),
+    0 0 40px rgba(96, 165, 250, 0.1);
+  transform: translateY(-3px);
+}
+
+/* Dark mode hover */
+html.dark .zlu-post-card:hover {
   border-color: var(--zlu-primary);
   background: var(--zlu-bg-elevated);
   box-shadow: var(--zlu-shadow-md), 0 0 30px rgba(96, 165, 250, 0.08);
@@ -466,6 +493,10 @@ html.light .zlu-sidebar-card {
 }
 
 .zlu-post-card:hover::before {
+  opacity: 1;
+}
+
+.zlu-post-card:hover::after {
   opacity: 1;
 }
 
@@ -570,9 +601,21 @@ html.light .zlu-sidebar-card {
   transition: all var(--zlu-transition-fast);
   border: 1px solid var(--zlu-border-muted);
   cursor: pointer;
+  position: relative;
+  will-change: transform;
 }
 
-.zlu-tag:hover {
+/* Light mode tag hover */
+html.light .zlu-tag:hover {
+  background: rgba(96, 165, 250, 0.12);
+  border-color: rgba(96, 165, 250, 0.25);
+  color: var(--zlu-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Dark mode tag hover */
+html.dark .zlu-tag:hover {
   background: rgba(96, 165, 250, 0.15);
   border-color: rgba(96, 165, 250, 0.3);
   color: var(--zlu-primary);
