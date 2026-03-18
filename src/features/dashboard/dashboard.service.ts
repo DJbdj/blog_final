@@ -98,6 +98,7 @@ async function fetchUmamiDataForRange(
   // Normalize and aggregate
   const aggregated = new Map<string, number>();
   (topPagesRaw || []).forEach((p) => {
+    if (!p) return;
     // Normalize: remove query and hash
     let path = p.x;
     if (path.includes("#")) path = path.split("#")[0];
@@ -152,6 +153,7 @@ async function fetchUmamiDataForRange(
   if (pageViews?.pageviews) {
     const rawData = new Map<number, number>();
     pageViews.pageviews.forEach((p: { x: string; y: number }) => {
+      if (!p) return;
       const d = new Date(p.x);
       if (range === "24h") d.setMinutes(0, 0, 0);
       else d.setHours(0, 0, 0, 0);
