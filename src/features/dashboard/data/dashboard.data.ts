@@ -38,7 +38,7 @@ export async function getRecentComments(db: DB, limit = 5) {
       user_id: CommentsTable.userId,
       createdAt: CommentsTable.createdAt,
       updatedAt: CommentsTable.updatedAt,
-      user: UserTable,
+      userName: UserTable.name,
       postTitle: PostsTable.title,
       postSlug: PostsTable.slug,
     })
@@ -60,7 +60,7 @@ export async function getRecentComments(db: DB, limit = 5) {
     user_id: r.user_id,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
-    user: r.user,
+    user: r.userName ? { name: r.userName } : null,
     post: r.postTitle ? { title: r.postTitle, slug: r.postSlug } : null,
   }));
 }
@@ -86,7 +86,11 @@ export async function getRecentPosts(db: DB, limit = 5) {
 
 export async function getRecentUsers(db: DB, limit = 5) {
   return db
-    .select()
+    .select({
+      id: UserTable.id,
+      name: UserTable.name,
+      createdAt: UserTable.createdAt,
+    })
     .from(UserTable)
     .orderBy(desc(UserTable.createdAt))
     .limit(limit);
