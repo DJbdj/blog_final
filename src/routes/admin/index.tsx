@@ -103,7 +103,7 @@ function DashboardOverview() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 max-w-300 mx-auto">
+    <div className="space-y-8 animate-in fade-in duration-500 ease-out fill-mode-both max-w-300 mx-auto">
       {/* Header */}
       <header className="flex flex-col md:flex-row justify-between md:items-end gap-4 border-b border-border/30 pb-6">
         <div className="space-y-1">
