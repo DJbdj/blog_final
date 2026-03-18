@@ -86,6 +86,7 @@ export async function getRecentPosts(db: DB, limit = 5) {
   // Normalize timestamps to ensure serializable format
   return results.map((r) => ({
     ...r,
+    publishedAt: r.publishedAt?.getTime ? r.publishedAt.getTime() : r.publishedAt,
     createdAt: r.createdAt?.getTime ? r.createdAt.getTime() : r.createdAt,
     updatedAt: r.updatedAt?.getTime ? r.updatedAt.getTime() : r.updatedAt,
   }));
