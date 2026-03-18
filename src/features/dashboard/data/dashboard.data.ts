@@ -58,15 +58,15 @@ export async function getRecentComments(db: DB, limit = 5) {
     ai_reason: r.ai_reason,
     post_id: r.post_id,
     user_id: r.user_id,
-    createdAt: r.createdAt,
-    updatedAt: r.updatedAt,
+    createdAt: r.createdAt?.getTime ? r.createdAt.getTime() : r.createdAt,
+    updatedAt: r.updatedAt?.getTime ? r.updatedAt.getTime() : r.updatedAt,
     user: r.userName ? { name: r.userName } : null,
     post: r.postTitle ? { title: r.postTitle, slug: r.postSlug } : null,
   }));
 }
 
 export async function getRecentPosts(db: DB, limit = 5) {
-  return db
+  const results = await db
     .select({
       id: PostsTable.id,
       title: PostsTable.title,
@@ -82,10 +82,17 @@ export async function getRecentPosts(db: DB, limit = 5) {
     .where(eq(PostsTable.status, "published"))
     .orderBy(desc(PostsTable.publishedAt))
     .limit(limit);
+
+  // Normalize timestamps to ensure serializable format
+  return results.map((r) => ({
+    ...r,
+    createdAt: r.createdAt?.getTime ? r.createdAt.getTime() : r.createdAt,
+    updatedAt: r.updatedAt?.getTime ? r.updatedAt.getTime() : r.updatedAt,
+  }));
 }
 
 export async function getRecentUsers(db: DB, limit = 5) {
-  return db
+  const results = await db
     .select({
       id: UserTable.id,
       name: UserTable.name,
@@ -94,4 +101,10 @@ export async function getRecentUsers(db: DB, limit = 5) {
     .from(UserTable)
     .orderBy(desc(UserTable.createdAt))
     .limit(limit);
+
+  // Normalize timestamps to ensure serializable format
+  return results.map((r) => ({
+    ...r,
+    createdAt: r.createdAt?.getTime ? r.createdAt.getTime() : r.createdAt,
+  }));
 }
