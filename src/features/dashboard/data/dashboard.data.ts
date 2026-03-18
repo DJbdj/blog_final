@@ -33,10 +33,10 @@ export async function getRecentComments(db: DB, limit = 5) {
       post: PostsTable,
     })
     .from(CommentsTable)
-    .orderBy(desc(CommentsTable.createdAt))
-    .limit(limit)
     .leftJoin(UserTable, eq(CommentsTable.userId, UserTable.id))
-    .leftJoin(PostsTable, eq(CommentsTable.postId, PostsTable.id));
+    .leftJoin(PostsTable, eq(CommentsTable.postId, PostsTable.id))
+    .orderBy(desc(CommentsTable.createdAt))
+    .limit(limit);
 
   // Transform to flat structure for easier consumption
   return results.map((r) => ({
