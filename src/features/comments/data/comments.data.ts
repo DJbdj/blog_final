@@ -173,7 +173,7 @@ export async function getRepliesByRootId(
       }
 
       const replyToComment = await findCommentById(db, reply.replyToCommentId);
-      if (!replyToComment) {
+      if (!replyToComment || !replyToComment.userId) {
         return { ...reply, replyTo: null };
       }
 

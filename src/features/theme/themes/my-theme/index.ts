@@ -8,11 +8,11 @@
  */
 
 import defaultTheme from "../default";
-import { config as defaultConfig } from "../default";
+import { config as defaultConfig } from "../default/config";
 import type { ThemeComponents } from "@/features/theme/contract/components";
 import { config as myConfig } from "./config";
 
-// you can customize the config object or simply reuse the default
+// you can customize the config or simply reuse the default
 export const config = myConfig || defaultConfig;
 
 export default {

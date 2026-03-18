@@ -87,7 +87,6 @@ export async function markdownToJsonContent(
 
   // 使用与编辑器相同的扩展配置
   const { default: StarterKit } = await import("@tiptap/starter-kit");
-  const { default: ImageExt } = await import("@tiptap/extension-image");
   const { default: Mathematics } =
     await import("@tiptap/extension-mathematics");
   const { Table } = await import("@tiptap/extension-table");

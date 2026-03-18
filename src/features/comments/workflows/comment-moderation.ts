@@ -183,7 +183,7 @@ export class CommentModerationWorkflow extends WorkflowEntrypoint<Env, Params> {
     }
 
     // Step 4: Send reply notification if comment was approved and is a reply
-    if (moderationResult.safe && comment.replyToCommentId) {
+    if (moderationResult.safe && comment.replyToCommentId && comment.userId) {
       await step.do("send reply notification", async () => {
         const db = getDb(this.env);
         await sendReplyNotification(db, this.env, {

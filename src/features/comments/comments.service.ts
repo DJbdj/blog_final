@@ -147,7 +147,7 @@ export async function createComment(
   }
 
   // Send reply notification for admin replies (non-admin replies get notified via moderation workflow)
-  if (isAdmin && replyToCommentId) {
+  if (isAdmin && replyToCommentId && comment.userId) {
     const post = await PostService.findPostById(context, {
       id: data.postId,
     });
@@ -286,7 +286,8 @@ export async function moderateComment(
   if (
     data.status === "published" &&
     comment.status !== "published" &&
-    comment.replyToCommentId
+    comment.replyToCommentId &&
+    comment.userId
   ) {
     const post = await PostService.findPostById(context, {
       id: comment.postId,

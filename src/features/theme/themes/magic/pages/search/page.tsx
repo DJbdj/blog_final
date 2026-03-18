@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Search, Calendar, Tag } from "lucide-react";
+import { Search, Tag } from "lucide-react";
 import type { SearchPageProps } from "@/features/theme/contract/pages";
 
 export function SearchPage({
@@ -22,18 +22,8 @@ export function SearchPage({
     onQueryChange(searchQuery);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      onQueryChange(searchQuery);
-    }
-  };
-
-  const handleEscape = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      onBack();
-    }
+  const handleEscape = () => {
+    onBack();
   };
 
   return (
@@ -55,7 +45,12 @@ export function SearchPage({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    onQueryChange(searchQuery);
+                  }
+                }}
                 onDoubleClick={handleEscape}
                 placeholder="搜索文章..."
                 className="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:outline-none focus:border-primary text-lg"
@@ -90,7 +85,8 @@ export function SearchPage({
             {results.map((result) => (
               <Link
                 key={result.post.id}
-                to={`/post/${result.post.slug}`}
+                to="/post/$slug"
+                params={{ slug: result.post.slug }}
                 onClick={() => onSelectPost(result.post.slug)}
                 className="magic-card p-6 hover:shadow-lg transition-all duration-300"
               >
@@ -121,19 +117,13 @@ export function SearchPage({
 
                 {/* Meta */}
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  {result.post.publishedAt && (
-                    <div className="flex items-center gap-1">
-                      <Calendar size={14} />
-                      <span>{new Date(result.post.publishedAt).toLocaleDateString()}</span>
-                    </div>
-                  )}
                   {result.post.tags && result.post.tags.length > 0 && (
                     <div className="flex items-center gap-1">
                       <Tag size={14} />
                       <div className="flex gap-1">
                         {result.post.tags.slice(0, 3).map((tag) => (
-                          <span key={tag.id} className="magic-tag">
-                            #{tag.name}
+                          <span key={tag} className="magic-tag">
+                            #{tag}
                           </span>
                         ))}
                       </div>

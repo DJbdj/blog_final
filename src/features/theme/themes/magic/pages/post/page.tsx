@@ -2,10 +2,9 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowUp, Share2, ArrowLeft } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { authClient } from "@/lib/auth/auth.client";
 import { ContentRenderer } from "@/features/theme/themes/magic/components/content/content-renderer";
 import { CommentSection } from "@/features/theme/themes/magic/components/comments/view/comment-section";
-import { config } from "@/features/theme/themes/magic/config";
+import { extendedConfig } from "@/features/theme/themes/magic/config";
 import { formatDate } from "@/lib/utils";
 
 // Placeholder type for post
@@ -24,7 +23,6 @@ interface Post {
 
 export function PostPage({ post }: { post: Post }) {
   const navigate = useNavigate();
-  const { data: session } = authClient.useSession();
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
@@ -94,7 +92,7 @@ export function PostPage({ post }: { post: Post }) {
                 {formatDate(post.publishedAt)}
               </time>
             )}
-            {config.showLastUpdated && post.updatedAt && (
+            {extendedConfig.showLastUpdated && post.updatedAt && (
               <span>更新于 {formatDate(post.updatedAt)}</span>
             )}
             {post.readTimeInMinutes && (
@@ -153,7 +151,7 @@ export function PostPage({ post }: { post: Post }) {
         {/* Related Posts */}
         <div className="pt-12 border-t border-border">
           <Suspense fallback={<div className="py-8">加载中...</div>}>
-            <RelatedPosts slug={post.slug} />
+            <RelatedPosts />
           </Suspense>
         </div>
 
@@ -176,7 +174,7 @@ export function PostPage({ post }: { post: Post }) {
   );
 }
 
-function RelatedPosts({ slug }: { slug: string }) {
+function RelatedPosts() {
   return (
     <div>
       <h3 className="text-xl font-bold mb-6">相关文章</h3>

@@ -122,7 +122,8 @@ export function PostsPage({
                 {/* Title */}
                 <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors">
                   <Link
-                    to={`/post/${post.slug}`}
+                    to="/post/$slug"
+                    params={{ slug: post.slug }}
                     className="hover:underline"
                   >
                     {post.title}
@@ -155,7 +156,8 @@ export function PostsPage({
                 {/* More Button */}
                 <div className="pt-2">
                   <Link
-                    to={`/post/${post.slug}`}
+                    to="/post/$slug"
+                    params={{ slug: post.slug }}
                     className="text-primary hover:underline text-sm flex items-center gap-1"
                   >
                     阅读更多 →

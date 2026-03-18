@@ -1,14 +1,9 @@
 import { useState } from "react";
-import { Loader2, User, Mail, Link, Save } from "lucide-react";
+import { Loader2, User, Mail, Save } from "lucide-react";
 import type { ProfilePageProps } from "@/features/theme/contract/pages";
 
-export function ProfilePage({ form, user }: ProfilePageProps) {
+export function ProfilePage({ profileForm, user }: ProfilePageProps) {
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await form.handleSubmit();
-  };
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
@@ -47,70 +42,40 @@ export function ProfilePage({ form, user }: ProfilePageProps) {
         {/* Form */}
         <div className="lg:col-span-2">
           {isEditing ? (
-            <form onSubmit={handleSave} className="space-y-6">
+            <form onSubmit={profileForm.handleSubmit} className="space-y-6">
               {/* Name */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">用户名</label>
                 <input
                   type="text"
-                  value={form.values.name}
-                  onChange={(e) => form.setValue("name", e.target.value)}
+                  {...profileForm.register("name")}
                   className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                 />
-                {form.errors.name && (
-                  <p className="text-sm text-red-500">{form.errors.name.message}</p>
+                {profileForm.errors.name && (
+                  <p className="text-sm text-red-500">{profileForm.errors.name.message}</p>
                 )}
               </div>
 
-              {/* Email */}
+              {/* Email - Read-only */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">邮箱地址</label>
                 <input
                   type="email"
-                  value={form.values.email}
-                  onChange={(e) => form.setValue("email", e.target.value)}
-                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
+                  value={user.email}
+                  disabled
+                  className="w-full px-4 py-2 border border-border rounded-lg bg-muted/50 text-muted-foreground"
                 />
-                {form.errors.email && (
-                  <p className="text-sm text-red-500">{form.errors.email.message}</p>
-                )}
+                <p className="text-xs text-muted-foreground">邮箱地址不可更改</p>
               </div>
 
-              {/* Website */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">个人网站</label>
-                <input
-                  type="url"
-                  value={form.values.website || ""}
-                  onChange={(e) => form.setValue("website", e.target.value)}
-                  placeholder="https://example.com"
-                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
-                />
-                {form.errors.website && (
-                  <p className="text-sm text-red-500">{form.errors.website.message}</p>
-                )}
-              </div>
-
-              {/* Bio */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">个人简介</label>
-                <textarea
-                  value={form.values.bio || ""}
-                  onChange={(e) => form.setValue("bio", e.target.value)}
-                  rows={4}
-                  placeholder="介绍一下自己..."
-                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-4">
+              {/* Save Button */}
+              <div>
                 <button
                   type="submit"
-                  disabled={form.isSubmitting}
+                  disabled={profileForm.isSubmitting}
                   className="magic-button flex items-center gap-2"
                 >
-                  {form.isSubmitting ? (
+                  {profileForm.isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin" size={16} />
                       保存中...
@@ -122,13 +87,6 @@ export function ProfilePage({ form, user }: ProfilePageProps) {
                     </>
                   )}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="magic-button magic-button-outline"
-                >
-                  取消
-                </button>
               </div>
             </form>
           ) : (
@@ -136,43 +94,18 @@ export function ProfilePage({ form, user }: ProfilePageProps) {
               {/* Info Fields */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
+                  <User size={20} className="text-muted-foreground" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">用户名</p>
+                    <p className="font-medium">{user.name}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
                   <Mail size={20} className="text-muted-foreground" />
                   <div>
                     <p className="text-sm text-muted-foreground">邮箱</p>
                     <p className="font-medium">{user.email}</p>
                   </div>
-                </div>
-
-                {user.website && (
-                  <div className="flex items-center gap-3">
-                    <Link size={20} className="text-muted-foreground" />
-                    <div>
-                      <p className="text-sm text-muted-foreground">网站</p>
-                      <a
-                        href={user.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium hover:text-primary"
-                      >
-                        {user.website}
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {user.bio && (
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-2">个人简介</p>
-                    <p className="font-medium">{user.bio}</p>
-                  </div>
-                )}
-
-                {/* Creation Date */}
-                <div>
-                  <p className="text-sm text-muted-foreground">注册时间</p>
-                  <p className="font-medium">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </p>
                 </div>
               </div>
             </div>

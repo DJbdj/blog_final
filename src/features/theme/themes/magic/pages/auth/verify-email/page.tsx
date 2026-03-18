@@ -13,7 +13,7 @@ export function VerifyEmailPage({
   error?: string;
 }) {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  const searchParams = new URLSearchParams(String(location.search));
   const token = searchParams.get("token");
 
   if (!token) {

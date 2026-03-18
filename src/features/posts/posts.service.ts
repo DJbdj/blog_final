@@ -31,6 +31,7 @@ import {
 import { purgePostCDNCache } from "@/lib/invalidate";
 import * as SearchService from "@/features/search/search.service";
 import { calculatePostHash } from "@/features/posts/utils/sync";
+import { enqueuePostAutoSnapshot } from "@/features/posts/services/post-auto-snapshot.service";
 
 export async function getPostsCursor(
   context: DbContext & { executionCtx: ExecutionContext },
@@ -302,6 +303,14 @@ export async function updatePost(
       syncPostMedia(context.db, updatedPost.id, data.data.contentJson),
     );
   }
+
+  // Enqueue auto-snapshot workflow (throttled by KV)
+  context.executionCtx.waitUntil(
+    enqueuePostAutoSnapshot(context, {
+      postId: updatedPost.id,
+      source: "updatePost",
+    }),
+  );
 
   return findPostById(context, { id: updatedPost.id });
 }

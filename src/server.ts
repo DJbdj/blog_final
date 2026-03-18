@@ -1,10 +1,12 @@
 import { handleEmailMessage } from "@/features/email/email.queue";
+import { handlePostAutoSnapshotMessage } from "@/features/posts/api/post-auto-snapshot.consumer";
 import { app } from "@/lib/hono";
 import { queueMessageSchema } from "@/lib/queue/queue.schema";
 
 export { CommentModerationWorkflow } from "@/features/comments/workflows/comment-moderation";
 export { ExportWorkflow } from "@/features/import-export/workflows/export.workflow";
 export { ImportWorkflow } from "@/features/import-export/workflows/import.workflow";
+export { PostAutoSnapshotWorkflow } from "@/features/posts/workflows/post-auto-snapshot";
 export { PostProcessWorkflow } from "@/features/posts/workflows/post-process";
 export { ScheduledPublishWorkflow } from "@/features/posts/workflows/scheduled-publish";
 export { RateLimiter } from "@/lib/do/rate-limiter";
@@ -50,8 +52,10 @@ export default {
               idempotencyKey: message.id,
             });
             break;
-          default:
-            event.type satisfies never;
+          case "POST_AUTO_SNAPSHOT":
+            await handlePostAutoSnapshotMessage({ env }, event.data);
+            break;
+          // No default case needed - TypeScript will catch unhandled types
         }
         message.ack();
       } catch (error) {

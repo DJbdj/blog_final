@@ -1,11 +1,47 @@
 import { z } from "zod";
 
+const notificationWebhookEventTypeSchema = z.enum([
+  "comment.admin_root_created",
+  "comment.admin_pending_review",
+  "comment.reply_to_admin_published",
+  "friend_link.submitted",
+]);
+
+const webhookEndpointSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1),
+  url: z.string().url(),
+  enabled: z.boolean(),
+  secret: z.string().min(1),
+  events: z.array(notificationWebhookEventTypeSchema),
+});
+
 export const SystemConfigSchema = z.object({
   email: z
     .object({
       apiKey: z.string().optional(),
       senderName: z.string().optional(),
       senderAddress: z.union([z.email(), z.literal("")]).optional(),
+    })
+    .optional(),
+  notification: z
+    .object({
+      admin: z
+        .object({
+          channels: z
+            .object({
+              email: z.boolean().optional(),
+              webhook: z.boolean().optional(),
+            })
+            .optional(),
+        })
+        .optional(),
+      user: z
+        .object({
+          emailEnabled: z.boolean().optional(),
+        })
+        .optional(),
+      webhooks: z.array(webhookEndpointSchema).optional(),
     })
     .optional(),
   site: z
@@ -70,6 +106,18 @@ export const DEFAULT_CONFIG: SystemConfig = {
     apiKey: "",
     senderName: "",
     senderAddress: "",
+  },
+  notification: {
+    admin: {
+      channels: {
+        email: true,
+        webhook: true,
+      },
+    },
+    user: {
+      emailEnabled: true,
+    },
+    webhooks: [],
   },
 };
 

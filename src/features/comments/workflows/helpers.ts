@@ -13,7 +13,7 @@ interface SendReplyNotificationParams {
     id: number;
     rootId: number | null;
     replyToCommentId: number | null;
-    userId: string;
+    userId: string | null;
     content: JSONContent | null;
   };
   post: {
@@ -38,7 +38,7 @@ export async function sendReplyNotification(
     comment.replyToCommentId,
   );
 
-  if (!replyToAuthor || !replyToAuthor.email) {
+  if (!replyToAuthor || !replyToAuthor.email || !replyToAuthor.id) {
     console.log(
       JSON.stringify({
         message: "reply notification skipped, author not found or no email",

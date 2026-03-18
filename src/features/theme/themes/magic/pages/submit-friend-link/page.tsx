@@ -1,19 +1,7 @@
-import { Link } from "@tanstack/react-router";
 import { ExternalLink, CheckCircle, Clock, XCircle } from "lucide-react";
 import { FriendLinkSubmitForm } from "./form";
 import type { SubmitFriendLinkPageProps } from "@/features/theme/contract/pages";
 import { formatDate } from "@/lib/utils";
-
-interface FriendLink {
-  id: string;
-  siteName: string;
-  siteUrl: string;
-  description?: string;
-  logoUrl?: string;
-  status: "approved" | "pending" | "rejected";
-  rejectionReason?: string;
-  createdAt: string;
-}
 
 export function SubmitFriendLinkPage({
   myLinks,

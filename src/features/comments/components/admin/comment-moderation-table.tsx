@@ -206,36 +206,54 @@ export const CommentModerationTable = ({
 
               {/* Author Info */}
               <div className="col-span-2 space-y-3">
-                <UserHoverCard
-                  user={{
-                    id: comment.userId,
-                    name: comment.user?.name || "Unknown",
-                    image: comment.user?.image || null,
-                  }}
-                >
-                  <div className="flex items-center gap-3 cursor-pointer group/user overflow-hidden">
+                {comment.userId && comment.user ? (
+                  <UserHoverCard
+                    user={{
+                      id: comment.userId,
+                      name: comment.user.name || "Unknown",
+                      image: comment.user.image || null,
+                    }}
+                  >
+                    <div className="flex items-center gap-3 cursor-pointer group/user overflow-hidden">
+                      <div className="w-8 h-8 rounded-none bg-muted/20 flex items-center justify-center border border-border/30 shrink-0">
+                        {comment.user.image ? (
+                          <img
+                            src={comment.user.image}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-[10px] font-mono">
+                            {comment.user.name.slice(0, 1)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="min-w-0 space-y-0.5">
+                        <div className="text-xs font-serif font-medium truncate group-hover/user:text-foreground transition-colors">
+                          {comment.user.name}
+                        </div>
+                        <div className="text-[9px] font-mono text-muted-foreground uppercase tracking-widest">
+                          {formatDate(comment.createdAt).split(" ")[0]}
+                        </div>
+                      </div>
+                    </div>
+                  </UserHoverCard>
+                ) : (
+                  <div className="flex items-center gap-3 overflow-hidden">
                     <div className="w-8 h-8 rounded-none bg-muted/20 flex items-center justify-center border border-border/30 shrink-0">
-                      {comment.user?.image ? (
-                        <img
-                          src={comment.user.image}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-[10px] font-mono">
-                          {comment.user?.name.slice(0, 1)}
-                        </span>
-                      )}
+                      <span className="text-[10px] font-mono">
+                        {(comment.user?.name || "A").slice(0, 1)}
+                      </span>
                     </div>
                     <div className="min-w-0 space-y-0.5">
-                      <div className="text-xs font-serif font-medium truncate group-hover/user:text-foreground transition-colors">
-                        {comment.user?.name}
+                      <div className="text-xs font-serif font-medium truncate text-foreground/60">
+                        {comment.user?.name || "Anonymous"}
                       </div>
                       <div className="text-[9px] font-mono text-muted-foreground uppercase tracking-widest">
                         {formatDate(comment.createdAt).split(" ")[0]}
                       </div>
                     </div>
                   </div>
-                </UserHoverCard>
+                )}
               </div>
 
               <div className="col-span-1"></div>

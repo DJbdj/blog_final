@@ -66,6 +66,11 @@
       "binding": "IMPORT_WORKFLOW",
       "class_name": "ImportWorkflow",
     },
+    {
+      "name": "post-auto-snapshot-workflow",
+      "binding": "POST_AUTO_SNAPSHOT_WORKFLOW",
+      "class_name": "PostAutoSnapshotWorkflow",
+    },
   ],
   "durable_objects": {
     "bindings": [
@@ -158,6 +163,11 @@
           "name": "import-workflow",
           "binding": "IMPORT_WORKFLOW",
           "class_name": "ImportWorkflow",
+        },
+        {
+          "name": "post-auto-snapshot-workflow",
+          "binding": "POST_AUTO_SNAPSHOT_WORKFLOW",
+          "class_name": "PostAutoSnapshotWorkflow",
         },
       ],
       "queues": {

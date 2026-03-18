@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Loader2, Lock } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { ResetPasswordPageProps } from "@/features/theme/contract/pages";
 
@@ -26,11 +26,6 @@ export function ResetPasswordPage({
       </div>
     );
   }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await resetPasswordForm.handleSubmit();
-  };
 
   // Note: isSuccess is not available in ResetPasswordFormData
   // The form submission will handle the redirect

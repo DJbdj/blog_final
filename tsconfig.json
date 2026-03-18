@@ -30,5 +30,6 @@
     "eslint.config.mjs",
     "./worker-configuration.d.ts",
     ".release-it.ts"
-  ]
+  ],
+  "exclude": ["clearn/**/*", "node_modules/**/*", "dist/**/*"]
 }

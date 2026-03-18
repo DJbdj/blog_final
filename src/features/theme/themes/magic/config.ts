@@ -1,8 +1,9 @@
 import { clientEnv } from "@/lib/env/client.env";
+import type { ThemeConfig } from "@/features/theme/contract/config";
 
 const env = clientEnv();
 
-// Theme config - only the required properties for ThemeConfig interface
+// Theme config - conforms to ThemeConfig interface from contract
 export const config = {
   home: {
     featuredPostsLimit: Number(env.VITE_MAGIC_POSTS_HERO_COUNT) || 4,
@@ -16,7 +17,7 @@ export const config = {
   preloadImages: [],
 } satisfies ThemeConfig;
 
-// Extended config for internal use
+// Extended config for internal use (not part of ThemeConfig contract)
 export const extendedConfig = {
   // General settings
   showLastUpdated: String(env.VITE_MAGIC_SHOW_LAST_UPDATED) === 'true',
@@ -37,36 +38,4 @@ export const extendedConfig = {
   showCategory: String(env.VITE_MAGIC_SHOW_CATEGORY) === 'true',
   enableSkeletonLoader: String(env.VITE_MAGIC_ENABLE_SKELETON_LOADER) === 'true',
   deferImageLoading: String(env.VITE_MAGIC_DEFER_IMAGE_LOADING) === 'true',
-};
-
-export type ThemeConfig = {
-  // General
-  postsPerPage: number;
-  postsHeroCount: number;
-  showLastUpdated: boolean;
-
-  // Content
-  proseSize: "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
-  enableImageZoom: boolean;
-  enableMathFormula: boolean;
-
-  // UI
-  showPostWordCount: boolean;
-  showReadTime: boolean;
-  enableHoverEffects: boolean;
-
-  // Colors & Theme
-  primaryColor: string;
-  accentColor: string;
-
-  // Display
-  enableFeaturedPosts: boolean;
-  featuredPostsTitle: string;
-  postsListTitle: string;
-  showTagCount: boolean;
-  showCategory: boolean;
-
-  // Performance
-  enableSkeletonLoader: boolean;
-  deferImageLoading: boolean;
 };
