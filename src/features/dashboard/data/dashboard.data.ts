@@ -26,13 +26,24 @@ export async function getDraftsCount(db: DB) {
 }
 
 export async function getRecentComments(db: DB, limit = 5) {
-  return db
-    .select()
+  const results = await db
+    .select({
+      comment: CommentsTable,
+      user: UserTable,
+      post: PostsTable,
+    })
     .from(CommentsTable)
     .orderBy(desc(CommentsTable.createdAt))
     .limit(limit)
     .leftJoin(UserTable, eq(CommentsTable.userId, UserTable.id))
     .leftJoin(PostsTable, eq(CommentsTable.postId, PostsTable.id));
+
+  // Transform to flat structure for easier consumption
+  return results.map((r) => ({
+    ...r.comment,
+    user: r.user,
+    post: r.post,
+  }));
 }
 
 export async function getRecentPosts(db: DB, limit = 5) {

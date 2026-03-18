@@ -258,13 +258,13 @@ export async function getDashboardStats(
 
   const activities = [
     ...recentComments
-      .filter((c): c is typeof c & { posts: NonNullable<typeof c.posts>; comments: NonNullable<typeof c.comments> } => c.posts != null && c.comments != null)
+      .filter((c): c is typeof c & { post: NonNullable<typeof c.post> } => c.post != null)
       .map((c) => ({
         type: "comment" as const,
-        text: `用户 ${c.user?.name || "Anonymous"} 在《${c.posts.title}》下评论了`,
-        time: c.comments.createdAt,
-        link: `/post/${c.posts.slug}?highlightCommentId=${c.comments.id}&rootId=${c.comments.rootId ?? c.comments.id}#comment-${c.comments.id}`,
-        rootId: c.comments.rootId ?? c.comments.id,
+        text: `用户 ${c.user?.name || "Anonymous"} 在《${c.post.title}》下评论了`,
+        time: c.createdAt,
+        link: `/post/${c.post.slug}?highlightCommentId=${c.id}&rootId=${c.rootId ?? c.id}#comment-${c.id}`,
+        rootId: c.rootId ?? c.id,
       })),
     ...recentPosts.map((p) => ({
       type: "post" as const,
