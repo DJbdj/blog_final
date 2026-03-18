@@ -48,7 +48,17 @@ export async function getRecentComments(db: DB, limit = 5) {
 
 export async function getRecentPosts(db: DB, limit = 5) {
   return db
-    .select()
+    .select({
+      id: PostsTable.id,
+      title: PostsTable.title,
+      summary: PostsTable.summary,
+      readTimeInMinutes: PostsTable.readTimeInMinutes,
+      slug: PostsTable.slug,
+      status: PostsTable.status,
+      publishedAt: PostsTable.publishedAt,
+      createdAt: PostsTable.createdAt,
+      updatedAt: PostsTable.updatedAt,
+    })
     .from(PostsTable)
     .where(eq(PostsTable.status, "published"))
     .orderBy(desc(PostsTable.publishedAt))
