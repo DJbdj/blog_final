@@ -11,7 +11,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "bun scripts/generate-manifest.ts && vite build",
+    "build": "bun i18n:compile && bun scripts/generate-manifest.ts && vite build",
     "deploy": "bun db:migrate && wrangler deploy",
     "serve": "vite preview",
     "test": "vitest run",
@@ -19,6 +19,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "check": "tsc --noEmit && bun lint:fix && bun format",
+    "i18n:compile": "bun paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
     "cf-typegen": "wrangler types --env-interface Env",
     "db:studio": "drizzle-kit studio",
     "db:push": "drizzle-kit push",

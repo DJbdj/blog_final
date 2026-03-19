@@ -179,7 +179,7 @@ console.error(
 - Markdown 文件：`markdowns/<timestamp>-<filename>`
 - 公开 URL 格式：`/images/<key>`
 
-### 其他事项
+## 其他事项
 
 - 任何情况不要执行git操作
 - 你可以访问blog.djbdj.space来获得上次更改后的效果。注意，只有在我手动git提交后才能应用更改，也就是说，你在下一次对话才能通过网址看到本次的更改
