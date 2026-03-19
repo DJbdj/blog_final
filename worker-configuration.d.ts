@@ -8,6 +8,7 @@ declare namespace Cloudflare {
 	}
 	interface Env {
 		KV: KVNamespace;
+		OAUTH_KV: KVNamespace;
 		ENVIRONMENT: string;
 		BETTER_AUTH_SECRET: string;
 		BETTER_AUTH_URL: string;

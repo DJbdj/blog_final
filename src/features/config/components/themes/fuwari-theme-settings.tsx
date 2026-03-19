@@ -1,3 +1,4 @@
+import "@/features/theme/themes/fuwari/styles/preview.css";
 import { useFormContext, useWatch } from "react-hook-form";
 import { AssetUploadField } from "@/features/config/components/asset-upload-field";
 import { RangeField } from "@/features/config/components/site-settings-fields";
@@ -6,6 +7,7 @@ import {
   FUWARI_THEME_HUE_MAX,
   FUWARI_THEME_HUE_MIN,
 } from "@/features/config/site-config.schema";
+import { m } from "@/paraglide/messages";
 
 function FuwariHuePreview() {
   const { control } = useFormContext<SystemConfig>();
@@ -30,10 +32,10 @@ function FuwariHuePreview() {
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium text-foreground">
-            主题色预览
+            {m.settings_site_primary_preview_title()}
           </p>
           <p className="text-xs text-muted-foreground">
-            当前色相：{previewHue}deg
+            {m.settings_site_primary_preview_desc({ hue: String(previewHue) })}
           </p>
         </div>
         <div
@@ -49,13 +51,13 @@ function FuwariHuePreview() {
             style={{ backgroundColor: "var(--fuwari-primary)" }}
           />
           <p className="mt-4 text-xs/5 font-medium text-black/45 dark:text-white/45">
-            卡片标签
+            {m.settings_site_primary_preview_card_label()}
           </p>
           <p className="mt-1 text-lg font-semibold text-black/90 dark:text-white/90">
-            卡片标题
+            {m.settings_site_primary_preview_card_title()}
           </p>
           <p className="mt-2 text-sm text-black/60 dark:text-white/60">
-            卡片描述内容
+            {m.settings_site_primary_preview_card_desc()}
           </p>
         </div>
 
@@ -63,14 +65,14 @@ function FuwariHuePreview() {
           type="button"
           className="fuwari-btn-primary h-11 rounded-xl px-4 text-sm font-semibold shadow-sm active:scale-[0.98]"
         >
-          主要按钮
+          {m.settings_site_primary_preview_btn_primary()}
         </button>
 
         <button
           type="button"
           className="fuwari-btn-regular h-11 rounded-xl px-4 text-sm font-medium shadow-sm active:scale-[0.98]"
         >
-          次要按钮
+          {m.settings_site_primary_preview_btn_tinted()}
         </button>
       </div>
     </div>
@@ -88,8 +90,8 @@ export function FuwariThemeSettings() {
         name="site.theme.fuwari.homeBg"
         assetPath="themes/fuwari/home-bg.webp"
         accept=".png,.webp,.jpg,.jpeg"
-        label="首页背景图片"
-        hint="Fuwari 主题首页的背景图片"
+        label={m.settings_site_field_home_image()}
+        hint={m.settings_site_field_home_image_hint()}
         placeholder="/images/asset/themes/fuwari/home-bg.webp or https://picsum.photos/1600/900"
         error={errors.site?.theme?.fuwari?.homeBg?.message}
       />
@@ -98,13 +100,13 @@ export function FuwariThemeSettings() {
         assetPath="themes/fuwari/avatar.png"
         accept=".png,.webp,.jpg,.jpeg"
         readOnly
-        label="头像图片"
+        label={m.settings_site_field_avatar()}
         error={errors.site?.theme?.fuwari?.avatar?.message}
       />
       <RangeField
         name="site.theme.fuwari.primaryHue"
-        label="主题色相"
-        hint="调整主题的主色调（0-360 度）"
+        label={m.settings_site_field_primary_hue()}
+        hint={m.settings_site_field_primary_hue_hint()}
         min={FUWARI_THEME_HUE_MIN}
         max={FUWARI_THEME_HUE_MAX}
         step={1}

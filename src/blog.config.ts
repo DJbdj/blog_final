@@ -12,8 +12,17 @@ export const blogConfig = {
     github: env.VITE_BLOG_GITHUB || "https://github.com/example",
     email: env.VITE_BLOG_EMAIL || "demo@example.com",
   },
+  icons: {
+    faviconSvg: "/favicon.svg",
+    faviconIco: "/favicon.ico",
+    favicon96: "/favicon-96x96.png",
+    appleTouchIcon: "/apple-touch-icon.png",
+    webApp192: "/web-app-manifest-192x192.png",
+    webApp512: "/web-app-manifest-512x512.png",
+  },
   theme: {
     default: {
+      navBarName: "导航栏名称",
       background: {
         homeImage: env.VITE_DEFAULT_HOME_IMAGE || "", // R2 path or external URL (hero on homepage)
         globalImage: env.VITE_DEFAULT_GLOBAL_IMAGE || "", // R2 path or external URL (all other pages + scroll target)
@@ -26,6 +35,7 @@ export const blogConfig = {
     fuwari: {
       homeBg: env.VITE_FUWARI_HOME_BG || "/images/home-bg.webp",
       avatar: env.VITE_FUWARI_AVATAR || "/images/avatar.png",
+      primaryHue: 250,
     },
     zlu: {
       avatar: env.VITE_ZLU_AVATAR || "/images/avatar.png",

@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
+import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
 export function MetricItem({
@@ -62,11 +62,11 @@ export function MetricItem({
             )}
           >
             {trend.direction === "up" ? (
-              <ArrowUp size={8} className="w-[8px] h-[8px]" />
+              <ArrowUp size={8} />
             ) : trend.direction === "down" ? (
-              <ArrowDown size={8} className="w-[8px] h-[8px]" />
+              <ArrowDown size={8} />
             ) : (
-              <Minus size={8} className="w-[8px] h-[8px]" />
+              <Minus size={8} />
             )}
             <span>{trend.percent}%</span>
           </div>
