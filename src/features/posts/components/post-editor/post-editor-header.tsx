@@ -1,6 +1,7 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { m } from "@/paraglide/messages";
+import { FileUp } from "lucide-react";
 import type { PostEditorData } from "./types";
 
 interface PostEditorHeaderProps {
@@ -10,6 +11,7 @@ interface PostEditorHeaderProps {
   isPostDirty: boolean;
   onPreview: () => void;
   onProcess: () => void;
+  onImportMarkdown: () => void;
 }
 
 export function PostEditorHeader({
@@ -19,6 +21,7 @@ export function PostEditorHeader({
   isPostDirty,
   onPreview,
   onProcess,
+  onImportMarkdown,
 }: PostEditorHeaderProps) {
   const getProcessButtonColor = () => {
     if (processState === "SUCCESS") return "text-emerald-500";
@@ -56,6 +59,21 @@ export function PostEditorHeader({
           >
             <span className="mr-2 opacity-50">[</span>
             {m.editor_header_preview_btn()}
+            <span className="ml-2 opacity-50">]</span>
+          </Button>
+
+          <div className="h-4 w-px bg-border/30" />
+
+          {/* Import Markdown Button */}
+          <Button
+            variant="ghost"
+            onClick={onImportMarkdown}
+            disabled={saveStatus === "SAVING"}
+            className="h-8 rounded-none px-2 text-[10px] font-mono text-muted-foreground transition-colors hover:bg-transparent hover:text-foreground disabled:opacity-30"
+          >
+            <FileUp className="w-3 h-3 mr-1.5" />
+            <span className="mr-2 opacity-50">[</span>
+            导入 Markdown
             <span className="ml-2 opacity-50">]</span>
           </Button>
 

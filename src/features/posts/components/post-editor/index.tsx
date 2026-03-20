@@ -7,6 +7,7 @@ import { Editor } from "@/components/tiptap-editor";
 import { MarkdownFileUpload } from "@/components/markdown-file-upload";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/ui/confirmation-modal";
+import Modal from "@/components/ui/modal";
 import { extensions } from "@/features/posts/editor/config";
 import type { PostRevisionSnapshot } from "@/features/posts/schema/post-revisions.schema";
 import { tagsAdminQueryOptions } from "@/features/tags/queries";
@@ -62,6 +63,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     `editor:${initialData.id}`,
   );
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
 
   // Fetch all tags for AI context and matching
   const { data: allTags = [] } = useQuery(tagsAdminQueryOptions());
@@ -121,6 +123,8 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     setEditorRenderKey(`editor:${initialData.id}:import:${Date.now()}`);
     // Mark post as modified
     setPost((prev) => ({ ...prev, isSynced: false }));
+    // Close import dialog
+    setIsImportDialogOpen(false);
   }, [initialData.id]);
 
   const handleRestoreApplied = useCallback(
@@ -204,6 +208,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
           if (post.slug) window.open(`/post/${post.slug}`, "_blank");
         }}
         onProcess={handleProcessData}
+        onImportMarkdown={() => setIsImportDialogOpen(true)}
       />
 
       <PostEditorHistoryPanel
@@ -214,6 +219,24 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
         allTags={allTags}
         onRestoreApplied={handleRestoreApplied}
       />
+
+      {/* Markdown Import Modal */}
+      <Modal
+        isOpen={isImportDialogOpen}
+        onClose={() => setIsImportDialogOpen(false)}
+        title="导入 Markdown"
+        maxWidth="max-w-xl"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            上传 Markdown 文件，将其内容导入到编辑器中。
+          </p>
+          <MarkdownFileUpload
+            onContentLoad={handleMarkdownImport}
+            disabled={saveStatus === "SAVING"}
+          />
+        </div>
+      </Modal>
 
       {/* Main Content Area (Only this scrolls) */}
       <div
@@ -247,14 +270,6 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
               onGenerateSummary={handleGenerateSummary}
               onGenerateTags={handleGenerateTags}
             />
-
-            {/* Markdown Import */}
-            <div className="mb-8">
-              <MarkdownFileUpload
-                onContentLoad={handleMarkdownImport}
-                disabled={saveStatus === "SAVING"}
-              />
-            </div>
 
             {/* Editor Area */}
             <div className="min-h-[60vh] pb-32">
