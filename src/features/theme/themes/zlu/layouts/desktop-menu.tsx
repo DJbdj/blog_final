@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { blogConfig } from "@/blog.config";
 import { useTheme } from "@/components/common/theme-provider";
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
+import { LanguageSwitcher } from "./language-switcher";
 
 interface DesktopMenuProps {
   isOpen: boolean;
@@ -101,6 +102,14 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
                 {themeIcons[userTheme]}
                 <span>{themeLabels[userTheme]}</span>
               </button>
+            </div>
+          </div>
+
+          {/* Language Switcher */}
+          <div className="pt-4 mt-4 border-t border-[var(--zlu-border)]">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-[var(--zlu-text-secondary)]">语言</span>
+              <LanguageSwitcher />
             </div>
           </div>
 

@@ -4,6 +4,7 @@ import type { JSONContent, Editor as TiptapEditor } from "@tiptap/react";
 import { History, Loader2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Editor } from "@/components/tiptap-editor";
+import { MarkdownFileUpload } from "@/components/markdown-file-upload";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/ui/confirmation-modal";
 import { extensions } from "@/features/posts/editor/config";
@@ -32,6 +33,9 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     isSynced: initialData.isSynced,
     hasPublicCache: initialData.hasPublicCache,
   }));
+
+  // Track imported markdown content
+  const [importedMarkdown, setImportedMarkdown] = useState<string | null>(null);
 
   // Sync state when initialData updates (e.g. after background refetch/invalidation)
   const [prevInitialDataId, setPrevInitialDataId] = useState(initialData.id);
@@ -100,11 +104,24 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
 
   const handleContentChange = useCallback((json: JSONContent) => {
     setPost((prev) => ({ ...prev, contentJson: json }));
-  }, []);
+    // Clear imported markdown once content is processed
+    if (importedMarkdown) {
+      setImportedMarkdown(null);
+    }
+  }, [importedMarkdown]);
 
   const handlePostChange = useCallback((updates: Partial<PostEditorData>) => {
     setPost((prev) => ({ ...prev, ...updates }));
   }, []);
+
+  const handleMarkdownImport = useCallback((content: string, fileName?: string) => {
+    // Store imported markdown to trigger editor re-render with new content
+    setImportedMarkdown(content);
+    // Force editor re-render
+    setEditorRenderKey(`editor:${initialData.id}:import:${Date.now()}`);
+    // Mark post as modified
+    setPost((prev) => ({ ...prev, isSynced: false }));
+  }, [initialData.id]);
 
   const handleRestoreApplied = useCallback(
     ({
@@ -231,12 +248,20 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
               onGenerateTags={handleGenerateTags}
             />
 
+            {/* Markdown Import */}
+            <div className="mb-8">
+              <MarkdownFileUpload
+                onContentLoad={handleMarkdownImport}
+                disabled={saveStatus === "SAVING"}
+              />
+            </div>
+
             {/* Editor Area */}
             <div className="min-h-[60vh] pb-32">
               <Editor
                 key={editorRenderKey}
                 extensions={extensions}
-                content={post.contentJson ?? ""}
+                content={importedMarkdown ?? post.contentJson ?? ""}
                 onChange={handleContentChange}
                 onCreated={setEditorInstance}
               />

@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { blogConfig } from "@/blog.config";
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
 import { useTheme } from "@/components/common/theme-provider";
+import { LanguageSwitcher } from "./language-switcher";
 
 interface NavItem {
   label: string;
@@ -111,6 +112,9 @@ export function Navbar({ navOptions, user, isLoading, onMenuClick }: NavbarProps
               {themeIcons[userTheme]}
             </button>
           </div>
+
+          {/* Language Switcher */}
+          <LanguageSwitcher />
 
           <button
             onClick={onMenuClick}

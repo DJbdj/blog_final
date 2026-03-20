@@ -1,6 +1,6 @@
 ---
 name: test-glm
-description: "在对项目增加新功能/修改现有功能/项目美化时都要进行测试"
+description: "在需要验证代码并构建时启用；在对项目增加新功能/修改现有功能/项目美化时进行测试"
 model: sonnet
 color: cyan
 memory: project
