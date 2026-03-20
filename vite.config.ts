@@ -23,6 +23,7 @@ const config = defineConfig(({ mode }) => {
   return {
     define: {
       __APP_VERSION__: JSON.stringify(packageJson.version),
+      __THEME_NAME__: JSON.stringify(buildEnv.THEME),
       __THEME_CONFIG__: JSON.stringify(themes[buildEnv.THEME]),
     },
     resolve: {
