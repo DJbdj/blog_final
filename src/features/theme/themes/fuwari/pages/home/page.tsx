@@ -3,7 +3,7 @@ import type { HomePageProps } from "@/features/theme/contract/pages";
 import { m } from "@/paraglide/messages";
 import { PostCard } from "../../components/post-card";
 
-export function HomePage({ posts }: HomePageProps) {
+export function HomePage({ posts, tags }: HomePageProps) {
   return (
     <div className="fuwari-onload-animation flex flex-col rounded-(--fuwari-radius-large) bg-(--fuwari-card-bg) py-1 md:py-0 md:bg-transparent md:gap-4">
       {posts.map((post, i) => (

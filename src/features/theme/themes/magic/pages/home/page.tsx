@@ -91,7 +91,7 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
   );
 }
 
-export function HomePage({ posts }: HomePageProps) {
+export function HomePage({ posts, tags }: HomePageProps) {
   const featuredPosts = useMemo(() => {
     return posts.slice(0, config.home.featuredPostsLimit);
   }, [posts]);

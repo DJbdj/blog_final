@@ -1471,6 +1471,87 @@ html.light .zlu-year-header {
 }
 
 /* Custom Code Block Styles */
+.zlu-code-block {
+  background: #21252b;
+  border-radius: 5px;
+  font-family: "Roboto Mono", Monaco, courier, monospace;
+  line-height: 1.6;
+  margin: 0 0 1.6em;
+  max-width: 100%;
+  overflow: auto;
+  position: relative;
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
+  padding: 35px 0 0 0;
+}
+
+.zlu-code-block::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: #fc625d;
+  width: 12px;
+  height: 12px;
+  left: 15px;
+  top: 12px;
+  box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+  z-index: 2;
+}
+
+.zlu-code-block code {
+  display: block;
+  font-family: "Roboto Mono", Monaco, courier, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 1em 1.4em;
+  background: transparent !important;
+}
+
+/* Shiki theme adjustments */
+.zlu-code-block .shiki {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+}
+
+.zlu-code-block .shiki code {
+  background: transparent !important;
+}
+
+/* Scrollbar for code blocks */
+.zlu-code-block::-webkit-scrollbar {
+  height: 8px;
+}
+
+.zlu-code-block::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #1d1f21;
+}
+
+.zlu-code-block::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #3e4451;
+}
+
+/* Light mode code adjustments */
+html.light .zlu-code-block {
+  background: #f8f8f8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+html.light .zlu-code-block::before {
+  background: #ff5f56;
+  box-shadow: 20px 0 #ffbd2e, 40px 0 #27c93f;
+}
+
+html.light .zlu-code-block::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+html.light .zlu-code-block::-webkit-scrollbar-thumb {
+  background-color: #d0d0d0;
+}
+
+/* Article content code blocks - ensure consistency */
 .zlu-article-content pre {
   background: #21252b;
   border-radius: 5px;

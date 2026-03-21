@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Copy, Check } from "lucide-react";
 import { codeToHtml } from "shiki";
 
@@ -12,6 +12,7 @@ interface CodeBlockProps {
 export function CodeBlock({ code, language }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const [highlightedCode, setHighlightedCode] = useState<string>("");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function highlight() {
@@ -20,10 +21,18 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
           lang: language === "text" ? "text" : language,
           theme: "one-dark-pro",
         });
-        setHighlightedCode(html);
+        // 提取 shiki 生成的 code 内容，去掉外层的 pre
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const preElement = doc.querySelector("pre");
+        if (preElement) {
+          // 保留 shiki 的 pre 结构和样式
+          setHighlightedCode(preElement.innerHTML);
+        } else {
+          setHighlightedCode(`<code>${escapeHtml(code)}</code>`);
+        }
       } catch {
-        // Fallback to plain text if language not supported
-        setHighlightedCode(`<pre><code>${escapeHtml(code)}</code></pre>`);
+        setHighlightedCode(`<code>${escapeHtml(code)}</code>`);
       }
     }
     highlight();
@@ -45,29 +54,26 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
   }
 
   return (
-    <div className="my-4">
-      <pre className="relative group">
-        <code
-          className="block"
-          dangerouslySetInnerHTML={{ __html: highlightedCode }}
-        />
-        <button
-          onClick={handleCopy}
-          className="absolute top-3 right-3 flex items-center gap-1 text-xs text-[var(--zlu-text-tertiary)] hover:text-[var(--zlu-text-primary)] transition-colors opacity-0 group-hover:opacity-100 bg-[var(--zlu-bg-secondary)] px-2 py-1 rounded"
-        >
-          {copied ? (
-            <>
-              <Check className="w-3 h-3" />
-              已复制
-            </>
-          ) : (
-            <>
-              <Copy className="w-3 h-3" />
-              复制
-            </>
-          )}
-        </button>
+    <div className="my-4 relative group" ref={containerRef}>
+      <pre className="zlu-code-block">
+        <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
       </pre>
+      <button
+        onClick={handleCopy}
+        className="absolute top-3 right-3 flex items-center gap-1 text-xs text-[var(--zlu-text-tertiary)] hover:text-[var(--zlu-text-primary)] transition-colors opacity-0 group-hover:opacity-100 bg-[var(--zlu-bg-secondary)] px-2 py-1 rounded border border-[var(--zlu-border)]"
+      >
+        {copied ? (
+          <>
+            <Check className="w-3 h-3" />
+            已复制
+          </>
+        ) : (
+          <>
+            <Copy className="w-3 h-3" />
+            复制
+          </>
+        )}
+      </button>
     </div>
   );
 }

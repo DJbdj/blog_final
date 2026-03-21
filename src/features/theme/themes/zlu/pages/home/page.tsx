@@ -1,8 +1,11 @@
+"use client";
+
 import { Link } from "@tanstack/react-router";
 import { Calendar, Clock, ArrowRight, Star } from "lucide-react";
 import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { config, extendedConfig } from "@/features/theme/themes/zlu/config";
+import { DefaultSidebarContent } from "../../components/default-sidebar-content";
 import { formatDate } from "@/lib/utils";
 
 function FeaturedPostCard({ post }: { post: any }) {
@@ -106,7 +109,7 @@ function PostCard({ post }: { post: any }) {
   );
 }
 
-export function HomePage({ posts }: HomePageProps) {
+export function HomePage({ posts, tags }: HomePageProps) {
   const featuredPosts = useMemo(() => {
     return posts.slice(0, config.home.featuredPostsLimit);
   }, [posts]);
@@ -116,50 +119,53 @@ export function HomePage({ posts }: HomePageProps) {
   }, [posts]);
 
   return (
-    <div className="space-y-8">
-      {/* Featured Posts - Horizontal Scroll */}
-      {featuredPosts.length > 0 && (
-        <section className="zlu-featured-section">
-          <h2 className="zlu-featured-title">
-            <Star className="w-5 h-5 text-blue-500" fill="currentColor" />
-            {extendedConfig.featuredPostsTitle || "精选文章"}
-          </h2>
-          <div className="zlu-featured-scroll">
-            {featuredPosts.map((post) => (
-              <FeaturedPostCard key={post.id} post={post} />
-            ))}
+    <>
+      <DefaultSidebarContent posts={posts} tags={tags} />
+      <div className="space-y-8">
+        {/* Featured Posts - Horizontal Scroll */}
+        {featuredPosts.length > 0 && (
+          <section className="zlu-featured-section">
+            <h2 className="zlu-featured-title">
+              <Star className="w-5 h-5 text-blue-500" fill="currentColor" />
+              {extendedConfig.featuredPostsTitle || "精选文章"}
+            </h2>
+            <div className="zlu-featured-scroll">
+              {featuredPosts.map((post) => (
+                <FeaturedPostCard key={post.id} post={post} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Recent Posts List */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-[var(--zlu-text-primary)] flex items-center gap-2">
+              <ArrowRight className="w-5 h-5 text-[var(--zlu-primary)]" />
+              {extendedConfig.postsListTitle || "最新文章"}
+            </h2>
+            <Link
+              to="/posts"
+              className="text-sm text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)] transition-colors flex items-center gap-1"
+            >
+              查看全部
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="space-y-4">
+            {recentPosts.length > 0 ? (
+              recentPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-[var(--zlu-text-tertiary)]">暂无文章</p>
+              </div>
+            )}
           </div>
         </section>
-      )}
-
-      {/* Recent Posts List */}
-      <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-[var(--zlu-text-primary)] flex items-center gap-2">
-            <ArrowRight className="w-5 h-5 text-[var(--zlu-primary)]" />
-            {extendedConfig.postsListTitle || "最新文章"}
-          </h2>
-          <Link
-            to="/posts"
-            className="text-sm text-[var(--zlu-primary)] hover:text-[var(--zlu-primary-hover)] transition-colors flex items-center gap-1"
-          >
-            查看全部
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="space-y-4">
-          {recentPosts.length > 0 ? (
-            recentPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-[var(--zlu-text-tertiary)]">暂无文章</p>
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 }

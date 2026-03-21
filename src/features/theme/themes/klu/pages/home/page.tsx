@@ -58,7 +58,7 @@ function PostCard({ post }: { post: HomePageProps["posts"][0] }) {
   );
 }
 
-export function HomePage({ posts }: HomePageProps) {
+export function HomePage({ posts, tags }: HomePageProps) {
   return (
     <div className="space-y-6">
       {/* Header */}

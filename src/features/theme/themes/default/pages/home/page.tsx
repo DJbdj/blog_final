@@ -4,7 +4,7 @@ import type { HomePageProps } from "@/features/theme/contract/pages";
 import { PostItem } from "@/features/theme/themes/default/components/post-item";
 import { m } from "@/paraglide/messages";
 
-export function HomePage({ posts }: HomePageProps) {
+export function HomePage({ posts, tags }: HomePageProps) {
   const { siteConfig } = useRouteContext({ from: "__root__" });
 
   return (

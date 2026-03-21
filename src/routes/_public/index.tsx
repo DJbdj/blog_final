@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import theme from "@theme";
 import { siteDomainQuery } from "@/features/config/queries";
 import { featuredPostsQuery } from "@/features/posts/queries";
+import { tagsQueryOptions } from "@/features/tags/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 
 const { featuredPostsLimit } = theme.config.home;
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/_public/")({
         featuredPostsQuery(featuredPostsLimit),
       ),
       context.queryClient.ensureQueryData(siteDomainQuery),
+      context.queryClient.ensureQueryData(tagsQueryOptions),
     ]);
 
     return {
@@ -31,7 +33,8 @@ function HomeRoute() {
   const { data: posts } = useSuspenseQuery(
     featuredPostsQuery(featuredPostsLimit),
   );
-  return <theme.HomePage posts={posts} />;
+  const { data: tags } = useSuspenseQuery(tagsQueryOptions);
+  return <theme.HomePage posts={posts} tags={tags} />;
 }
 
 function HomePageSkeleton() {
