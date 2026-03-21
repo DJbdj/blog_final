@@ -111,21 +111,14 @@ function PostCard({ post }: { post: any }) {
 
 export function HomePage({ posts, tags }: HomePageProps) {
   const featuredPosts = useMemo(() => {
-    // 优先使用标记为精选的文章，如果不足则补充最新的文章
-    const featured = posts.filter((post) => post.featured);
-    if (featured.length >= config.home.featuredPostsLimit) {
-      return featured.slice(0, config.home.featuredPostsLimit);
-    }
-    // 如果精选文章不足，补充普通文章
-    const remaining = config.home.featuredPostsLimit - featured.length;
-    const nonFeatured = posts.filter((post) => !post.featured);
-    return [...featured, ...nonFeatured.slice(0, remaining)];
+    // 只显示标记为精选的文章
+    return posts.filter((post) => post.featured).slice(0, config.home.featuredPostsLimit);
   }, [posts]);
 
   const recentPosts = useMemo(() => {
     // 归档区域显示所有非精选文章，按时间排序
-    return posts.filter((post) => !featuredPosts.find((fp) => fp.id === post.id));
-  }, [posts, featuredPosts]);
+    return posts.filter((post) => !post.featured);
+  }, [posts]);
 
   return (
     <>
