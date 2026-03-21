@@ -1,4 +1,4 @@
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Star } from "lucide-react";
 import TextareaAutosize from "react-textarea-autosize";
 import DatePicker from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
@@ -50,7 +50,7 @@ export function PostEditorMetadata({
         />
       </div>
 
-      <div className="mb-16 grid grid-cols-1 gap-x-12 gap-y-8 border-t border-border/30 pt-8 md:grid-cols-3">
+      <div className="mb-16 grid grid-cols-1 gap-x-12 gap-y-8 border-t border-border/30 pt-8 md:grid-cols-4">
         <div className="space-y-3">
           <label className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">
             {m.editor_meta_status()}
@@ -72,6 +72,28 @@ export function PostEditorMetadata({
                 {STATUS_LABELS[status]()}
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <label className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">
+            精选
+          </label>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => onPostChange({ featured: !post.featured })}
+              className={`
+                flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider transition-colors
+                ${
+                  post.featured
+                    ? "border-b border-amber-500 font-bold text-amber-500"
+                    : "text-muted-foreground hover:text-foreground"
+                }
+              `}
+            >
+              <Star className="w-3 h-3" fill={post.featured ? "currentColor" : "none"} />
+              {post.featured ? "已精选" : "设为精选"}
+            </button>
           </div>
         </div>
 

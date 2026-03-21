@@ -6,6 +6,7 @@ export interface PostEditorData {
   summary: string;
   slug: string;
   status: PostStatus;
+  featured: boolean;
   readTimeInMinutes: number;
   contentJson: JSONContent | null;
   publishedAt: Date | null;
@@ -26,6 +27,7 @@ export const defaultPostData: PostEditorData = {
   summary: "",
   slug: "",
   status: "draft",
+  featured: false,
   readTimeInMinutes: 1,
   contentJson: null,
   publishedAt: null,

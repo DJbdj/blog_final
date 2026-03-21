@@ -232,6 +232,7 @@ export async function createEmptyPost(context: DbContext) {
     slug,
     summary: "",
     status: "draft",
+    featured: false,
     readTimeInMinutes: 1,
     contentJson: null,
   });
@@ -305,6 +306,7 @@ export async function findPostById(
       slug: post.slug,
       publishedAt: post.publishedAt,
       readTimeInMinutes: post.readTimeInMinutes,
+      featured: post.featured,
     });
     isSynced = dbHash === kvHash;
   }
@@ -402,6 +404,7 @@ export async function startPostProcessWorkflow(
         slug: post.slug,
         publishedAt: post.publishedAt,
         readTimeInMinutes: post.readTimeInMinutes,
+        featured: post.featured,
       });
 
       await PostRevisionRepo.insertPostRevision(context.db, {
@@ -413,6 +416,7 @@ export async function startPostProcessWorkflow(
           summary: post.summary,
           slug: post.slug,
           status: post.status,
+          featured: post.featured,
           publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
           readTimeInMinutes: post.readTimeInMinutes,
           contentJson: post.contentJson,

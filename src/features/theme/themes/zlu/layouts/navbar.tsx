@@ -67,7 +67,7 @@ export function Navbar({ navOptions, user, isLoading, onMenuClick }: NavbarProps
     <header className={`zlu-navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="zlu-navbar-inner">
         <Link to="/" className="zlu-logo">
-          {blogConfig.title}
+          {import.meta.env.VITE_BLOG_NAME || blogConfig.name}
           {import.meta.env.DEV && <span>.dev</span>}
         </Link>
 

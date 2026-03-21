@@ -20,8 +20,8 @@ export const config = {
 export const extendedConfig = {
   // General settings
   enableFeaturedPosts: String(env.VITE_ZLU_ENABLE_FEATURED_POSTS) !== 'false',
-  featuredPostsTitle: env.VITE_BLOG_TITLE || "精选文章",
-  postsListTitle: env.VITE_BLOG_TITLE || "最新文章",
+  featuredPostsTitle: "精选文章",
+  postsListTitle: "归档",
 
   // Colors
   primaryColor: env.VITE_ZLU_PRIMARY_COLOR || "#3b82f6",

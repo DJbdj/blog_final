@@ -1,5 +1,5 @@
 import { ClientOnly, useNavigate } from "@tanstack/react-router";
-import { Edit3, MoreVertical, Trash2 } from "lucide-react";
+import { Edit3, MoreVertical, Star, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Dropdown from "@/components/ui/dropdown";
@@ -48,8 +48,17 @@ export function PostRow({ post, onDelete }: PostRowProps) {
       </div>
 
       {/* Middle side: Status */}
-      <div className="md:col-span-3 flex items-center gap-4">
+      <div className="md:col-span-3 flex items-center gap-2">
         <StatusBadge status={post.status} />
+        {post.featured && (
+          <Badge
+            variant="outline"
+            className="text-[9px] px-2 py-0.5 uppercase tracking-widest font-mono font-normal rounded-none border border-amber-500/30 shadow-none bg-transparent text-amber-600"
+          >
+            <Star className="w-3 h-3 mr-1" fill="currentColor" />
+            精选
+          </Badge>
+        )}
       </div>
 
       {/* Right Side: Date & Actions (Desktop Split) */}

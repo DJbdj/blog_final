@@ -25,6 +25,7 @@ export const PostsTable = sqliteTable(
       mode: "json",
     }).$type<JSONContent>(),
     status: text("status", { enum: POST_STATUSES }).notNull().default("draft"),
+    featured: integer({ mode: "boolean" }).notNull().default(false),
     publishedAt: integer("published_at", { mode: "timestamp" }),
     createdAt,
     updatedAt,
