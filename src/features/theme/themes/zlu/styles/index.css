@@ -986,7 +986,8 @@ html.light .zlu-footer {
 
 /* Light mode image adjustments - remove border to avoid dark edges */
 html.light .zlu-article-content img {
-  border: none;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .zlu-article-content table {

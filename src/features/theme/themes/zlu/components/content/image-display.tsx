@@ -15,7 +15,7 @@ export function ImageDisplay({ src, alt, caption }: ImageDisplayProps) {
   return (
     <>
       <figure className="my-6">
-        <div className="relative rounded-lg overflow-hidden bg-gray-800">
+        <div className="relative rounded-lg overflow-hidden bg-[var(--zlu-bg-tertiary)]">
           <img
             src={src}
             alt={alt}
@@ -40,7 +40,7 @@ export function ImageDisplay({ src, alt, caption }: ImageDisplayProps) {
       {/* Image Modal */}
       {isZoomed && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90"
           onClick={() => setIsZoomed(false)}
         >
           <button
