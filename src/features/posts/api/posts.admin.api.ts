@@ -79,16 +79,17 @@ export const uploadMarkdownFn = createServerFn({
   method: "POST",
 })
   .middleware([adminMiddleware])
-  .handler(async ({ request }) => {
-    const formData = await request.formData();
-    const file = formData.get("file") as File | null;
+  .handler(async ({ data }) => {
+    try {
+      const { content, fileName } = data as { content: string; fileName: string };
 
-    if (!file) {
-      throw new Error("No file uploaded");
+      if (!content) {
+        throw new Error("No content provided");
+      }
+
+      return { content, fileName };
+    } catch (error) {
+      console.error("Upload markdown error:", error);
+      throw new Error(`Failed to upload markdown: ${error instanceof Error ? error.message : String(error)}`);
     }
-
-    const content = await file.text();
-    const fileName = file.name;
-
-    return { content, fileName };
   });
