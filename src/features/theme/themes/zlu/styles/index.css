@@ -1583,7 +1583,7 @@ html.light .zlu-article-content pre::-webkit-scrollbar-thumb {
 }
 
 .zlu-article-content blockquote p:first-child::before {
-  content: """;
+  content: '"';
   font-size: 1.5em;
   line-height: 0;
   margin-right: 0.25em;
