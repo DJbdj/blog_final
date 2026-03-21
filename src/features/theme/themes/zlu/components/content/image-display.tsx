@@ -37,11 +37,12 @@ export function ImageDisplay({ src, alt, caption }: ImageDisplayProps) {
         )}
       </figure>
 
-      {/* Image Modal */}
+      {/* Image Modal - Using Portal-like behavior with highest z-index */}
       {isZoomed && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95"
           onClick={() => setIsZoomed(false)}
+          style={{ isolation: 'isolate' }}
         >
           <button
             className="absolute top-4 right-4 p-2 text-white hover:text-gray-300"
