@@ -11,7 +11,9 @@ import {
   UpdatePostInputSchema,
 } from "@/features/posts/schema/posts.schema";
 import * as PostService from "@/features/posts/services/posts.service";
+import { markdownToJsonContent } from "@/features/import-export/utils/markdown-parser";
 import { adminMiddleware } from "@/lib/middlewares";
+import type { JSONContent } from "@tiptap/react";
 
 export const generateSlugFn = createServerFn()
   .middleware([adminMiddleware])
@@ -87,7 +89,10 @@ export const uploadMarkdownFn = createServerFn({
         throw new Error("No content provided");
       }
 
-      return { content, fileName };
+      // Convert markdown to JSONContent for the editor
+      const jsonContent = await markdownToJsonContent(content);
+
+      return { content: jsonContent as JSONContent, fileName };
     } catch (error) {
       console.error("Upload markdown error:", error);
       throw new Error(`Failed to upload markdown: ${error instanceof Error ? error.message : String(error)}`);
