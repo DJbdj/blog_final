@@ -984,9 +984,9 @@ html.light .zlu-footer {
   border: 1px solid var(--zlu-border-muted);
 }
 
-/* Light mode image adjustments - use normal border color instead of muted */
+/* Light mode image adjustments - remove border to avoid dark edges */
 html.light .zlu-article-content img {
-  border-color: var(--zlu-border);
+  border: none;
 }
 
 .zlu-article-content table {
