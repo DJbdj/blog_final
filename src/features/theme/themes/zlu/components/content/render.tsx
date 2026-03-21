@@ -94,8 +94,8 @@ function renderReact(content: any) {
         ),
         heading: ({ node: _node, children }: any) => {
           const level = _node.attrs.level as number;
-          // 提取文本内容用于生成 ID
-          const textContent = (children?.props?.text || children?.toString() || "").toString();
+          // 从 node 的文本内容中提取 ID，而不是从 children
+          const textContent = _node.textContent || "";
           const id = textContent
             .toLowerCase()
             .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")

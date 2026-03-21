@@ -1534,7 +1534,7 @@ html.light .zlu-year-header {
 
 /* Light mode code adjustments */
 html.light .zlu-code-block {
-  background: #f8f8f8;
+  background: #f5f5f5;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -1543,12 +1543,16 @@ html.light .zlu-code-block::before {
   box-shadow: 20px 0 #ffbd2e, 40px 0 #27c93f;
 }
 
+html.light .zlu-code-block code {
+  color: #1a1a1a;
+}
+
 html.light .zlu-code-block::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
+  background-color: #e8e8e8;
 }
 
 html.light .zlu-code-block::-webkit-scrollbar-thumb {
-  background-color: #d0d0d0;
+  background-color: #c0c0c0;
 }
 
 /* Article content code blocks - ensure consistency */
@@ -1611,7 +1615,7 @@ html.light .zlu-code-block::-webkit-scrollbar-thumb {
 
 /* Light mode code adjustments */
 html.light .zlu-article-content pre {
-  background: #f8f8f8;
+  background: #f5f5f5;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -1621,15 +1625,15 @@ html.light .zlu-article-content pre::before {
 }
 
 html.light .zlu-article-content pre code {
-  color: #383a42;
+  color: #1a1a1a;
 }
 
 html.light .zlu-article-content pre::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
+  background-color: #e8e8e8;
 }
 
 html.light .zlu-article-content pre::-webkit-scrollbar-thumb {
-  background-color: #d0d0d0;
+  background-color: #c0c0c0;
 }
 
 /* Inline code */
