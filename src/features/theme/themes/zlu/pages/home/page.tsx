@@ -5,7 +5,7 @@ import { Calendar, Clock, ArrowRight, Star } from "lucide-react";
 import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { config, extendedConfig } from "@/features/theme/themes/zlu/config";
-import { DefaultSidebarContent } from "../../components/default-sidebar-content";
+import { DefaultSidebarContent } from "@/features/theme/themes/zlu/components/default-sidebar-content";
 import { formatDate } from "@/lib/utils";
 
 function FeaturedPostCard({ post }: { post: any }) {

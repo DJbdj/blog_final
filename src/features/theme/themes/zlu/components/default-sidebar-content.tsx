@@ -3,7 +3,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Megaphone, TrendingUp, Tag, ChevronRight } from "lucide-react";
-import { useRightSidebar } from "../../contexts/right-sidebar-context";
+import { useRightSidebar } from "@/features/theme/themes/zlu/contexts/right-sidebar-context";
 import type { PostPageProps } from "@/features/theme/contract/pages";
 import { formatDate } from "@/lib/utils";
 

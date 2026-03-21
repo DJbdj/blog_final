@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { Calendar, Clock, Filter } from "lucide-react";
 import { useEffect } from "react";
 import type { PostsPageProps } from "@/features/theme/contract/pages";
-import { useRightSidebar } from "../../contexts/right-sidebar-context";
+import { useRightSidebar } from "@/features/theme/themes/zlu/contexts/right-sidebar-context";
 import { formatDate } from "@/lib/utils";
 
 function PostCard({ post }: { post: any }) {

@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { Calendar, Clock, Tag, ArrowLeft } from "lucide-react";
 import type { PostPageProps } from "@/features/theme/contract/pages";
-import { ContentRendererWrapper as ContentRenderer } from "../../components/content/content-renderer";
+import { ContentRendererWrapper as ContentRenderer } from "@/features/theme/themes/zlu/components/content/content-renderer";
 import { PostTableOfContents } from "./components/table-of-contents";
-import { useRightSidebar } from "../../contexts/right-sidebar-context";
+import { useRightSidebar } from "@/features/theme/themes/zlu/contexts/right-sidebar-context";
 import { formatDate } from "@/lib/utils";
 
 export function PostPage({ post }: PostPageProps) {
