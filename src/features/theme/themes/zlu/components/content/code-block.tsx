@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Copy, Check } from "lucide-react";
 import { codeToHtml } from "shiki";
 
@@ -12,21 +12,38 @@ interface CodeBlockProps {
 export function CodeBlock({ code, language }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const [highlightedCode, setHighlightedCode] = useState<string>("");
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  // 检测当前主题
+  useEffect(() => {
+    const checkTheme = () => {
+      const isLight = document.documentElement.classList.contains("light");
+      setIsLightMode(isLight);
+    };
+
+    checkTheme();
+
+    // 监听主题变化
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     async function highlight() {
       try {
+        // 根据主题选择 shiki 主题
+        const theme = isLightMode ? "github-light" : "one-dark-pro";
         const html = await codeToHtml(code, {
           lang: language === "text" ? "text" : language,
-          theme: "one-dark-pro",
+          theme,
         });
         // 提取 shiki 生成的 code 内容，去掉外层的 pre
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
         const preElement = doc.querySelector("pre");
         if (preElement) {
-          // 保留 shiki 的 pre 结构和样式
           setHighlightedCode(preElement.innerHTML);
         } else {
           setHighlightedCode(`<code>${escapeHtml(code)}</code>`);
@@ -36,7 +53,7 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
       }
     }
     highlight();
-  }, [code, language]);
+  }, [code, language, isLightMode]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -54,7 +71,7 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
   }
 
   return (
-    <div className="my-4 relative group" ref={containerRef}>
+    <div className="my-4 relative group">
       <pre className="zlu-code-block">
         <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
       </pre>

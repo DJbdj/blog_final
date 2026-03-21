@@ -984,6 +984,11 @@ html.light .zlu-footer {
   border: 1px solid var(--zlu-border-muted);
 }
 
+/* Light mode image adjustments - use normal border color instead of muted */
+html.light .zlu-article-content img {
+  border-color: var(--zlu-border);
+}
+
 .zlu-article-content table {
   width: 100%;
   border-collapse: collapse;
