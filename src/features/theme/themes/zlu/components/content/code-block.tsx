@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Copy, Check } from "lucide-react";
+import { codeToHtml } from "shiki";
 
 interface CodeBlockProps {
   code: string;
@@ -10,6 +11,23 @@ interface CodeBlockProps {
 
 export function CodeBlock({ code, language }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const [highlightedCode, setHighlightedCode] = useState<string>("");
+
+  useEffect(() => {
+    async function highlight() {
+      try {
+        const html = await codeToHtml(code, {
+          lang: language === "text" ? "text" : language,
+          theme: "one-dark-pro",
+        });
+        setHighlightedCode(html);
+      } catch {
+        // Fallback to plain text if language not supported
+        setHighlightedCode(`<pre><code>${escapeHtml(code)}</code></pre>`);
+      }
+    }
+    highlight();
+  }, [code, language]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -17,14 +35,25 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  function escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   return (
-    <div className="relative my-4 rounded-lg overflow-hidden border border-gray-700 bg-gray-900">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
-        <span className="text-xs text-[var(--zlu-text-tertiary)] font-mono">{language}</span>
+    <div className="my-4">
+      <pre className="relative group">
+        <code
+          className="block"
+          dangerouslySetInnerHTML={{ __html: highlightedCode }}
+        />
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 text-xs text-[var(--zlu-text-tertiary)] hover:text-[var(--zlu-text-primary)] transition-colors"
+          className="absolute top-3 right-3 flex items-center gap-1 text-xs text-[var(--zlu-text-tertiary)] hover:text-[var(--zlu-text-primary)] transition-colors opacity-0 group-hover:opacity-100 bg-[var(--zlu-bg-secondary)] px-2 py-1 rounded"
         >
           {copied ? (
             <>
@@ -38,11 +67,6 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
             </>
           )}
         </button>
-      </div>
-
-      {/* Code */}
-      <pre className="p-4 overflow-x-auto">
-        <code className="text-sm font-mono text-gray-300 whitespace-pre">{code}</code>
       </pre>
     </div>
   );

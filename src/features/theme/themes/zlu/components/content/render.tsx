@@ -94,12 +94,20 @@ function renderReact(content: any) {
         ),
         heading: ({ node: _node, children }: any) => {
           const level = _node.attrs.level as number;
-          if (level === 1) return <h1 className="text-[var(--zlu-text-primary)] font-semibold text-3xl mt-6 mb-3">{children}</h1>;
-          if (level === 2) return <h2 className="text-[var(--zlu-text-primary)] font-semibold text-2xl mt-6 mb-3">{children}</h2>;
-          if (level === 3) return <h3 className="text-[var(--zlu-text-primary)] font-semibold text-xl mt-6 mb-3">{children}</h3>;
-          if (level === 4) return <h4 className="text-[var(--zlu-text-primary)] font-semibold text-lg mt-6 mb-3">{children}</h4>;
-          if (level === 5) return <h5 className="text-[var(--zlu-text-primary)] font-semibold text-base mt-6 mb-3">{children}</h5>;
-          return <h6 className="text-[var(--zlu-text-primary)] font-semibold text-sm mt-6 mb-3">{children}</h6>;
+          // 提取文本内容用于生成 ID
+          const textContent = (children?.props?.text || children?.toString() || "").toString();
+          const id = textContent
+            .toLowerCase()
+            .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+            .replace(/^-|-$/g, "");
+
+          const baseClasses = "text-[var(--zlu-text-primary)] font-semibold mt-6 mb-3 scroll-mt-24";
+          if (level === 1) return <h1 id={id} className={`${baseClasses} text-3xl`}>{children}</h1>;
+          if (level === 2) return <h2 id={id} className={`${baseClasses} text-2xl`}>{children}</h2>;
+          if (level === 3) return <h3 id={id} className={`${baseClasses} text-xl`}>{children}</h3>;
+          if (level === 4) return <h4 id={id} className={`${baseClasses} text-lg`}>{children}</h4>;
+          if (level === 5) return <h5 id={id} className={`${baseClasses} text-base`}>{children}</h5>;
+          return <h6 id={id} className={`${baseClasses} text-sm`}>{children}</h6>;
         },
         paragraph: ({ node: _node, children }: any) => (
           <p className="text-[var(--zlu-text-secondary)] my-4 leading-relaxed">
