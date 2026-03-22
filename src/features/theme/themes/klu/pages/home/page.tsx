@@ -58,13 +58,14 @@ function PostCard({ post }: { post: HomePageProps["posts"][0] }) {
   );
 }
 
-export function HomePage({ posts, tags }: HomePageProps) {
+export function HomePage({ posts, tags: _tags }: HomePageProps) {
+  // Note: tags parameter is available but not used in this theme
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="klu-card p-6">
         <h1 className="text-2xl font-bold text-[var(--klu-text-primary)] mb-2">
-          最新文章
+          精选文章
         </h1>
         <p className="text-[var(--klu-text-secondary)] text-sm">
           探索 {posts.length} 篇精彩文章

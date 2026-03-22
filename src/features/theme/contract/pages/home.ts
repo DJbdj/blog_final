@@ -3,6 +3,5 @@ import type { TagWithCount } from "@/features/tags/tags.schema";
 
 export interface HomePageProps {
   posts: Array<PostItem>;
-  recentPosts?: Array<PostItem>;
   tags: Array<TagWithCount>;
 }
