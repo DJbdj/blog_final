@@ -52,7 +52,7 @@ export async function getFeaturedPosts(
     return await PostRepo.getFeaturedPosts(context.db, { limit });
   };
 
-  const version = await CacheService.getVersion(context, "posts:featured");
+  const version = await CacheService.getVersion(context, CACHE_NAMESPACES.POSTS_FEATURED);
   const cacheKey = POSTS_CACHE_KEYS.featured(version, limit);
 
   return await CacheService.get(
@@ -349,6 +349,13 @@ export async function updatePost(
   if (data.data.contentJson !== undefined) {
     context.executionCtx.waitUntil(
       syncPostMedia(context.db, updatedPost.id, data.data.contentJson),
+    );
+  }
+
+  // Invalidate featured posts cache if featured status changed
+  if (data.data.featured !== undefined) {
+    context.executionCtx.waitUntil(
+      CacheService.bumpVersion(context, CACHE_NAMESPACES.POSTS_FEATURED),
     );
   }
 
