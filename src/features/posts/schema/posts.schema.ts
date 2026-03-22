@@ -24,6 +24,7 @@ export const PostInsertSchema = createInsertSchema(PostsTable);
 export const PostUpdateSchema = createUpdateSchema(PostsTable, {
   contentJson: NullableJsonContentSchema.optional(),
   publicContentJson: NullableJsonContentSchema.optional(),
+  featured: z.boolean().optional(),
 }).omit({
   publicContentJson: true,
 });
