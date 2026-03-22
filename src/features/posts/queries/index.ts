@@ -96,6 +96,27 @@ export function postsInfiniteQueryOptions(
   });
 }
 
+export function recentPostsQuery(limit: number) {
+  return queryOptions({
+    queryKey: [...POSTS_KEYS.lists, "recent", limit],
+    queryFn: async () => {
+      if (isSSR) {
+        const result = await getPostsCursorFn({
+          data: { limit, cursor: undefined },
+        });
+        // Validate and return items
+        const parsed = PostListResponseSchema.parse(result);
+        return parsed.items;
+      }
+      const res = await apiClient.posts.$get({
+        query: { limit: String(limit) },
+      });
+      if (!res.ok) throw new Error("Failed to fetch recent posts");
+      return PostListResponseSchema.parse(await res.json()).items;
+    },
+  });
+}
+
 export function postBySlugQuery(slug: string) {
   return queryOptions({
     queryKey: POSTS_KEYS.detail(slug),
