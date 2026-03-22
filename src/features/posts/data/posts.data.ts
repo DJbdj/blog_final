@@ -431,6 +431,69 @@ export async function getRelatedPostIds(
   return matchingPosts.map((p) => p.id);
 }
 
+export async function getFeaturedPosts(
+  db: DB,
+  options: {
+    limit?: number;
+  } = {},
+) {
+  const { limit = 4 } = options;
+
+  const posts = await db
+    .select({
+      id: PostsTable.id,
+      title: PostsTable.title,
+      summary: PostsTable.summary,
+      readTimeInMinutes: PostsTable.readTimeInMinutes,
+      slug: PostsTable.slug,
+      status: PostsTable.status,
+      featured: PostsTable.featured,
+      publishedAt: PostsTable.publishedAt,
+      createdAt: PostsTable.createdAt,
+      updatedAt: PostsTable.updatedAt,
+    })
+    .from(PostsTable)
+    .where(
+      and(
+        eq(PostsTable.featured, true),
+        eq(PostsTable.status, "published"),
+      ),
+    )
+    .orderBy(desc(PostsTable.publishedAt))
+    .limit(limit);
+
+  // Fetch tags for all posts
+  if (posts.length > 0) {
+    const postIds = posts.map((p) => p.id);
+    const tagsResults = await db
+      .select({
+        postId: PostTagsTable.postId,
+        tag: {
+          id: TagsTable.id,
+          name: TagsTable.name,
+          createdAt: TagsTable.createdAt,
+        },
+      })
+      .from(PostTagsTable)
+      .innerJoin(TagsTable, eq(PostTagsTable.tagId, TagsTable.id))
+      .where(inArray(PostTagsTable.postId, postIds));
+
+    // Map tags back to posts
+    const tagsByPostId = new Map<number, Array<typeof tagsResults[0]["tag"]>>();
+    for (const result of tagsResults) {
+      const existing = tagsByPostId.get(result.postId) ?? [];
+      existing.push(result.tag);
+      tagsByPostId.set(result.postId, existing);
+    }
+
+    (posts as Array<PostListItem>).forEach((item) => {
+      item.tags = tagsByPostId.get(item.id) ?? [];
+    });
+  }
+
+  return posts as Array<PostListItem>;
+}
+
 export async function getPublicPostsByIds(db: DB, ids: Array<number>) {
   if (ids.length === 0) return [];
 

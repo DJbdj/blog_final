@@ -19,6 +19,7 @@ import {
   findPostBySlugFn,
   getPostsCursorFn,
   getRelatedPostsFn,
+  getFeaturedPostsFn,
 } from "../api/posts.public.api";
 
 export const POSTS_KEYS = {
@@ -51,14 +52,14 @@ export function featuredPostsQuery(limit: number) {
     queryKey: [...POSTS_KEYS.featured, limit],
     queryFn: async () => {
       if (isSSR) {
-        const result = await getPostsCursorFn({ data: { limit } });
-        return result.items;
+        const result = await getFeaturedPostsFn({ data: { limit } });
+        return result;
       }
-      const res = await apiClient.posts.$get({
+      const res = await apiClient.posts.featured.$get({
         query: { limit: String(limit) },
       });
-      if (!res.ok) throw new Error("Failed to fetch posts");
-      return PostListResponseSchema.parse(await res.json()).items;
+      if (!res.ok) throw new Error("Failed to fetch featured posts");
+      return PostItemSchema.array().parse(await res.json());
     },
   });
 }

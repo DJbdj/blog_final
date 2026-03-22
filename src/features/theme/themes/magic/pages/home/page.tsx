@@ -1,9 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
 import { Github as GithubIcon } from "lucide-react";
-import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
-import { config } from "@/features/theme/themes/magic/config";
 import { blogConfig } from "@/blog.config";
 import { formatDate } from "@/lib/utils";
 
@@ -91,14 +89,9 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
   );
 }
 
-export function HomePage({ posts, tags }: HomePageProps) {
-  const featuredPosts = useMemo(() => {
-    return posts.slice(0, config.home.featuredPostsLimit);
-  }, [posts]);
-
-  const recentPosts = useMemo(() => {
-    return posts.slice(config.home.featuredPostsLimit);
-  }, [posts]);
+export function HomePage({ posts: featuredPosts, recentPosts = [], tags }: HomePageProps) {
+  // 如果 recentPosts 为空（旧接口兼容），使用原来的逻辑
+  const displayRecentPosts = recentPosts.length > 0 ? recentPosts : [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
@@ -150,9 +143,9 @@ export function HomePage({ posts, tags }: HomePageProps) {
         </div>
 
         {/* Grid Layout */}
-        {recentPosts.length > 0 ? (
+        {displayRecentPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentPosts.map((post) => (
+            {displayRecentPosts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>

@@ -43,6 +43,28 @@ function stripPublicContentJson<T extends { publicContentJson?: unknown }>(
   return rest;
 }
 
+export async function getFeaturedPosts(
+  context: DbContext & { executionCtx: ExecutionContext },
+  limit: number,
+) {
+  const fetcher = async () => {
+    return await PostRepo.getFeaturedPosts(context.db, { limit });
+  };
+
+  const version = await CacheService.getVersion(context, "posts:featured");
+  const cacheKey = POSTS_CACHE_KEYS.featured(version, limit);
+
+  return await CacheService.get(
+    context,
+    cacheKey,
+    z.array(PostItemSchema),
+    fetcher,
+    {
+      ttl: "7d",
+    },
+  );
+}
+
 export async function getPostsCursor(
   context: DbContext & { executionCtx: ExecutionContext },
   data: GetPostsCursorInput,

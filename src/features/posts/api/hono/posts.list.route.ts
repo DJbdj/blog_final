@@ -10,21 +10,40 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use("*", baseMiddleware);
 
-const route = app.get(
-  "/",
-  zValidator(
-    "query",
-    GetPostsCursorInputSchema.extend({
-      cursor: z.coerce.number().optional(),
-      limit: z.coerce.number().optional(),
-    }),
-  ),
-  async (c) => {
-    const data = c.req.valid("query");
-    const result = await PostService.getPostsCursor(getServiceContext(c), data);
-    setCacheHeaders(c.res.headers, "public");
-    return c.json(result);
-  },
-);
+const route = app
+  .get(
+    "/",
+    zValidator(
+      "query",
+      GetPostsCursorInputSchema.extend({
+        cursor: z.coerce.number().optional(),
+        limit: z.coerce.number().optional(),
+      }),
+    ),
+    async (c) => {
+      const data = c.req.valid("query");
+      const result = await PostService.getPostsCursor(getServiceContext(c), data);
+      setCacheHeaders(c.res.headers, "public");
+      return c.json(result);
+    },
+  )
+  .get(
+    "/featured",
+    zValidator(
+      "query",
+      z.object({
+        limit: z.coerce.number().optional().default(4),
+      }),
+    ),
+    async (c) => {
+      const data = c.req.valid("query");
+      const result = await PostService.getFeaturedPosts(
+        getServiceContext(c),
+        data.limit,
+      );
+      setCacheHeaders(c.res.headers, "public");
+      return c.json(result);
+    },
+  );
 
 export default route;

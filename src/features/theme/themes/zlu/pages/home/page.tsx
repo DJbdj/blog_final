@@ -2,9 +2,8 @@
 
 import { Link } from "@tanstack/react-router";
 import { Calendar, Clock, ArrowRight, Star } from "lucide-react";
-import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
-import { config, extendedConfig } from "@/features/theme/themes/zlu/config";
+import { extendedConfig } from "@/features/theme/themes/zlu/config";
 import { DefaultSidebarContent } from "@/features/theme/themes/zlu/components/default-sidebar-content";
 import { formatDate } from "@/lib/utils";
 
@@ -109,20 +108,12 @@ function PostCard({ post }: { post: any }) {
   );
 }
 
-export function HomePage({ posts, tags }: HomePageProps) {
-  const featuredPosts = useMemo(() => {
-    // 只显示标记为精选的文章
-    return posts.filter((post) => post.featured).slice(0, config.home.featuredPostsLimit);
-  }, [posts]);
-
-  const recentPosts = useMemo(() => {
-    // 归档区域显示所有非精选文章，按时间排序
-    return posts.filter((post) => !post.featured);
-  }, [posts]);
+export function HomePage({ posts: featuredPosts, recentPosts = [], tags }: HomePageProps) {
+  // posts 现在是精选文章列表
 
   return (
     <>
-      <DefaultSidebarContent posts={posts} tags={tags} />
+      <DefaultSidebarContent posts={featuredPosts} tags={tags} />
       <div className="space-y-8">
         {/* Featured Posts - Horizontal Scroll */}
         {featuredPosts.length > 0 && (

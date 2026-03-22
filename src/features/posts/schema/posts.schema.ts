@@ -17,6 +17,7 @@ export const PostSelectSchema = createSelectSchema(PostsTable, {
   publishedAt: coercedDateNullable,
   createdAt: coercedDate,
   updatedAt: coercedDate,
+  featured: z.boolean().or(z.number().transform(v => v === 1)).default(false),
 }).omit({
   publicContentJson: true,
 });
@@ -132,4 +133,6 @@ export const POSTS_CACHE_KEYS = {
   related: (slug: string, limit?: number) =>
     ["posts", "related-ids", slug, limit] as const,
   syncHash: (id: number) => `post_hash:${id}` as const,
+  featured: (version: string, limit: number) =>
+    ["posts", "featured", version, limit] as const,
 } as const;
