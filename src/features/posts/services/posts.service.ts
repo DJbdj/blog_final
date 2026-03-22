@@ -19,6 +19,7 @@ import type {
 } from "@/features/posts/schema/posts.schema";
 import {
   POSTS_CACHE_KEYS,
+  PostItemSchema,
   PostListResponseSchema,
   PostWithTocSchema,
 } from "@/features/posts/schema/posts.schema";

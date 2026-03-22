@@ -53,7 +53,8 @@ export function featuredPostsQuery(limit: number) {
     queryFn: async () => {
       if (isSSR) {
         const result = await getFeaturedPostsFn({ data: { limit } });
-        return result;
+        // Validate the result with schema in SSR
+        return PostItemSchema.array().parse(result);
       }
       const res = await apiClient.posts.featured.$get({
         query: { limit: String(limit) },
