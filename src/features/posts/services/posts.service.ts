@@ -34,6 +34,7 @@ import { isFuturePublishDate } from "@/features/posts/utils/date";
 import { calculatePostHash } from "@/features/posts/utils/sync";
 import { generateTableOfContents } from "@/features/posts/utils/toc";
 import * as SearchService from "@/features/search/service/search.service";
+import { CACHE_NAMESPACES } from "@/features/cache/types";
 import { err, ok } from "@/lib/errors";
 import { purgePostCDNCache } from "@/lib/invalidate";
 
