@@ -27,7 +27,31 @@ export async function getDraftsCount(db: DB) {
 
 export async function getRecentComments(db: DB, limit = 5) {
   return db
-    .select()
+    .select({
+      comments: {
+        id: CommentsTable.id,
+        content: CommentsTable.content,
+        rootId: CommentsTable.rootId,
+        replyToCommentId: CommentsTable.replyToCommentId,
+        postId: CommentsTable.postId,
+        userId: CommentsTable.userId,
+        status: CommentsTable.status,
+        aiReason: CommentsTable.aiReason,
+        createdAt: CommentsTable.createdAt,
+        updatedAt: CommentsTable.updatedAt,
+      },
+      user: {
+        id: UserTable.id,
+        name: UserTable.name,
+        image: UserTable.image,
+        role: UserTable.role,
+      },
+      posts: {
+        id: PostsTable.id,
+        title: PostsTable.title,
+        slug: PostsTable.slug,
+      },
+    })
     .from(CommentsTable)
     .orderBy(desc(CommentsTable.createdAt))
     .limit(limit)

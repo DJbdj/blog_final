@@ -12,8 +12,8 @@ import { CommentsTable } from "@/lib/db/schema";
 const coercedDate = z.union([z.date(), z.string().pipe(z.coerce.date())]);
 
 export const CommentSelectSchema = createSelectSchema(CommentsTable, {
-  createdAt: coercedDate,
-  updatedAt: coercedDate,
+  createdAt: coercedDate.nullish(),
+  updatedAt: coercedDate.nullish(),
 });
 export const CommentInsertSchema = createInsertSchema(CommentsTable);
 export const CommentUpdateSchema = createUpdateSchema(CommentsTable);
@@ -47,7 +47,7 @@ export const CommentWithUserSchema = CommentSelectSchema.extend({
 export const UserStatsSchema = z.object({
   totalComments: z.number(),
   rejectedComments: z.number(),
-  registeredAt: z.date(),
+  registeredAt: z.date().nullish(),
 });
 
 export const GetUserStatsInputSchema = z.object({

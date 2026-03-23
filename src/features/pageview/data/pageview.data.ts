@@ -1,7 +1,6 @@
 import {
   and,
   count,
-  countDistinct,
   eq,
   gte,
   inArray,
@@ -19,20 +18,31 @@ export async function getStats(
   startAt: Date,
   endAt: Date,
 ): Promise<{ pv: number; uv: number }> {
-  const result = await db
-    .select({
-      pv: count(),
-      uv: countDistinct(PageViewsTable.visitorHash),
-    })
-    .from(PageViewsTable)
-    .where(
-      and(
-        gte(PageViewsTable.createdAt, startAt),
-        lt(PageViewsTable.createdAt, endAt),
-      ),
-    );
+  const whereClause = and(
+    gte(PageViewsTable.createdAt, startAt),
+    lt(PageViewsTable.createdAt, endAt),
+  );
 
-  return { pv: result[0]?.pv ?? 0, uv: result[0]?.uv ?? 0 };
+  const [pvResult, uvSubqueryResult] = await Promise.all([
+    db
+      .select({ count: count() })
+      .from(PageViewsTable)
+      .where(whereClause),
+    db
+      .select({ count: count() })
+      .from(
+        db
+          .selectDistinct({ visitorHash: PageViewsTable.visitorHash })
+          .from(PageViewsTable)
+          .where(whereClause)
+          .as("distinct_visitors"),
+      ),
+  ]);
+
+  return {
+    pv: Number(pvResult[0]?.count ?? 0),
+    uv: Number(uvSubqueryResult[0]?.count ?? 0),
+  };
 }
 
 /**
@@ -51,8 +61,8 @@ export async function getTrafficTrend(
 
   const rows = await db
     .select({
-      bucket: truncExpr.as("bucket"),
-      views: count().as("views"),
+      bucket: truncExpr,
+      views: count(),
     })
     .from(PageViewsTable)
     .where(
@@ -61,12 +71,12 @@ export async function getTrafficTrend(
         lt(PageViewsTable.createdAt, endAt),
       ),
     )
-    .groupBy(sql`bucket`)
-    .orderBy(sql`bucket`);
+    .groupBy(truncExpr)
+    .orderBy(truncExpr);
 
   return rows.map((r) => ({
     date: Number(r.bucket) * 1000, // unix seconds → ms
-    views: r.views,
+    views: Number(r.views),
   }));
 }
 
@@ -79,11 +89,11 @@ export async function getTopPages(
   endAt: Date,
   limit = 5,
 ): Promise<Array<{ slug: string; title: string; views: number }>> {
-  return db
+  const rows = await db
     .select({
       slug: PostsTable.slug,
       title: PostsTable.title,
-      views: count().as("views"),
+      views: count(),
     })
     .from(PageViewsTable)
     .innerJoin(PostsTable, eq(PageViewsTable.postId, PostsTable.id))
@@ -96,6 +106,12 @@ export async function getTopPages(
     .groupBy(PostsTable.slug)
     .orderBy(sql`views DESC`)
     .limit(limit);
+
+  return rows.map((r) => ({
+    slug: r.slug,
+    title: r.title,
+    views: Number(r.views),
+  }));
 }
 
 /**
@@ -110,12 +126,12 @@ export async function getViewCountsBySlugs(
   const rows = await db
     .select({
       slug: PostsTable.slug,
-      views: count().as("views"),
+      views: count(),
     })
     .from(PageViewsTable)
     .innerJoin(PostsTable, eq(PageViewsTable.postId, PostsTable.id))
     .where(inArray(PostsTable.slug, slugs))
     .groupBy(PostsTable.slug);
 
-  return Object.fromEntries(rows.map((r) => [r.slug, r.views]));
+  return Object.fromEntries(rows.map((r) => [r.slug, Number(r.views)]));
 }

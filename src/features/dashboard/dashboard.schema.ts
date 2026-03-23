@@ -10,7 +10,7 @@ export const DashboardStatsSchema = z.object({
 export const ActivityLogItemSchema = z.object({
   type: z.enum(["comment", "post", "user"]),
   text: z.string(),
-  time: z.date().nullable(),
+  time: z.date().nullish(),
   link: z.string().optional(),
   rootId: z.number().optional(),
 });

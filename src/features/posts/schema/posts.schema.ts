@@ -13,11 +13,11 @@ import { NullableJsonContentSchema } from "./json-content.schema";
 const coercedDate = z.union([z.date(), z.string().pipe(z.coerce.date())]);
 
 export const PostSelectSchema = createSelectSchema(PostsTable, {
-  publishedAt: coercedDate.nullable(),
+  publishedAt: coercedDate.nullish(),
   createdAt: coercedDate,
   updatedAt: coercedDate,
   featured: z.boolean().or(z.number().transform(v => v === 1)).default(false),
-  pinnedAt: coercedDate.nullable(),
+  pinnedAt: coercedDate.nullish(),
 }).omit({
   publicContentJson: true,
 });
