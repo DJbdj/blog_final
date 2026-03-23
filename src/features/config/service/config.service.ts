@@ -48,14 +48,14 @@ export function resolveSiteConfig(
 ): SiteConfig {
   const configDefaultBackground = config?.site?.theme?.default?.background;
 
+  // Build social array, preserving user's array structure or falling back to defaults
+  const resolvedSocial = config?.site?.social ?? blogConfig.social;
+
   return FullSiteConfigSchema.parse({
     title: config?.site?.title ?? blogConfig.title,
     author: config?.site?.author ?? blogConfig.author,
     description: config?.site?.description ?? blogConfig.description,
-    social: {
-      github: config?.site?.social?.github ?? blogConfig.social.github,
-      email: config?.site?.social?.email ?? blogConfig.social.email,
-    },
+    social: resolvedSocial,
     icons: {
       faviconSvg:
         config?.site?.icons?.faviconSvg || blogConfig.icons.faviconSvg,

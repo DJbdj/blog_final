@@ -508,6 +508,7 @@ export async function getPublicPostsByIds(db: DB, ids: Array<number>) {
       slug: PostsTable.slug,
       status: PostsTable.status,
       featured: PostsTable.featured,
+      pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,

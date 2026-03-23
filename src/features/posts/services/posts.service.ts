@@ -353,8 +353,8 @@ export async function updatePost(
     );
   }
 
-  // Invalidate featured posts cache if featured status changed
-  if (data.data.featured !== undefined) {
+  // Invalidate featured posts cache if featured or pinned status changed
+  if (data.data.featured !== undefined || data.data.pinnedAt !== undefined) {
     context.executionCtx.waitUntil(
       CacheService.bumpVersion(context, CACHE_NAMESPACES.POSTS_FEATURED),
     );

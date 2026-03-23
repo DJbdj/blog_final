@@ -18,6 +18,7 @@ export const PostSelectSchema = createSelectSchema(PostsTable, {
   createdAt: coercedDate,
   updatedAt: coercedDate,
   featured: z.boolean().or(z.number().transform(v => v === 1)).default(false),
+  pinnedAt: coercedDateNullable,
 }).omit({
   publicContentJson: true,
 });

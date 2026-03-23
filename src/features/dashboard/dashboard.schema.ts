@@ -35,21 +35,17 @@ export const DashboardResponseSchema = z.object({
         traffic: z.array(TrafficDataSchema),
         overview: z
           .object({
-            visitors: MetricSchema,
             pageViews: MetricSchema,
-            visits: MetricSchema,
-            bounces: MetricSchema,
-            totalTime: MetricSchema,
+            visitors: MetricSchema,
           })
           .optional(),
         topPages: z
-          .array(z.object({ x: z.string(), y: z.number() }))
+          .array(z.object({ slug: z.string(), title: z.string(), views: z.number() }))
           .optional(),
         lastUpdated: z.number(),
       }),
     )
     .optional(),
-  umamiUrl: z.string().optional(),
 });
 
 export type DashboardStats = z.infer<typeof DashboardStatsSchema>;
