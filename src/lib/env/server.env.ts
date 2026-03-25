@@ -24,7 +24,7 @@ const serverEnvSchema = z.object({
       (v) => v === undefined || domainRegex.test(v),
       "Must be a valid domain (e.g., cdn.example.com)",
     ),
-  ENVIRONMENT: z.enum(["dev", "prod", "test"]).optional(),
+  ENVIRONMENT: z.string().optional(),
   VITE_UMAMI_WEBSITE_ID: z.string().optional(),
   UMAMI_SRC: z.string().optional(),
   PAGEVIEW_SALT: z.string().optional(),

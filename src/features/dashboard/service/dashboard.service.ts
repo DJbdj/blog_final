@@ -56,9 +56,11 @@ async function fetchTrafficDataForRange(
     overview: {
       pageViews: { value: stats.pv, prev: prevStats.pv },
       visitors: { value: stats.uv, prev: prevStats.uv },
+      visits: { value: stats.pv, prev: prevStats.pv },
+      bounces: { value: 0, prev: 0 },
     },
     traffic,
-    topPages,
+    topPages: topPages.map((p) => ({ x: p.title || p.slug, y: p.views })),
     lastUpdated: Date.now(),
   };
 }

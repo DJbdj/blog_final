@@ -37,10 +37,12 @@ export const DashboardResponseSchema = z.object({
           .object({
             pageViews: MetricSchema,
             visitors: MetricSchema,
+            visits: MetricSchema,
+            bounces: MetricSchema,
           })
           .optional(),
         topPages: z
-          .array(z.object({ slug: z.string(), title: z.string(), views: z.number() }))
+          .array(z.object({ x: z.string(), y: z.number() }))
           .optional(),
         lastUpdated: z.number(),
       }),

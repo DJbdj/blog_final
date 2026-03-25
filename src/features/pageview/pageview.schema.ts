@@ -3,13 +3,15 @@ import { z } from "zod";
 export const TrafficOverviewSchema = z.object({
   pageViews: z.object({ value: z.number(), prev: z.number().optional() }),
   visitors: z.object({ value: z.number(), prev: z.number().optional() }),
+  visits: z.object({ value: z.number(), prev: z.number().optional() }),
+  bounces: z.object({ value: z.number(), prev: z.number().optional() }),
 });
 
 export const TrafficRangeDataSchema = z.object({
   traffic: z.array(z.object({ date: z.number(), views: z.number() })),
   overview: TrafficOverviewSchema.optional(),
   topPages: z
-    .array(z.object({ slug: z.string(), title: z.string(), views: z.number() }))
+    .array(z.object({ x: z.string(), y: z.number() }))
     .optional(),
   lastUpdated: z.number(),
 });
