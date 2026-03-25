@@ -188,4 +188,4 @@ console.error(
 - 你可以用测试管理员的账户。账号：yfanyuhan@189.cn 密码：lyh52000
 - 你可以查看README.md来学习该项目的开发流程
 - 如果要在本地构建，则调用对应的agent进行构建及后续测试
-- 项目托管在cloudflare上，变量CLOUDFLARE_API_TOKEN=cfut_6TElxtJ56ytcBEtISFILqcbqeyOYw8WBFtqACMcS12c24807。权限参考模板Edit Cloudflare Workers
+- 项目托管在cloudflare上，变量CLOUDFLARE_API_TOKEN=cfut_6TElxtJ56ytcBEtISFILqcbqeyOYw8WBFtqACMcS12c24807。权限参考模板Edit Cloudflare Workers，你可以用这个尝试远程部署
