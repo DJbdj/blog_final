@@ -79,7 +79,7 @@ export async function getTopPages(
   endAt: Date,
   limit = 5,
 ): Promise<Array<{ slug: string; title: string; views: number }>> {
-  const rows = await db
+  return db
     .select({
       slug: PostsTable.slug,
       title: PostsTable.title,
@@ -96,12 +96,6 @@ export async function getTopPages(
     .groupBy(PostsTable.slug)
     .orderBy(sql`views DESC`)
     .limit(limit);
-
-  return rows.map((r) => ({
-    slug: r.slug,
-    title: r.title,
-    views: r.views,
-  }));
 }
 
 /**

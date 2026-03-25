@@ -11,13 +11,14 @@ import { NullableJsonContentSchema } from "./json-content.schema";
 
 // Date fields need to accept both Date objects and ISO strings (for JSON serialization)
 const coercedDate = z.union([z.date(), z.string().pipe(z.coerce.date())]);
+const coercedDateNullable = coercedDate.nullable();
 
 export const PostSelectSchema = createSelectSchema(PostsTable, {
-  publishedAt: coercedDate.nullish(),
+  publishedAt: coercedDateNullable,
   createdAt: coercedDate,
   updatedAt: coercedDate,
   featured: z.boolean().or(z.number().transform(v => v === 1)).default(false),
-  pinnedAt: coercedDate.nullish(),
+  pinnedAt: coercedDateNullable,
 }).omit({
   publicContentJson: true,
 });
