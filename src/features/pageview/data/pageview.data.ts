@@ -66,7 +66,7 @@ export async function getTrafficTrend(
 
   return rows.map((r) => ({
     date: Number(r.bucket) * 1000, // unix seconds → ms
-    views: Number(r.views),
+    views: r.views,
   }));
 }
 
