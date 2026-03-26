@@ -25,19 +25,19 @@ export function resolveSystemConfig(
       ...DEFAULT_CONFIG.notification,
       ...config?.notification,
       admin: {
-        ...DEFAULT_CONFIG.notification?.admin,
+        ...DEFAULT_CONFIG.notification.admin,
         ...config?.notification?.admin,
         channels: {
-          ...DEFAULT_CONFIG.notification?.admin?.channels,
+          ...DEFAULT_CONFIG.notification.admin.channels,
           ...config?.notification?.admin?.channels,
         },
       },
       user: {
-        ...DEFAULT_CONFIG.notification?.user,
+        ...DEFAULT_CONFIG.notification.user,
         ...config?.notification?.user,
       },
       webhooks:
-        config?.notification?.webhooks ?? DEFAULT_CONFIG.notification?.webhooks,
+        config?.notification?.webhooks ?? DEFAULT_CONFIG.notification.webhooks,
     },
     site: resolveSiteConfig(config),
   };

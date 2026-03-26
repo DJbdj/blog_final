@@ -18,6 +18,7 @@ import {
 } from "@/features/posts/data/helper";
 import type { PostListItem } from "@/features/posts/schema/posts.schema";
 import type { PostStatus, Tag } from "@/lib/db/schema";
+import type { DB } from "@/lib/db";
 import { PostsTable, PostTagsTable, TagsTable } from "@/lib/db/schema";
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -67,6 +68,7 @@ export async function getPosts(
       slug: PostsTable.slug,
       status: PostsTable.status,
       featured: PostsTable.featured,
+      pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,
@@ -158,6 +160,7 @@ export async function getPostsCursor(
       slug: PostsTable.slug,
       status: PostsTable.status,
       featured: PostsTable.featured,
+      pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,
@@ -448,6 +451,7 @@ export async function getFeaturedPosts(
       slug: PostsTable.slug,
       status: PostsTable.status,
       featured: PostsTable.featured,
+      pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,

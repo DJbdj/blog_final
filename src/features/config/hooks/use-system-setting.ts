@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { updateSystemConfigFn } from "@/features/config/api/config.api";
 import { CONFIG_KEYS, systemConfigQuery } from "@/features/config/queries";
+import { DEFAULT_CONFIG } from "@/features/config/config.schema";
 
 export function useSystemSetting() {
   const queryClient = useQueryClient();
@@ -18,7 +19,7 @@ export function useSystemSetting() {
   });
 
   return {
-    settings: data,
+    settings: data ?? DEFAULT_CONFIG,
     isLoading,
     saveSettings: saveMutation.mutateAsync,
   };

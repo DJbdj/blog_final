@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { SystemConfig } from "@/features/config/config.schema";
+import type { DB } from "@/lib/db";
 import { SystemConfigTable } from "@/lib/db/schema";
 
 export async function getSystemConfig(db: DB): Promise<SystemConfig | null> {
