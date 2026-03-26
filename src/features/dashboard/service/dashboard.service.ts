@@ -12,6 +12,7 @@ import {
   PAGEVIEW_CACHE_KEYS,
   type TrafficRangeData,
 } from "@/features/pageview/pageview.schema";
+import { serverEnv } from "@/lib/env/server.env";
 import { m } from "@/paraglide/messages";
 
 function getTimeRange(range: DashboardRange) {
@@ -68,7 +69,10 @@ async function fetchTrafficDataForRange(
 export async function getDashboardStats(
   context: DbContext & { executionCtx: ExecutionContext },
 ) {
-  const { db } = context;
+  const { db, env } = context;
+  const { UMAMI_SRC } = serverEnv(env);
+
+  const umamiUrl = UMAMI_SRC ? new URL(UMAMI_SRC).origin : undefined;
 
   const [
     pendingComments,
@@ -155,5 +159,6 @@ export async function getDashboardStats(
     },
     activities,
     trafficByRange,
+    umamiUrl,
   };
 }

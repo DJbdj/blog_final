@@ -48,6 +48,7 @@ export const DashboardResponseSchema = z.object({
       }),
     )
     .optional(),
+  umamiUrl: z.string().optional(),
 });
 
 export type DashboardStats = z.infer<typeof DashboardStatsSchema>;
