@@ -6,6 +6,7 @@ import {
   DEFAULT_CONFIG,
   SystemConfigSchema,
 } from "@/features/config/config.schema";
+import type { SocialLink } from "@/features/config/utils/social-platforms";
 import * as ConfigRepo from "@/features/config/data/config.data";
 import { FullSiteConfigSchema } from "@/features/config/site-config.schema";
 import * as Storage from "@/features/media/data/media.storage";
@@ -43,19 +44,34 @@ export function resolveSystemConfig(
   };
 }
 
+function migrateSocial(social: unknown): SocialLink[] {
+  // New format — already an array
+  if (Array.isArray(social)) return social;
+
+  // Old format — { github?: string, email?: string }
+  if (social && typeof social === "object") {
+    const old = social as { github?: string; email?: string };
+    const migrated: SocialLink[] = [];
+    if (old.github) migrated.push({ platform: "github", url: old.github });
+    if (old.email)
+      migrated.push({ platform: "email", url: `mailto:${old.email}` });
+    return migrated;
+  }
+
+  // Fallback to blogConfig defaults
+  return [...blogConfig.social];
+}
+
 export function resolveSiteConfig(
   config: SystemConfig | null | undefined,
 ): SiteConfig {
   const configDefaultBackground = config?.site?.theme?.default?.background;
 
-  // Build social array, preserving user's array structure or falling back to defaults
-  const resolvedSocial = config?.site?.social ?? blogConfig.social;
-
   return FullSiteConfigSchema.parse({
     title: config?.site?.title ?? blogConfig.title,
     author: config?.site?.author ?? blogConfig.author,
     description: config?.site?.description ?? blogConfig.description,
-    social: resolvedSocial,
+    social: migrateSocial(config?.site?.social),
     icons: {
       faviconSvg:
         config?.site?.icons?.faviconSvg || blogConfig.icons.faviconSvg,
