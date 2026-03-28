@@ -90,32 +90,7 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         });
       },
     },
-    emailVerification: {
-      sendVerificationEmail: async ({ user, url }) => {
-        // Per-email rate limit: 3 per hour — silently skip if exceeded
-        const allowed = await checkEmailRateLimit(
-          env,
-          "email-verify",
-          user.email,
-        );
-        if (!allowed) return;
-
-        const locale = getAuthEmailLocale();
-        const emailHtml = renderToStaticMarkup(
-          AuthEmail({ locale, type: "verification", url }),
-        );
-
-        await env.QUEUE.send({
-          type: "EMAIL",
-          data: {
-            to: user.email,
-            subject: m.email_auth_verification_subject({}, { locale }),
-            html: emailHtml,
-          },
-        });
-      },
-      autoSignInAfterVerification: true,
-    },
+    // 邮箱验证已禁用 - 用户注册后自动视为已验证
     database: drizzleAdapter(db, {
       provider: "sqlite",
       schema: authSchema,
@@ -125,9 +100,9 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         create: {
           before: async (user) => {
             if (user.email === ADMIN_EMAIL) {
-              return { data: { ...user, role: "admin" } };
+              return { data: { ...user, role: "admin", emailVerified: true } };
             }
-            return { data: user };
+            return { data: { ...user, emailVerified: true } };
           },
         },
       },
