@@ -60,11 +60,27 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
     },
     emailAndPassword: {
       enabled: true,
-      requireEmailVerification: false,
+      requireEmailVerification: true,
       password: {
         hash: (password: string) => getPasswordHasher().hash(password),
         verify: (params: { hash: string; password: string }) =>
           getPasswordHasher().verify(params),
+      },
+      // 发送验证邮件
+      sendVerificationEmail: async ({ user, url }) => {
+        const locale = getAuthEmailLocale();
+        const emailHtml = renderToStaticMarkup(
+          AuthEmail({ locale, type: "verify-email", url }),
+        );
+
+        await env.QUEUE.send({
+          type: "EMAIL",
+          data: {
+            to: user.email,
+            subject: m.email_auth_verification_subject({}, { locale }),
+            html: emailHtml,
+          },
+        });
       },
       sendResetPassword: async ({ user, url }) => {
         // Per-email rate limit: 3 per hour — silently skip if exceeded
@@ -90,7 +106,7 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         });
       },
     },
-    // 邮箱验证已禁用 - 用户注册后自动视为已验证
+    // 邮箱验证：管理员自动验证，普通用户需要邮件验证
     database: drizzleAdapter(db, {
       provider: "sqlite",
       schema: authSchema,
@@ -102,7 +118,8 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
             if (user.email === ADMIN_EMAIL) {
               return { data: { ...user, role: "admin", emailVerified: true } };
             }
-            return { data: { ...user, emailVerified: true } };
+            // 普通用户不自动验证，需要等待邮件验证
+            return { data: { ...user, emailVerified: false } };
           },
         },
       },

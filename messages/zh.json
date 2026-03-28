@@ -344,6 +344,7 @@
   "register_toast_success": "注册成功",
   "register_toast_activated": "账号已激活。",
   "register_toast_failed": "注册失败",
+  "register_toast_pending_verification": "请等待管理员审核您的账户。",
   "register_error_default": "服务器连接异常，请稍后重试。",
   "forgot_password_title": "找回密码",
   "forgot_password_label": "FORGOT_PASSWORD",

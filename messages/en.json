@@ -350,6 +350,7 @@
   "register_toast_success": "Registration Success",
   "register_toast_activated": "Account activated.",
   "register_toast_failed": "Registration Failed",
+  "register_toast_pending_verification": "Please wait for administrator to verify your account.",
   "register_error_default": "Server connection error, please try again later.",
   "forgot_password_title": "Forgot Password",
   "forgot_password_label": "FORGOT_PASSWORD",

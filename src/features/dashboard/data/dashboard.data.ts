@@ -27,13 +27,36 @@ export async function getDraftsCount(db: DB) {
 }
 
 export async function getRecentComments(db: DB, limit = 5) {
-  return db
+  // 先获取评论列表
+  const comments = await db
     .select()
     .from(CommentsTable)
     .orderBy(desc(CommentsTable.createdAt))
-    .limit(limit)
-    .leftJoin(UserTable, eq(CommentsTable.userId, UserTable.id))
-    .leftJoin(PostsTable, eq(CommentsTable.postId, PostsTable.id));
+    .limit(limit);
+
+  // 为每条评论获取用户和帖子信息
+  const result = await Promise.all(
+    comments.map(async (comment) => {
+      const [user, post] = await Promise.all([
+        comment.userId
+          ? db.query.user.findFirst({
+              where: eq(UserTable.id, comment.userId),
+            })
+          : Promise.resolve(null),
+        db.query.posts.findFirst({
+          where: eq(PostsTable.id, comment.postId),
+        }),
+      ]);
+
+      return {
+        comments: comment,
+        user,
+        posts: post,
+      };
+    }),
+  );
+
+  return result;
 }
 
 export async function getRecentPosts(db: DB, limit = 5) {

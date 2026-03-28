@@ -4,12 +4,12 @@ import { EmailLayout } from "./EmailLayout";
 
 interface AuthEmailProps {
   locale: Locale;
-  type: "verification" | "reset-password";
+  type: "verification" | "reset-password" | "verify-email";
   url: string;
 }
 
 export const AuthEmail = ({ locale, type, url }: AuthEmailProps) => {
-  const isVerification = type === "verification";
+  const isVerification = type === "verification" || type === "verify-email";
   const title = isVerification
     ? m.email_auth_verification_subject({}, { locale })
     : m.email_auth_reset_subject({}, { locale });

@@ -78,16 +78,17 @@ export function useRegisterForm(options: UseRegisterFormOptions) {
 
     queryClient.removeQueries({ queryKey: AUTH_KEYS.session });
 
+    // 无论邮箱是否配置，都显示验证提示
+    // 如果邮箱未配置，管理员需要在后台手动验证用户
+    setIsSuccess(true);
     if (isEmailConfigured) {
-      setIsSuccess(true);
       toast.success(m.register_toast_created(), {
         description: m.register_toast_verification_sent(),
       });
     } else {
-      toast.success(m.register_toast_success(), {
-        description: m.register_toast_activated(),
+      toast.success(m.register_toast_created(), {
+        description: m.register_toast_pending_verification(),
       });
-      navigate({ to: previousLocation });
     }
   };
 
