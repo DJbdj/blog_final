@@ -6,10 +6,10 @@ export interface PostEditorData {
   summary: string;
   slug: string;
   status: PostStatus;
-  featured: boolean;
   readTimeInMinutes: number;
   contentJson: JSONContent | null;
   publishedAt: Date | null;
+  pinnedAt: Date | null;
   tagIds: Array<number>;
   isSynced: boolean;
   hasPublicCache: boolean;
@@ -27,10 +27,10 @@ export const defaultPostData: PostEditorData = {
   summary: "",
   slug: "",
   status: "draft",
-  featured: false,
   readTimeInMinutes: 1,
   contentJson: null,
   publishedAt: null,
+  pinnedAt: null,
   tagIds: [],
   isSynced: true,
   hasPublicCache: false,

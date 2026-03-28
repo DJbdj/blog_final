@@ -17,7 +17,6 @@ export const PostSelectSchema = createSelectSchema(PostsTable, {
   publishedAt: coercedDateNullable,
   createdAt: coercedDate,
   updatedAt: coercedDate,
-  featured: z.boolean().or(z.number().transform(v => v === 1)).default(false),
   pinnedAt: coercedDateNullable,
 }).omit({
   publicContentJson: true,
@@ -26,7 +25,6 @@ export const PostInsertSchema = createInsertSchema(PostsTable);
 export const PostUpdateSchema = createUpdateSchema(PostsTable, {
   contentJson: NullableJsonContentSchema.optional(),
   publicContentJson: NullableJsonContentSchema.optional(),
-  featured: z.boolean().optional(),
 }).omit({
   publicContentJson: true,
 });

@@ -26,6 +26,7 @@ export type RevisionFieldKey =
   | "summary"
   | "slug"
   | "status"
+  | "pinnedAt"
   | "publishedAt"
   | "readTime"
   | "tags";
@@ -218,6 +219,10 @@ function normalizePublishedAt(value: string | null) {
   return value ?? "Unpublished";
 }
 
+function normalizePinnedAt(value: string | null) {
+  return value ? "Pinned" : "Not pinned";
+}
+
 function normalizeTagIds(tagIds: Array<number>, tagMap: Map<number, string>) {
   if (tagIds.length === 0) return "No tags";
 
@@ -254,6 +259,11 @@ export function buildRevisionFieldDiffs(
       field: "status" as const,
       previousValue: previousSnapshot.status,
       currentValue: currentSnapshot.status,
+    },
+    {
+      field: "pinnedAt" as const,
+      previousValue: normalizePinnedAt(previousSnapshot.pinnedAt),
+      currentValue: normalizePinnedAt(currentSnapshot.pinnedAt),
     },
     {
       field: "publishedAt" as const,

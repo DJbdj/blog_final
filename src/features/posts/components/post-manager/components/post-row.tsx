@@ -50,7 +50,7 @@ export function PostRow({ post, onDelete }: PostRowProps) {
       {/* Middle side: Status */}
       <div className="md:col-span-3 flex items-center gap-2">
         <StatusBadge status={post.status} />
-        {post.featured && (
+        {post.pinnedAt && (
           <Badge
             variant="outline"
             className="text-[9px] px-2 py-0.5 uppercase tracking-widest font-mono font-normal rounded-none border border-amber-500/30 shadow-none bg-transparent text-amber-600"

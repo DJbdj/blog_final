@@ -81,18 +81,21 @@ export function PostEditorMetadata({
           </label>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => onPostChange({ featured: !post.featured })}
+              onClick={() => {
+                const newPinnedAt = post.pinnedAt ? null : new Date();
+                onPostChange({ pinnedAt: newPinnedAt });
+              }}
               className={`
                 flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider transition-colors
                 ${
-                  post.featured
+                  post.pinnedAt
                     ? "border-b border-amber-500 font-bold text-amber-500"
                     : "text-muted-foreground hover:text-foreground"
                 }
               `}
             >
-              <Star className="w-3 h-3" fill={post.featured ? "currentColor" : "none"} />
-              {post.featured ? "已精选" : "设为精选"}
+              <Star className="w-3 h-3" fill={post.pinnedAt ? "currentColor" : "none"} />
+              {post.pinnedAt ? "已精选" : "设为精选"}
             </button>
           </div>
         </div>

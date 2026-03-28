@@ -459,11 +459,11 @@ export async function getFeaturedPosts(
     .from(PostsTable)
     .where(
       and(
-        eq(PostsTable.featured, true),
+        isNotNull(PostsTable.pinnedAt),
         eq(PostsTable.status, "published"),
       ),
     )
-    .orderBy(desc(PostsTable.publishedAt))
+    .orderBy(desc(PostsTable.pinnedAt), desc(PostsTable.publishedAt))
     .limit(limit);
 
   // Fetch tags for all posts

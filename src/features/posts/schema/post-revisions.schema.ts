@@ -18,7 +18,7 @@ export const PostRevisionSnapshotSchema = z.object({
   summary: z.string().nullable(),
   slug: z.string(),
   status: z.enum(POST_STATUSES),
-  featured: z.boolean(),
+  pinnedAt: z.string().nullable(),
   publishedAt: z.string().nullable(),
   readTimeInMinutes: z.number().int().min(1),
   contentJson: NullableJsonContentSchema,

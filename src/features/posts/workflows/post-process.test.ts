@@ -94,6 +94,7 @@ describe("PostProcessWorkflow", () => {
         slug: post!.slug,
         publishedAt: post!.publishedAt,
         readTimeInMinutes: post!.readTimeInMinutes,
+        pinnedAt: post!.pinnedAt,
       }),
     );
 

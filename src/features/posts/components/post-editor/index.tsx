@@ -27,10 +27,10 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     summary: initialData.summary,
     slug: initialData.slug,
     status: initialData.status,
-    featured: initialData.featured,
     readTimeInMinutes: initialData.readTimeInMinutes,
     contentJson: initialData.contentJson ?? null,
     publishedAt: initialData.publishedAt,
+    pinnedAt: initialData.pinnedAt,
     tagIds: initialData.tagIds,
     isSynced: initialData.isSynced,
     hasPublicCache: initialData.hasPublicCache,
@@ -137,7 +137,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
         summary: string | null;
         slug: string;
         status: PostEditorData["status"];
-        featured: boolean;
+        pinnedAt: string | null;
         publishedAt: string | null;
         readTimeInMinutes: number;
         contentJson: PostEditorData["contentJson"];
@@ -150,11 +150,13 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
         summary: snapshot.summary ?? "",
         slug: snapshot.slug,
         status: snapshot.status,
-        featured: snapshot.featured ?? false,
         readTimeInMinutes: snapshot.readTimeInMinutes,
         contentJson: snapshot.contentJson,
         publishedAt: snapshot.publishedAt
           ? new Date(snapshot.publishedAt)
+          : null,
+        pinnedAt: snapshot.pinnedAt
+          ? new Date(snapshot.pinnedAt)
           : null,
         tagIds: snapshot.tagIds,
         isSynced: snapshot.status === "draft" ? !hasPublicCache : false,
@@ -174,7 +176,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
       summary: post.summary.trim() || null,
       slug: post.slug,
       status: post.status,
-      featured: post.featured,
+      pinnedAt: post.pinnedAt ? post.pinnedAt.toISOString() : null,
       publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
       readTimeInMinutes: post.readTimeInMinutes,
       contentJson: post.contentJson,
@@ -182,7 +184,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     }),
     [
       post.contentJson,
-      post.featured,
+      post.pinnedAt,
       post.publishedAt,
       post.readTimeInMinutes,
       post.slug,
