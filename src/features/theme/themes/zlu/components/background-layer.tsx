@@ -38,54 +38,67 @@ export function BackgroundLayer() {
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <>
-      {/* Pexels 背景图片（仅在浅色模式且有数据时显示） */}
-      {pexelsBackground && currentLightMode && (
-        <>
-          <link rel="preload" as="image" href={pexelsBackground.src.landscape} />
-          <div
-            className="fixed inset-0 -z-10 overflow-hidden"
-            style={{
-              pointerEvents: "none",
-              backgroundImage: `url("${pexelsBackground.src.landscape}")`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              opacity: 0.15,
-            }}
-          />
-          {/* 摄影师署名 */}
-          <a
-            href={pexelsBackground.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fixed bottom-4 right-4 text-xs text-gray-500 opacity-50 hover:opacity-100 transition-opacity z-0"
-            style={{ pointerEvents: "auto" }}
-          >
-            Photo by {pexelsBackground.photographer} on Pexels
-          </a>
-        </>
-      )}
+  // 应用 Pexels 背景到 body
+  useEffect(() => {
+    if (!pexelsBackground || !currentLightMode) {
+      // 清除背景
+      document.body.style.backgroundImage = 'none';
+      document.body.style.backgroundSize = '';
+      document.body.style.backgroundPosition = '';
+      document.body.style.backgroundRepeat = '';
+      document.body.style.backgroundAttachment = '';
+      document.body.style.backgroundColor = '';
+      document.documentElement.style.backgroundColor = '';
+      // 隐藏署名
+      const link = document.querySelector('.pexels-credit') as HTMLElement;
+      if (link) link.style.display = 'none';
+      return;
+    }
 
-      {/* Gradient Orbs */}
-      <div
-        className="fixed inset-0 -z-10 overflow-hidden"
-        style={{ pointerEvents: "none" }}
-      >
-        <div
-          className="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-10 blur-3xl"
-          style={{
-            background: "radial-gradient(circle, var(--zlu-primary) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10 blur-3xl"
-          style={{
-            background: "radial-gradient(circle, var(--zlu-accent) 0%, transparent 70%)",
-          }}
-        />
-      </div>
-    </>
-  );
+    // 设置 HTML 和 body 背景为透明
+    document.documentElement.style.backgroundColor = 'transparent';
+    document.body.style.backgroundColor = 'transparent';
+
+    // 设置 body 背景图片
+    document.body.style.backgroundImage = `url("${pexelsBackground.src.landscape}")`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundAttachment = 'fixed';
+    document.body.style.opacity = '0.35';
+
+    // 添加或更新摄影师署名
+    let link = document.querySelector('.pexels-credit') as HTMLAnchorElement;
+    if (!link) {
+      link = document.createElement('a');
+      link.href = pexelsBackground.url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.className = 'pexels-credit';
+      link.style.cssText = 'position:fixed;bottom:1rem;right:1rem;font-size:0.75rem;color:#6b7280;opacity:0.5;transition:opacity 0.2s;z-index:9999;pointer-events:auto;text-decoration:none;';
+      link.onmouseenter = () => link.style.opacity = '1';
+      link.onmouseleave = () => link.style.opacity = '0.5';
+      document.body.appendChild(link);
+    }
+
+    link.href = pexelsBackground.url;
+    link.textContent = `Photo by ${pexelsBackground.photographer} on Pexels`;
+    link.style.display = 'block';
+
+    return () => {
+      // 清理
+      document.documentElement.style.backgroundColor = '';
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundSize = '';
+      document.body.style.backgroundPosition = '';
+      document.body.style.backgroundRepeat = '';
+      document.body.style.backgroundAttachment = '';
+      document.body.style.backgroundColor = '';
+      document.body.style.opacity = '';
+      const link = document.querySelector('.pexels-credit') as HTMLElement;
+      if (link) link.style.display = 'none';
+    };
+  }, [pexelsBackground, currentLightMode]);
+
+  return null;
 }

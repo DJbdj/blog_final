@@ -106,6 +106,9 @@ html.dark {
   transition: background-color var(--zlu-transition-normal), color var(--zlu-transition-normal);
 }
 
+/* Pexels Background - Light Mode Only */
+/* Uses ::before pseudo-element on body for fixed background behind content */
+
 /* Layout - 拓宽正文区域，侧边栏更靠边 */
 .zlu-layout {
   display: grid;
