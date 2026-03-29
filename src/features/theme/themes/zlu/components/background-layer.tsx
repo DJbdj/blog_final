@@ -38,17 +38,19 @@ export function BackgroundLayer() {
     return () => observer.disconnect();
   }, []);
 
-  // 应用 Pexels 背景到 body
+  // 应用 Pexels 背景到 body::before 伪元素
   useEffect(() => {
+    // 获取或创建样式元素
+    let styleEl = document.getElementById('pexels-background-style') as HTMLStyleElement;
+
     if (!pexelsBackground || !currentLightMode) {
       // 清除背景
-      document.body.style.backgroundImage = 'none';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-      document.body.style.backgroundRepeat = '';
-      document.body.style.backgroundAttachment = '';
-      document.body.style.backgroundColor = '';
       document.documentElement.style.backgroundColor = '';
+      document.body.style.backgroundColor = '';
+      // 移除伪元素样式
+      if (styleEl) {
+        styleEl.remove();
+      }
       // 隐藏署名
       const link = document.querySelector('.pexels-credit') as HTMLElement;
       if (link) link.style.display = 'none';
@@ -59,13 +61,31 @@ export function BackgroundLayer() {
     document.documentElement.style.backgroundColor = 'transparent';
     document.body.style.backgroundColor = 'transparent';
 
-    // 设置 body 背景图片
-    document.body.style.backgroundImage = `url("${pexelsBackground.src.landscape}")`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    document.body.style.backgroundRepeat = 'no-repeat';
-    document.body.style.backgroundAttachment = 'fixed';
-    document.body.style.opacity = '0.15';
+    // 创建或更新伪元素样式
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'pexels-background-style';
+      document.head.appendChild(styleEl);
+    }
+
+    styleEl.textContent = `
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("${pexelsBackground.src.landscape}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        opacity: 0.15;
+        z-index: -1;
+        pointer-events: none;
+      }
+    `;
 
     // 添加或更新摄影师署名
     let link = document.querySelector('.pexels-credit') as HTMLAnchorElement;
@@ -88,13 +108,10 @@ export function BackgroundLayer() {
     return () => {
       // 清理
       document.documentElement.style.backgroundColor = '';
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-      document.body.style.backgroundRepeat = '';
-      document.body.style.backgroundAttachment = '';
       document.body.style.backgroundColor = '';
-      document.body.style.opacity = '';
+      if (styleEl) {
+        styleEl.remove();
+      }
       const link = document.querySelector('.pexels-credit') as HTMLElement;
       if (link) link.style.display = 'none';
     };
