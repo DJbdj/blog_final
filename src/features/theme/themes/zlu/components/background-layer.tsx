@@ -65,7 +65,7 @@ export function BackgroundLayer() {
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundRepeat = 'no-repeat';
     document.body.style.backgroundAttachment = 'fixed';
-    document.body.style.opacity = '0.35';
+    document.body.style.opacity = '0.15';
 
     // 添加或更新摄影师署名
     let link = document.querySelector('.pexels-credit') as HTMLAnchorElement;
