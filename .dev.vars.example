@@ -44,3 +44,7 @@ UMAMI_API_KEY=your-cloud-api-key
 # 未认证请求限流 60 次/小时/IP，Cloudflare Workers 共享 IP 容易触发限流
 # 创建无权限的 Fine-grained token: https://github.com/settings/personal-access-tokens
 # GITHUB_TOKEN=your-github-token
+
+# --- Pexels API（每日精选背景图片） ---
+# 获取 API Key: https://www.pexels.com/api/new/
+PEXELS_API_KEY=your-pexels-api-key
