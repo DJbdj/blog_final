@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getDailyBackgroundFn } from "@/features/pexels/api/pexels.api";
+import { getPexelsDailyBackgroundFn } from "@/features/config/api/site.api";
 
 /**
  * 查询键工厂
@@ -16,7 +16,7 @@ export const pexelsQueryKeys = {
 export function useDailyBackground(enabled: boolean = true) {
   return useQuery({
     queryKey: pexelsQueryKeys.dailyBackground(),
-    queryFn: () => getDailyBackgroundFn(),
+    queryFn: () => getPexelsDailyBackgroundFn(),
     staleTime: 1000 * 60 * 60, // 1 小时后视为过期
     gcTime: 1000 * 60 * 60 * 24, // 24 小时后从缓存移除
     refetchOnWindowFocus: false,
