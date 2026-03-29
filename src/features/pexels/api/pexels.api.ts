@@ -14,8 +14,8 @@ declare global {
  * 客户端调用此函数获取 Pexels 每日精选图片
  */
 export const getDailyBackgroundFn = createServerFn({ method: "GET" })
-  .handler(async (): Promise<PexelsPhoto | null> => {
-    const env = process.env as unknown as {
+  .handler(async ({ context }): Promise<PexelsPhoto | null> => {
+    const env = context.env as unknown as {
       PEXELS_API_KEY?: string;
       KV?: KVNamespace;
     };
