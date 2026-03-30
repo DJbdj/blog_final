@@ -3,41 +3,41 @@
 
 /* ZLu Theme Styles - Dark Minimalist Design */
 
-/* CSS Variables - Light Mode (Default) */
+/* CSS Variables - Light Mode (Default) - Limestart Style */
 html.light {
-  /* Primary Colors */
-  --zlu-primary: #3b82f6;
-  --zlu-primary-hover: #2563eb;
-  --zlu-primary-glow: rgba(59, 130, 246, 0.3);
+  /* Primary Colors - Softer blue */
+  --zlu-primary: #4d80e6;
+  --zlu-primary-hover: #3a6fd6;
+  --zlu-primary-glow: rgba(77, 128, 230, 0.15);
 
-  /* Background Colors */
+  /* Background Colors - Clean white with subtle warmth */
   --zlu-bg-primary: #ffffff;
-  --zlu-bg-secondary: #f8fafc;
-  --zlu-bg-tertiary: #f1f5f9;
+  --zlu-bg-secondary: #f9f9f9;
+  --zlu-bg-tertiary: #f2f3f5;
   --zlu-bg-elevated: #ffffff;
 
-  /* Text Colors */
-  --zlu-text-primary: #0f172a;
-  --zlu-text-secondary: #475569;
-  --zlu-text-tertiary: #94a3b8;
+  /* Text Colors - Softer dark gray */
+  --zlu-text-primary: #1a1a1a;
+  --zlu-text-secondary: #666666;
+  --zlu-text-tertiary: #999999;
 
-  /* Border Colors */
-  --zlu-border: #e2e8f0;
-  --zlu-border-muted: #f1f5f9;
+  /* Border Colors - Subtle light gray */
+  --zlu-border: #e8e8e8;
+  --zlu-border-muted: #f0f0f0;
 
-  /* Shadow */
-  --zlu-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --zlu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --zlu-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --zlu-shadow-glow: 0 0 20px rgba(59, 130, 246, 0.2);
+  /* Shadow - Soft and subtle */
+  --zlu-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --zlu-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --zlu-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --zlu-shadow-glow: 0 0 20px rgba(77, 128, 230, 0.15);
 
   /* Accent Colors */
-  --zlu-accent: #3b82f6;
+  --zlu-accent: #4d80e6;
   --zlu-success: #22c55e;
   --zlu-warning: #f59e0b;
   --zlu-danger: #ef4444;
 
-  /* Border Radius */
+  /* Border Radius - More subtle */
   --zlu-radius-sm: 6px;
   --zlu-radius-md: 10px;
   --zlu-radius-lg: 14px;
@@ -153,7 +153,9 @@ html.dark {
 }
 
 html.light .zlu-left-sidebar {
-  background: rgba(248, 250, 252, 0.85);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.6);
 }
 
 .zlu-profile {
@@ -222,9 +224,9 @@ html.light .zlu-left-sidebar {
 }
 
 .zlu-nav-item.active {
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(96, 165, 250, 0.05));
+  background: linear-gradient(135deg, rgba(77, 128, 230, 0.12), rgba(77, 128, 230, 0.04));
   color: var(--zlu-primary);
-  border: 1px solid rgba(96, 165, 250, 0.2);
+  border: 1px solid rgba(77, 128, 230, 0.15);
 }
 
 /* Main Content */
@@ -262,7 +264,9 @@ html.light .zlu-left-sidebar {
 }
 
 html.light .zlu-sidebar-card {
-  background: rgba(248, 250, 252, 0.8);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.5);
 }
 
 .zlu-sidebar-card + .zlu-sidebar-card {
@@ -376,7 +380,7 @@ html.light .zlu-sidebar-card {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(96, 165, 250, 0.3),
+    rgba(77, 128, 230, 0.25),
     transparent
   );
   opacity: 0;
@@ -386,7 +390,7 @@ html.light .zlu-sidebar-card {
 .zlu-featured-card:hover {
   border-color: var(--zlu-border-muted);
   background: var(--zlu-bg-elevated);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(96, 165, 250, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 30px rgba(77, 128, 230, 0.06);
   transform: translateY(-6px) scale(1.02);
 }
 
@@ -462,7 +466,7 @@ html.light .zlu-sidebar-card {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(96, 165, 250, 0.2),
+    rgba(77, 128, 230, 0.15),
     transparent
   );
   opacity: 0;
@@ -472,7 +476,7 @@ html.light .zlu-sidebar-card {
 .zlu-post-card:hover {
   border-color: var(--zlu-primary);
   background: var(--zlu-bg-elevated);
-  box-shadow: var(--zlu-shadow-md), 0 0 30px rgba(96, 165, 250, 0.08);
+  box-shadow: var(--zlu-shadow-md), 0 0 20px rgba(77, 128, 230, 0.08);
   transform: translateY(-3px);
 }
 
@@ -584,11 +588,11 @@ html.light .zlu-sidebar-card {
 }
 
 .zlu-tag:hover {
-  background: rgba(96, 165, 250, 0.15);
-  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(77, 128, 230, 0.1);
+  border-color: rgba(77, 128, 230, 0.25);
   color: var(--zlu-primary);
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.15);
+  box-shadow: 0 2px 8px rgba(77, 128, 230, 0.1);
 }
 
 /* Navbar - Enhanced Glassmorphism */
@@ -687,7 +691,9 @@ html.dark .zlu-navbar {
 }
 
 html.light .zlu-footer {
-  background: rgba(248, 250, 252, 0.9);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-top: 1px solid rgba(232, 232, 232, 0.6);
 }
 
 .zlu-footer-content {
@@ -781,6 +787,7 @@ html.light .zlu-footer {
 .zlu-button-primary:hover {
   background: var(--zlu-primary-hover);
   color: white;
+  box-shadow: 0 2px 8px rgba(77, 128, 230, 0.2);
 }
 
 .zlu-button-secondary {
@@ -809,7 +816,7 @@ html.light .zlu-footer {
 .zlu-input:focus {
   outline: none;
   border-color: var(--zlu-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(77, 128, 230, 0.08);
 }
 
 .zlu-input::placeholder {
@@ -835,7 +842,7 @@ html.light .zlu-footer {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(96, 165, 250, 0.2),
+    rgba(77, 128, 230, 0.15),
     transparent
   );
 }
@@ -1035,7 +1042,9 @@ html.light .zlu-article-content img {
 }
 
 html.light .zlu-toc {
-  background: rgba(248, 250, 252, 0.8);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.5);
 }
 
 .zlu-toc::-webkit-scrollbar {
@@ -1127,7 +1136,7 @@ html.dark .zlu-year-header {
 }
 
 html.light .zlu-year-header {
-  color: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.04);
 }
 
 .zlu-year-posts {
@@ -1665,7 +1674,7 @@ html.light .zlu-article-content pre::-webkit-scrollbar-thumb {
 
 .zlu-article-content blockquote {
   border-left: 4px solid var(--zlu-primary);
-  background: rgba(96, 165, 250, 0.08);
+  background: rgba(77, 128, 230, 0.06);
   padding: 1em 1.25em;
   margin: 1.5em 0;
   border-radius: 0 var(--zlu-radius-md) var(--zlu-radius-md) 0;
@@ -1707,7 +1716,7 @@ html.light .zlu-article-content pre::-webkit-scrollbar-thumb {
 }
 
 .zlu-article-content tr:hover {
-  background: rgba(96, 165, 250, 0.05);
+  background: rgba(77, 128, 230, 0.04);
 }
 
 .zlu-article-content hr {
