@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { PostCard } from "../../components/post-card";
 import type { HomePageProps } from "@/features/theme/contract/pages";
+import { m } from "@/paraglide/messages";
+import { PostCard } from "../../components/post-card";
 
-export function HomePage({ posts }: HomePageProps) {
+export function HomePage({ posts, tags: _tags }: HomePageProps) {
+  // Note: tags parameter is available but not used in this theme
   return (
     <div className="fuwari-onload-animation flex flex-col rounded-(--fuwari-radius-large) bg-(--fuwari-card-bg) py-1 md:py-0 md:bg-transparent md:gap-4">
       {posts.map((post, i) => (
@@ -27,7 +29,7 @@ export function HomePage({ posts }: HomePageProps) {
           to="/posts"
           className="fuwari-btn-regular mx-6 rounded-lg h-10 px-6 mt-4 flex items-center justify-center mb-4 md:mb-0 md:mx-auto"
         >
-          查看全部文章
+          {m.home_view_all_posts()}
         </Link>
       </div>
     </div>

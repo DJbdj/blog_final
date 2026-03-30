@@ -8,6 +8,7 @@ export async function calculatePostHash(post: {
   slug: string;
   publishedAt: Date | string | null;
   readTimeInMinutes: number;
+  pinnedAt: Date | string | null;
 }): Promise<string> {
   const stateToHash = {
     title: post.title,
@@ -20,6 +21,10 @@ export async function calculatePostHash(post: {
         ? post.publishedAt.toISOString()
         : post.publishedAt,
     readTimeInMinutes: post.readTimeInMinutes,
+    pinnedAt:
+      post.pinnedAt instanceof Date
+        ? post.pinnedAt.toISOString()
+        : post.pinnedAt,
   };
 
   const msgUint8 = new TextEncoder().encode(JSON.stringify(stateToHash));

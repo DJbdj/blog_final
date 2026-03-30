@@ -4,10 +4,14 @@ import type {
   OAuthBlogScope,
   OAuthBlogScopeGroups,
   OAuthBlogScopeSelection,
-} from "../oauth-provider.config";
+} from "../oauth-provider.shared";
 
-function typedEntries<T extends Record<string, unknown>>(obj: T): Array<[keyof T & string, T[keyof T & string]]> {
-  return Object.entries(obj) as Array<[keyof T & string, T[keyof T & string]]>;
+function typedEntries<T extends Record<string, unknown>>(obj: T) {
+  return Object.entries(obj) as Array<
+    {
+      [K in keyof T & string]: [K, T[K]];
+    }[keyof T & string]
+  >;
 }
 
 function toBlogScope<R extends OAuthBlogResource>(
@@ -24,17 +28,7 @@ export type OAuthBlogScopesInput =
 export function flattenBlogScopes(
   blogScopes: OAuthBlogScopesInput,
 ): OAuthBlogScope[] {
-  const entries = typedEntries(blogScopes);
-  const result: OAuthBlogScope[] = [];
-
-  for (const [resource, actions] of entries) {
-    if (actions) {
-      const actionArray = actions as readonly OAuthBlogAction<typeof resource>[];
-      for (const action of actionArray) {
-        result.push(toBlogScope(resource as OAuthBlogResource, action));
-      }
-    }
-  }
-
-  return result;
+  return typedEntries(blogScopes).flatMap(([resource, actions]) =>
+    (actions ?? []).map((action) => toBlogScope(resource, action)),
+  );
 }

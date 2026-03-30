@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface DropdownOption {
   label: string;
@@ -24,7 +24,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedOption =
-    options.find((opt) => opt.value === value) || options[0];
+    options.find((opt) => opt.value === value) || options[0] || { label: "", value: "" };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

@@ -21,10 +21,12 @@ export function MarkdownFileUpload({
   const parseMarkdown = useCallback(async (file: File) => {
     setIsLoading(true);
     try {
-      // Upload to server using FormData
-      const formData = new FormData();
-      formData.append("file", file);
-      const result = await uploadMarkdownFn({ data: formData });
+      // Read file content in client side
+      const content = await file.text();
+      const fileName = file.name;
+
+      // Send to server
+      const result = await uploadMarkdownFn({ data: { content, fileName } });
       setFileName(result.fileName);
       onContentLoad(result.content, result.fileName);
       toast.success("Markdown 文件已加载", {

@@ -1,7 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import * as ConfigService from "@/features/config/config.service";
-import { adminMiddleware } from "@/lib/middlewares";
+import { z } from "zod";
+import { parseSiteAssetUploadInput } from "@/features/config/config.asset.schema";
 import { SystemConfigSchema } from "@/features/config/config.schema";
+import * as ConfigService from "@/features/config/service/config.service";
+import { adminMiddleware } from "@/lib/middlewares";
+import { m } from "@/paraglide/messages";
 
 export const getSystemConfigFn = createServerFn()
   .middleware([adminMiddleware])
@@ -16,14 +19,14 @@ export const updateSystemConfigFn = createServerFn({
     ConfigService.updateSystemConfig(context, data),
   );
 
+const SiteAssetUploadInputSchema = z.instanceof(FormData);
+
 export const uploadSiteAssetFn = createServerFn({
   method: "POST",
 })
   .middleware([adminMiddleware])
-  .handler(async ({ context, data }) => {
-    const formData = data as unknown as FormData;
-    const file = formData.get("file") as File;
-    const assetPath = formData.get("assetPath") as string;
-
-    return ConfigService.uploadSiteAsset(context, { file, assetPath });
+  .inputValidator(SiteAssetUploadInputSchema)
+  .handler(async ({ data, context }) => {
+    const input = parseSiteAssetUploadInput(data, m);
+    return ConfigService.uploadSiteAsset(context, input);
   });

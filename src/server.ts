@@ -1,6 +1,7 @@
-import { handleEmailMessage } from "@/features/email/email.queue";
+import { handleEmailMessage } from "@/features/email/api/email.consumer";
+import { handlePageviewMessages } from "@/features/pageview/api/pageview.consumer";
 import { handlePostAutoSnapshotMessage } from "@/features/posts/api/post-auto-snapshot.consumer";
-import { app } from "@/lib/hono";
+import { handleWebhookMessage } from "@/features/webhook/api/webhook.consumer";
 import { queueMessageSchema } from "@/lib/queue/queue.schema";
 
 export { CommentModerationWorkflow } from "@/features/comments/workflows/comment-moderation";
@@ -9,25 +10,31 @@ export { ImportWorkflow } from "@/features/import-export/workflows/import.workfl
 export { PostAutoSnapshotWorkflow } from "@/features/posts/workflows/post-auto-snapshot";
 export { PostProcessWorkflow } from "@/features/posts/workflows/post-process";
 export { ScheduledPublishWorkflow } from "@/features/posts/workflows/scheduled-publish";
-export { RateLimiter } from "@/lib/do/rate-limiter";
 export { PasswordHasher } from "@/lib/do/password-hasher";
+export { RateLimiter } from "@/lib/do/rate-limiter";
 
 declare module "@tanstack/react-start" {
   interface Register {
     server: {
       requestContext: {
         env: Env;
-        executionCtx: ExecutionContext;
+        executionCtx: ExecutionContext<unknown>;
       };
     };
   }
 }
 
 export default {
-  fetch(request, env, ctx) {
-    return app.fetch(request, env, ctx);
+  async fetch(request, env, ctx) {
+    const { handleRootRequest } = await import("@/lib/worker/root-handler");
+    return handleRootRequest(request, env, ctx);
   },
-  async queue(batch, env) {
+  async queue(batch, env, ctx) {
+    const pageviewBatch: {
+      data: { postId: number; visitorHash: string };
+      message: Message;
+    }[] = [];
+
     for (const message of batch.messages) {
       const parsed = queueMessageSchema.safeParse(message.body);
       if (!parsed.success) {
@@ -45,17 +52,30 @@ export default {
       try {
         const event = parsed.data;
         switch (event.type) {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           case "EMAIL":
-            await handleEmailMessage(env, {
-              ...event.data,
-              idempotencyKey: message.id,
-            });
+            await handleEmailMessage(
+              {
+                env,
+                executionCtx: ctx,
+              },
+              {
+                ...event.data,
+                idempotencyKey: message.id,
+              },
+            );
+            break;
+          case "WEBHOOK":
+            await handleWebhookMessage({ env }, event.data, message.id);
             break;
           case "POST_AUTO_SNAPSHOT":
             await handlePostAutoSnapshotMessage({ env }, event.data);
             break;
-          // No default case needed - TypeScript will catch unhandled types
+          case "PAGEVIEW":
+            pageviewBatch.push({ data: event.data, message });
+            continue;
+          default:
+            event satisfies never;
+            throw new Error("Unknown queue message type");
         }
         message.ack();
       } catch (error) {
@@ -67,6 +87,26 @@ export default {
           }),
         );
         message.retry();
+      }
+    }
+
+    // Handle pageview batch separately
+    if (pageviewBatch.length > 0) {
+      try {
+        await handlePageviewMessages(
+          { env },
+          pageviewBatch.map((item) => item.data),
+        );
+        for (const item of pageviewBatch) item.message.ack();
+      } catch (error) {
+        console.error(
+          JSON.stringify({
+            message: "pageview batch processing failed",
+            count: pageviewBatch.length,
+            error: error instanceof Error ? error.message : "unknown error",
+          }),
+        );
+        for (const item of pageviewBatch) item.message.retry();
       }
     }
   },

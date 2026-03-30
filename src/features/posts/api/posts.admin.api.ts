@@ -9,61 +9,16 @@ import {
   PreviewSummaryInputSchema,
   StartPostProcessInputSchema,
   UpdatePostInputSchema,
-} from "@/features/posts/posts.schema";
-import * as PostService from "@/features/posts/posts.service";
+} from "@/features/posts/schema/posts.schema";
+import * as PostService from "@/features/posts/services/posts.service";
+import { markdownToJsonContent } from "@/features/import-export/utils/markdown-parser";
 import { adminMiddleware } from "@/lib/middlewares";
-import { z } from "zod";
+import type { JSONContent } from "@tiptap/react";
 
 export const generateSlugFn = createServerFn()
   .middleware([adminMiddleware])
   .inputValidator(GenerateSlugInputSchema)
   .handler(({ data, context }) => PostService.generateSlug(context, data));
-
-/**
- * Upload Markdown file to R2 and return its content
- */
-export const uploadMarkdownFn = createServerFn({
-  method: "POST",
-})
-  .middleware([adminMiddleware])
-  .inputValidator(
-    z.instanceof(FormData).transform((formData) => {
-      const file = formData.get("file");
-      if (!(file instanceof File)) throw new Error("Markdown file is required");
-      return { file };
-    }),
-  )
-  .handler(async ({ data, context }) => {
-    const { file } = data;
-
-    // Generate key for markdown file
-    const timestamp = Date.now();
-    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const key = `markdowns/${timestamp}-${safeName}`;
-
-    // Upload to R2
-    await context.env.R2.put(key, file.stream(), {
-      httpMetadata: {
-        contentType: file.type || "text/markdown",
-      },
-      customMetadata: {
-        originalName: file.name,
-      },
-    });
-
-    // Read file content
-    const text = await file.text();
-
-    // Get public URL
-    const url = `/images/${key}`;
-
-    return {
-      url,
-      key,
-      fileName: file.name,
-      content: text,
-    };
-  });
 
 export const createEmptyPostFn = createServerFn({
   method: "POST",
@@ -120,3 +75,26 @@ export const startPostProcessWorkflowFn = createServerFn()
   .handler(({ data, context }) =>
     PostService.startPostProcessWorkflow(context, data),
   );
+
+// Upload and parse markdown file
+export const uploadMarkdownFn = createServerFn({
+  method: "POST",
+})
+  .middleware([adminMiddleware])
+  .handler(async ({ data }) => {
+    try {
+      const { content, fileName } = data as { content: string; fileName: string };
+
+      if (!content) {
+        throw new Error("No content provided");
+      }
+
+      // Convert markdown to JSONContent for the editor
+      const jsonContent = await markdownToJsonContent(content);
+
+      return { content: jsonContent as JSONContent, fileName };
+    } catch (error) {
+      console.error("Upload markdown error:", error);
+      throw new Error(`Failed to upload markdown: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  });

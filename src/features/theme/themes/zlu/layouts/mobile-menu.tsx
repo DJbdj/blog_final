@@ -113,7 +113,7 @@ export function MobileMenu({ navOptions, isOpen, onClose, user, logout }: Mobile
                     <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-[var(--zlu-primary)]" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-[var(--zlu-primary)] flex items-center justify-center text-white font-semibold">
-                      {user.name[0].toUpperCase()}
+                      {user.name?.[0]?.toUpperCase() || "?"}
                     </div>
                   )}
                   <div>

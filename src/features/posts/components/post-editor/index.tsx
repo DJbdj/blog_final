@@ -1,34 +1,24 @@
-import { useBlocker } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, Sparkles, Upload, FileText } from "lucide-react";
-import { useCallback, useState, useRef } from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import { useAutoSave, usePostActions } from "./hooks";
-import { EditorTableOfContents } from "./editor-table-of-contents";
+import { useBlocker } from "@tanstack/react-router";
 import type { JSONContent, Editor as TiptapEditor } from "@tiptap/react";
-import type { PostEditorData, PostEditorProps } from "./types";
-import { TagSelector } from "@/features/tags/components/tag-selector";
-import { tagsAdminQueryOptions } from "@/features/tags/queries";
+import { History, Loader2 } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 import { Editor } from "@/components/tiptap-editor";
+import { MarkdownFileUpload } from "@/components/markdown-file-upload";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/ui/confirmation-modal";
-import DatePicker from "@/components/ui/date-picker";
-import { toLocalDateString } from "@/lib/utils";
-import { toast } from "sonner";
-
-import { Input } from "@/components/ui/input";
-import { POST_STATUSES } from "@/lib/db/schema";
+import Modal from "@/components/ui/modal";
 import { extensions } from "@/features/posts/editor/config";
-import { Breadcrumbs } from "@/components/breadcrumbs";
-import { MarkdownFileUpload } from "@/components/markdown-file-upload";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { markdownToJsonContent } from "@/features/import-export/utils/markdown-parser";
+import type { PostRevisionSnapshot } from "@/features/posts/schema/post-revisions.schema";
+import { tagsAdminQueryOptions } from "@/features/tags/queries";
+import { m } from "@/paraglide/messages";
+import { EditorTableOfContents } from "./editor-table-of-contents";
+import { useAutoSave, usePostActions } from "./hooks";
+import { PostEditorHeader } from "./post-editor-header";
+import { PostEditorHistoryPanel } from "./post-editor-history-panel";
+import { PostEditorMetadata } from "./post-editor-metadata";
+import { PostEditorStatusBar } from "./post-editor-status-bar";
+import type { PostEditorData, PostEditorProps } from "./types";
 
 export function PostEditor({ initialData, onSave }: PostEditorProps) {
   // Initialize post state from initialData (always provided)
@@ -40,13 +30,14 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     readTimeInMinutes: initialData.readTimeInMinutes,
     contentJson: initialData.contentJson ?? null,
     publishedAt: initialData.publishedAt,
+    pinnedAt: initialData.pinnedAt,
     tagIds: initialData.tagIds,
     isSynced: initialData.isSynced,
     hasPublicCache: initialData.hasPublicCache,
   }));
 
-  const [isMarkdownDialogOpen, setIsMarkdownDialogOpen] = useState(false);
-  const markdownContentRef = useRef<string>("");
+  // Track imported markdown content
+  const [importedMarkdown, setImportedMarkdown] = useState<string | null>(null);
 
   // Sync state when initialData updates (e.g. after background refetch/invalidation)
   const [prevInitialDataId, setPrevInitialDataId] = useState(initialData.id);
@@ -69,6 +60,11 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
   const [editorInstance, setEditorInstance] = useState<TiptapEditor | null>(
     null,
   );
+  const [editorRenderKey, setEditorRenderKey] = useState(
+    `editor:${initialData.id}`,
+  );
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
 
   // Fetch all tags for AI context and matching
   const { data: allTags = [] } = useQuery(tagsAdminQueryOptions());
@@ -79,7 +75,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     onSave,
   });
 
-  const { saveStatus, lastSaved, setError } = useAutoSaveReturn;
+  const { saveStatus, lastSaved, setError, markSaved } = useAutoSaveReturn;
 
   const { proceed, reset, status } = useBlocker({
     shouldBlockFn: () => saveStatus === "SAVING",
@@ -111,11 +107,93 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
 
   const handleContentChange = useCallback((json: JSONContent) => {
     setPost((prev) => ({ ...prev, contentJson: json }));
-  }, []);
+    // Clear imported markdown once content is processed
+    if (importedMarkdown) {
+      setImportedMarkdown(null);
+    }
+  }, [importedMarkdown]);
 
   const handlePostChange = useCallback((updates: Partial<PostEditorData>) => {
     setPost((prev) => ({ ...prev, ...updates }));
   }, []);
+
+  const handleMarkdownImport = useCallback((content: string, fileName?: string) => {
+    // Store imported markdown to trigger editor re-render with new content
+    setImportedMarkdown(content);
+    // Force editor re-render
+    setEditorRenderKey(`editor:${initialData.id}:import:${Date.now()}`);
+    // Mark post as modified
+    setPost((prev) => ({ ...prev, isSynced: false }));
+    // Close import dialog
+    setIsImportDialogOpen(false);
+  }, [initialData.id]);
+
+  const handleRestoreApplied = useCallback(
+    ({
+      snapshot,
+    }: {
+      snapshot: {
+        title: string;
+        summary: string | null;
+        slug: string;
+        status: PostEditorData["status"];
+        pinnedAt: string | null;
+        publishedAt: string | null;
+        readTimeInMinutes: number;
+        contentJson: PostEditorData["contentJson"];
+        tagIds: Array<number>;
+      };
+    }) => {
+      const hasPublicCache = post.hasPublicCache;
+      const restoredPost: PostEditorData = {
+        title: snapshot.title,
+        summary: snapshot.summary ?? "",
+        slug: snapshot.slug,
+        status: snapshot.status,
+        readTimeInMinutes: snapshot.readTimeInMinutes,
+        contentJson: snapshot.contentJson,
+        publishedAt: snapshot.publishedAt
+          ? new Date(snapshot.publishedAt)
+          : null,
+        pinnedAt: snapshot.pinnedAt
+          ? new Date(snapshot.pinnedAt)
+          : null,
+        tagIds: snapshot.tagIds,
+        isSynced: snapshot.status === "draft" ? !hasPublicCache : false,
+        hasPublicCache,
+      };
+
+      setPost(restoredPost);
+      setEditorRenderKey(`editor:${initialData.id}:${Date.now()}`);
+      markSaved(restoredPost);
+    },
+    [initialData.id, markSaved, post.hasPublicCache],
+  );
+
+  const currentSnapshot = useMemo<PostRevisionSnapshot>(
+    () => ({
+      title: post.title,
+      summary: post.summary.trim() || null,
+      slug: post.slug,
+      status: post.status,
+      pinnedAt: post.pinnedAt ? post.pinnedAt.toISOString() : null,
+      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+      readTimeInMinutes: post.readTimeInMinutes,
+      contentJson: post.contentJson,
+      tagIds: [...new Set(post.tagIds)].sort((a, b) => a - b),
+    }),
+    [
+      post.contentJson,
+      post.pinnedAt,
+      post.publishedAt,
+      post.readTimeInMinutes,
+      post.slug,
+      post.status,
+      post.summary,
+      post.tagIds,
+      post.title,
+    ],
+  );
 
   return (
     <div className="fixed inset-0 z-80 flex flex-col bg-background overflow-hidden">
@@ -123,146 +201,49 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
         isOpen={status === "blocked"}
         onClose={() => reset?.()}
         onConfirm={() => proceed?.()}
-        title="离开页面？"
-        message="您有正在保存的更改。离开可能会导致部分数据丢失。"
-        confirmLabel="确认离开"
+        title={m.editor_leave_title()}
+        message={m.editor_leave_message()}
+        confirmLabel={m.editor_leave_confirm()}
       />
 
-      {/* Control Header */}
-      <header className="h-16 flex items-center justify-between px-6 border-b border-border/30 bg-background z-40 sticky top-0">
-        <div className="flex-1 min-w-0 overflow-hidden">
-          <Breadcrumbs />
+      <PostEditorHeader
+        post={post}
+        saveStatus={saveStatus}
+        processState={processState}
+        isPostDirty={isPostDirty}
+        onPreview={() => {
+          if (post.slug) window.open(`/post/${post.slug}`, "_blank");
+        }}
+        onProcess={handleProcessData}
+        onImportMarkdown={() => setIsImportDialogOpen(true)}
+      />
+
+      <PostEditorHistoryPanel
+        postId={initialData.id}
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        currentSnapshot={currentSnapshot}
+        allTags={allTags}
+        onRestoreApplied={handleRestoreApplied}
+      />
+
+      {/* Markdown Import Modal */}
+      <Modal
+        isOpen={isImportDialogOpen}
+        onClose={() => setIsImportDialogOpen(false)}
+        title="导入 Markdown"
+        maxWidth="max-w-xl"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            上传 Markdown 文件，将其内容导入到编辑器中。
+          </p>
+          <MarkdownFileUpload
+            onContentLoad={handleMarkdownImport}
+            disabled={saveStatus === "SAVING"}
+          />
         </div>
-
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-4">
-            {/* Import Markdown Button */}
-            <Dialog open={isMarkdownDialogOpen} onOpenChange={setIsMarkdownDialogOpen}>
-              <button
-                type="button"
-                onClick={() => setIsMarkdownDialogOpen(true)}
-                className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors inline-flex items-center justify-center gap-1"
-              >
-                <span className="mr-2 opacity-50">[</span>
-                <Upload className="w-3 h-3" />
-                导入 Markdown
-                <span className="ml-2 opacity-50">]</span>
-              </button>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2">
-                    <FileText className="w-5 h-5" />
-                    导入 Markdown 文件
-                  </DialogTitle>
-                  <DialogDescription>
-                    上传 Markdown 文件，内容将自动填充到编辑器
-                  </DialogDescription>
-                </DialogHeader>
-                <MarkdownFileUpload
-                  onContentLoad={(content, fileName) => {
-                    markdownContentRef.current = content;
-                    // Set title from filename if empty
-                    if (post.title === "" && fileName) {
-                      setPost((prev) => ({
-                        ...prev,
-                        title: fileName.replace(/\.md$/i, ""),
-                      }));
-                    }
-                  }}
-                />
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsMarkdownDialogOpen(false)}
-                  >
-                    取消
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="default"
-                    onClick={async () => {
-                      if (markdownContentRef.current && editorInstance) {
-                        try {
-                          // Parse markdown to JSONContent
-                          const jsonContent = await markdownToJsonContent(
-                            markdownContentRef.current,
-                          );
-
-                          // Set content in editor
-                          editorInstance.commands.setContent(jsonContent);
-
-                          setIsMarkdownDialogOpen(false);
-                          toast.success("Markdown 内容已导入到编辑器");
-                        } catch (error) {
-                          console.error("Markdown parse error:", error);
-                          toast.error("解析失败", {
-                            description:
-                              error instanceof Error
-                                ? error.message
-                                : "无法解析 Markdown 文件",
-                          });
-                        }
-                      } else if (!editorInstance) {
-                        toast.error("编辑器尚未初始化");
-                      }
-                    }}
-                  >
-                    导入到编辑器
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-
-            <Button
-              variant="ghost"
-              onClick={() => {
-                if (post.slug) window.open(`/post/${post.slug}`, "_blank");
-              }}
-              disabled={!post.hasPublicCache}
-              title={!post.hasPublicCache ? "前台暂无此文章" : "预览前台文章"}
-              className="h-8 px-2 rounded-none text-[10px] font-mono hover:bg-transparent hover:text-foreground text-muted-foreground transition-colors disabled:opacity-30"
-            >
-              <span className="mr-2 opacity-50">[</span>
-              预览
-              <span className="ml-2 opacity-50">]</span>
-            </Button>
-
-            <div className="h-4 w-px bg-border/30" />
-
-            <Button
-              onClick={handleProcessData}
-              disabled={
-                processState !== "IDLE" ||
-                saveStatus === "SAVING" ||
-                !isPostDirty ||
-                (post.status === "published" && !post.publishedAt)
-              }
-              variant="ghost"
-              className={`
-                    h-8 px-2 rounded-none text-[10px] font-mono transition-colors disabled:opacity-30 hover:bg-transparent
-                    ${
-                      processState === "SUCCESS"
-                        ? "text-emerald-500"
-                        : post.status === "draft" && post.hasPublicCache
-                          ? "text-orange-500"
-                          : "text-foreground hover:text-foreground/80"
-                    }
-                `}
-            >
-              <span className="mr-2 opacity-50">[</span>
-              {processState === "PROCESSING"
-                ? "处理中..."
-                : processState === "SUCCESS"
-                  ? "成功"
-                  : post.status === "draft" && post.hasPublicCache
-                    ? "下架"
-                    : "发布"}
-              <span className="ml-2 opacity-50">]</span>
-            </Button>
-          </div>
-        </div>
-      </header>
+      </Modal>
 
       {/* Main Content Area (Only this scrolls) */}
       <div
@@ -272,190 +253,37 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
         <div className="w-full mx-auto py-20 px-6 md:px-12 grid grid-cols-1 xl:grid-cols-[1fr_240px] 2xl:grid-cols-[1fr_56rem_1fr] gap-12 items-start">
           <div className="hidden 2xl:block" />
           <div className="min-w-0 w-full max-w-4xl mx-auto 2xl:mx-0">
-            {/* Title Area */}
-            <div className="mb-12">
-              <TextareaAutosize
-                value={post.title}
-                onChange={(e) =>
-                  setPost((prev) => ({ ...prev, title: e.target.value }))
-                }
-                minRows={1}
-                placeholder="在此输入文章标题..."
-                className="w-full bg-transparent text-4xl md:text-6xl font-serif font-medium tracking-tight text-foreground placeholder:text-muted-foreground/20 focus:outline-none transition-all overflow-hidden leading-[1.2] resize-none border-none p-0"
-              />
+            <div className="mb-6 flex justify-end xl:hidden">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsHistoryOpen(true)}
+                className="rounded-none text-[10px] font-mono uppercase tracking-[0.18em]"
+              >
+                <History size={14} />
+                <span className="ml-2">{m.editor_history_open()}</span>
+              </Button>
             </div>
 
-            {/* Metadata Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-8 mb-16 border-t border-border/30 pt-8">
-              {/* 1. Status */}
-              <div className="space-y-3">
-                <label className="text-[9px] uppercase tracking-widest text-muted-foreground font-mono">
-                  状态
-                </label>
-                <div className="flex items-center gap-4">
-                  {POST_STATUSES.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => handlePostChange({ status: s })}
-                      className={`
-                                text-[10px] uppercase tracking-wider font-mono transition-colors
-                                ${post.status === s ? "text-foreground font-bold border-b border-foreground" : "text-muted-foreground hover:text-foreground"}
-                            `}
-                    >
-                      {s === "draft" ? "草稿" : "已发布"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 2. Date */}
-              <div className="space-y-3">
-                <label className="text-[9px] uppercase tracking-widest text-muted-foreground font-mono">
-                  发布时间
-                </label>
-                <div className="font-mono text-xs">
-                  <DatePicker
-                    value={
-                      post.publishedAt
-                        ? toLocalDateString(post.publishedAt)
-                        : ""
-                    }
-                    onChange={(dateStr) =>
-                      handlePostChange({
-                        publishedAt: dateStr
-                          ? new Date(`${dateStr}T12:00:00Z`)
-                          : null,
-                      })
-                    }
-                    className="p-0! border-none! bg-transparent! text-xs text-foreground font-mono h-auto!"
-                  />
-                </div>
-              </div>
-
-              {/* 3. Read Time */}
-              <div className="space-y-3">
-                <label className="text-[9px] uppercase tracking-widest text-muted-foreground font-mono">
-                  阅读时长
-                </label>
-                <div className="flex items-center gap-2 group">
-                  <Input
-                    type="number"
-                    value={post.readTimeInMinutes}
-                    onChange={(e) =>
-                      handlePostChange({
-                        readTimeInMinutes: Number.parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="w-12 bg-transparent border-none shadow-none text-xs font-mono text-foreground focus-visible:ring-0 px-0 h-auto p-0"
-                  />
-                  <span className="text-[10px] font-mono text-muted-foreground">
-                    分钟
-                  </span>
-                  <button
-                    onClick={handleCalculateReadTime}
-                    disabled={isCalculatingReadTime}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 text-muted-foreground hover:text-foreground"
-                  >
-                    {isCalculatingReadTime ? (
-                      <Loader2 size={10} className="w-[10px] h-[10px] animate-spin" />
-                    ) : (
-                      <Sparkles size={10} className="w-[10px] h-[10px]" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* 4. Slug (Full Width) */}
-              <div className="col-span-1 md:col-span-3 space-y-3">
-                <label className="text-[9px] uppercase tracking-widest text-muted-foreground font-mono">
-                  链接 slug
-                </label>
-                <div className="flex items-center gap-2 group">
-                  <span className="text-xs text-muted-foreground font-mono">
-                    /post/
-                  </span>
-                  <Input
-                    type="text"
-                    value={post.slug || ""}
-                    onChange={(e) => handlePostChange({ slug: e.target.value })}
-                    className="flex-1 bg-transparent border-none shadow-none text-xs font-mono text-foreground focus-visible:ring-0 px-0 h-auto p-0 placeholder:text-muted-foreground/30"
-                    placeholder="your-post-slug"
-                  />
-                  <button
-                    onClick={handleGenerateSlug}
-                    disabled={isGeneratingSlug}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 text-muted-foreground hover:text-foreground"
-                  >
-                    {isGeneratingSlug ? (
-                      <Loader2 size={10} className="w-[10px] h-[10px] animate-spin" />
-                    ) : (
-                      <Sparkles size={10} className="w-[10px] h-[10px]" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* 5. Tags (Full Width) */}
-              <div className="col-span-1 md:col-span-3 space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-[9px] uppercase tracking-widest text-muted-foreground font-mono">
-                    标签
-                  </label>
-                  <button
-                    onClick={handleGenerateTags}
-                    disabled={isGeneratingTags}
-                    className="text-[9px] font-mono text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-                  >
-                    {isGeneratingTags ? (
-                      <Loader2 size={8} className="w-[8px] h-[8px] animate-spin" />
-                    ) : (
-                      <Sparkles size={8} className="w-[8px] h-[8px]" />
-                    )}
-                    自动生成
-                  </button>
-                </div>
-                <TagSelector
-                  value={post.tagIds}
-                  onChange={(tagIds) => handlePostChange({ tagIds })}
-                />
-              </div>
-
-              {/* 6. Summary (Full Width) */}
-              <div className="col-span-1 md:col-span-3 space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-[9px] uppercase tracking-widest text-muted-foreground font-mono">
-                    摘要
-                  </label>
-                  <button
-                    onClick={handleGenerateSummary}
-                    disabled={isGeneratingSummary}
-                    className="text-[9px] font-mono text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-                  >
-                    {isGeneratingSummary ? (
-                      <Loader2 size={8} className="w-[8px] h-[8px] animate-spin" />
-                    ) : (
-                      <Sparkles size={8} className="w-[8px] h-[8px]" />
-                    )}
-                    自动生成
-                  </button>
-                </div>
-                <TextareaAutosize
-                  value={post.summary || ""}
-                  onChange={(e) =>
-                    handlePostChange({ summary: e.target.value })
-                  }
-                  placeholder="简短的介绍..."
-                  className="w-full bg-transparent text-xs font-mono leading-relaxed text-foreground focus:outline-none resize-none placeholder:text-muted-foreground/30"
-                />
-              </div>
-            </div>
+            <PostEditorMetadata
+              post={post}
+              isGeneratingSlug={isGeneratingSlug}
+              isCalculatingReadTime={isCalculatingReadTime}
+              isGeneratingSummary={isGeneratingSummary}
+              isGeneratingTags={isGeneratingTags}
+              onPostChange={handlePostChange}
+              onGenerateSlug={handleGenerateSlug}
+              onCalculateReadTime={handleCalculateReadTime}
+              onGenerateSummary={handleGenerateSummary}
+              onGenerateTags={handleGenerateTags}
+            />
 
             {/* Editor Area */}
             <div className="min-h-[60vh] pb-32">
               <Editor
-                key={initialData.id}
+                key={editorRenderKey}
                 extensions={extensions}
-                content={initialData.contentJson ?? ""}
+                content={importedMarkdown ?? post.contentJson ?? ""}
                 onChange={handleContentChange}
                 onCreated={setEditorInstance}
               />
@@ -464,60 +292,44 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
 
           {/* Sidebar */}
           <aside className="hidden xl:block sticky top-20 h-full max-h-[calc(100vh-10rem)] w-60">
-            {editorInstance && (
-              <EditorTableOfContents editor={editorInstance} />
-            )}
+            <div className="space-y-6">
+              <button
+                type="button"
+                onClick={() => setIsHistoryOpen(true)}
+                className="flex w-full items-center justify-between border border-border/30 px-4 py-3 text-left transition-colors hover:border-foreground/20 hover:bg-muted/30"
+              >
+                <div>
+                  <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-muted-foreground/55">
+                    {m.editor_history_eyebrow()}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-foreground">
+                    {m.editor_history_title()}
+                  </p>
+                </div>
+                {saveStatus === "SAVING" ? (
+                  <Loader2
+                    size={14}
+                    className="animate-spin text-muted-foreground"
+                  />
+                ) : (
+                  <History size={16} className="text-muted-foreground" />
+                )}
+              </button>
+
+              {editorInstance && (
+                <EditorTableOfContents editor={editorInstance} />
+              )}
+            </div>
           </aside>
         </div>
       </div>
 
-      {/* Minimalist Status Bar */}
-      <div className="fixed bottom-0 inset-x-0 h-8 bg-background/80 backdrop-blur-md border-t border-border/40 z-50 flex items-center justify-between px-6 text-[10px] font-mono select-none">
-        <div className="flex items-center gap-6 text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span>字符</span>
-            <span className="text-foreground">{contentStats.chars}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span>词数</span>
-            <span className="text-foreground">{contentStats.words}</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {saveStatus === "ERROR" ? (
-            <span className="text-red-500 font-medium flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-              保存失败
-            </span>
-          ) : saveStatus === "SAVING" ? (
-            <span className="text-muted-foreground flex items-center gap-2">
-              <Loader2 className="animate-spin w-2.5 h-2.5" />
-              保存中...
-            </span>
-          ) : saveStatus === "PENDING" ? (
-            <span className="text-amber-500/80 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-              未保存
-            </span>
-          ) : (
-            <span className="text-muted-foreground/60 flex items-center gap-2 transition-opacity duration-300">
-              {lastSaved ? (
-                <>
-                  已保存{" "}
-                  {lastSaved.toLocaleTimeString([], {
-                    hour12: false,
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </>
-              ) : (
-                "已同步"
-              )}
-            </span>
-          )}
-        </div>
-      </div>
+      <PostEditorStatusBar
+        chars={contentStats.chars}
+        words={contentStats.words}
+        saveStatus={saveStatus}
+        lastSaved={lastSaved}
+      />
     </div>
   );
 }

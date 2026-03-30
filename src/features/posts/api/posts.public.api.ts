@@ -3,15 +3,27 @@ import {
   FindPostBySlugInputSchema,
   FindRelatedPostsInputSchema,
   GetPostsCursorInputSchema,
-} from "@/features/posts/posts.schema";
-import * as PostService from "@/features/posts/posts.service";
+} from "@/features/posts/schema/posts.schema";
+import * as PostService from "@/features/posts/services/posts.service";
 import { dbMiddleware } from "@/lib/middlewares";
+import { z } from "zod";
+
+const GetFeaturedPostsInputSchema = z.object({
+  limit: z.number().optional(),
+});
 
 export const getPostsCursorFn = createServerFn()
   .middleware([dbMiddleware])
   .inputValidator(GetPostsCursorInputSchema)
   .handler(async ({ data, context }) => {
     return await PostService.getPostsCursor(context, data);
+  });
+
+export const getFeaturedPostsFn = createServerFn()
+  .middleware([dbMiddleware])
+  .inputValidator(GetFeaturedPostsInputSchema)
+  .handler(async ({ data, context }) => {
+    return await PostService.getFeaturedPosts(context, data.limit ?? 4);
   });
 
 export const findPostBySlugFn = createServerFn()

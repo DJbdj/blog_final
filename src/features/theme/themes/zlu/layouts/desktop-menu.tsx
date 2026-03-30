@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { blogConfig } from "@/blog.config";
 import { useTheme } from "@/components/common/theme-provider";
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
+import { LanguageSwitcher } from "./language-switcher";
 
 interface DesktopMenuProps {
   isOpen: boolean;
@@ -104,6 +105,14 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
             </div>
           </div>
 
+          {/* Language Switcher */}
+          <div className="pt-4 mt-4 border-t border-[var(--zlu-border)]">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-[var(--zlu-text-secondary)]">语言</span>
+              <LanguageSwitcher />
+            </div>
+          </div>
+
           {/* User Section */}
           <div className="pt-4 mt-4 border-t border-[var(--zlu-border)]">
             {user ? (
@@ -113,7 +122,7 @@ export function DesktopMenu({ isOpen, onClose, navOptions, user, logout }: Deskt
                     <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-[var(--zlu-primary)]" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-[var(--zlu-primary)] flex items-center justify-center text-white font-semibold">
-                      {user.name[0].toUpperCase()}
+                      {user.name?.[0]?.toUpperCase() || "?"}
                     </div>
                   )}
                   <div>

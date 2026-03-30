@@ -1,4 +1,9 @@
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   Activity,
   ArrowRight,
@@ -10,47 +15,41 @@ import {
   RefreshCw,
   Users,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { z } from "zod";
 import { toast } from "sonner";
-import type {
-  ActivityLogItem,
-  DashboardRange,
-} from "@/features/dashboard/dashboard.schema";
-import { dashboardStatsQuery } from "@/features/dashboard/queries";
-import { useVersionCheck } from "@/features/version/hooks/use-version-check";
+import { z } from "zod";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { refreshDashboardCacheFn } from "@/features/dashboard/api/dashboard.api";
 import { DashboardSkeleton } from "@/features/dashboard/components/dashboard-skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatBytes, formatTimeAgo } from "@/lib/utils";
-import { refreshDashboardCacheFn } from "@/features/dashboard/dashboard.api";
+import { MetricItem } from "@/features/dashboard/components/metric-item";
 import { StatCard } from "@/features/dashboard/components/stat-card";
 import { TrafficChart } from "@/features/dashboard/components/traffic-chart";
-import { MetricItem } from "@/features/dashboard/components/metric-item";
+import type {
+  ActivityLogItem,
+  DashboardRange,
+} from "@/features/dashboard/dashboard.schema";
+import { dashboardStatsQuery } from "@/features/dashboard/queries";
+import { useVersionCheck } from "@/features/version/hooks/use-version-check";
+import { formatBytes, formatTime, formatTimeAgo } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 const SearchSchema = z.object({
   range: z.enum(["24h", "7d", "30d", "90d"]).default("24h").optional(),
 });
 
 export const Route = createFileRoute("/admin/")({
+  ssr: "data-only",
   component: DashboardOverview,
   pendingComponent: DashboardSkeleton,
   validateSearch: (search) => SearchSchema.parse(search),
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(dashboardStatsQuery);
-    return { title: "概览" };
+    return { title: m.admin_overview_title() };
   },
   head: ({ loaderData }) => ({
     meta: [
@@ -75,10 +74,7 @@ function DashboardOverview() {
     mutationFn: refreshDashboardCacheFn,
     onSuccess: () => {
       queryClient.invalidateQueries(dashboardStatsQuery);
-      toast.success("数据已刷新");
-    },
-    onError: () => {
-      toast.error("刷新失败，请重试");
+      toast.success(m.admin_overview_refresh_success());
     },
   });
 
@@ -88,31 +84,26 @@ function DashboardOverview() {
   const topPages = currentRangeData?.topPages;
   const lastUpdated = currentRangeData?.lastUpdated;
 
-  const lastUpdatedTime = lastUpdated
-    ? new Date(lastUpdated).toLocaleTimeString("zh-CN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "";
+  const lastUpdatedTime = lastUpdated ? formatTime(lastUpdated) : "";
 
   const rangeLabel = {
-    "24h": "24小时",
-    "7d": "7天",
-    "30d": "30天",
-    "90d": "90天",
+    "24h": m.admin_overview_range_24h(),
+    "7d": m.admin_overview_range_7d(),
+    "30d": m.admin_overview_range_30d(),
+    "90d": m.admin_overview_range_90d(),
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 ease-out fill-mode-both max-w-300 mx-auto">
+    <div className="space-y-8 animate-in fade-in duration-500 max-w-300 mx-auto">
       {/* Header */}
       <header className="flex flex-col md:flex-row justify-between md:items-end gap-4 border-b border-border/30 pb-6">
         <div className="space-y-1">
           <h1 className="text-3xl font-serif font-medium tracking-tight text-foreground">
-            仪表盘
+            {m.admin_overview_heading()}
           </h1>
           <div className="flex items-center gap-2">
             <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
-              SYSTEM_OPERATIONAL
+              {m.admin_overview_status()}
             </p>
           </div>
         </div>
@@ -152,12 +143,12 @@ function DashboardOverview() {
                 >
                   <RefreshCw
                     size={14}
-                    className={cn("w-[14px] h-[14px]", isFetching ? "animate-spin" : "")}
+                    className={isFetching ? "animate-spin" : ""}
                   />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>刷新数据</p>
+                <p>{m.admin_overview_refresh()}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -168,32 +159,36 @@ function DashboardOverview() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link to="/admin/comments" search={{ status: "pending" }}>
           <StatCard
-            label="待审核评论"
+            label={m.admin_overview_stat_pending_comments()}
             value={stats.pendingComments.toString()}
-            icon={<MessageSquare size={14} className="w-[14px] h-[14px]" />}
-            trend={stats.pendingComments > 0 ? "需要处理" : "一切正常"}
+            icon={<MessageSquare size={14} />}
+            trend={
+              stats.pendingComments > 0
+                ? m.admin_overview_trend_action_required()
+                : m.admin_overview_trend_all_good()
+            }
           />
         </Link>
         <Link to="/admin/posts" search={{ status: "PUBLISHED" }}>
           <StatCard
-            label="已发布文章"
+            label={m.admin_overview_stat_published_posts()}
             value={stats.publishedPosts.toString()}
-            icon={<FileText size={14} className="w-[14px] h-[14px]" />}
-            trend="活跃内容"
+            icon={<FileText size={14} />}
+            trend={m.admin_overview_trend_active_content()}
           />
         </Link>
         <StatCard
-          label="媒体库占用"
+          label={m.admin_overview_stat_media_storage()}
           value={formatBytes(stats.mediaSize)}
-          icon={<Database size={14} className="w-[14px] h-[14px]" />}
-          trend="存储使用"
+          icon={<Database size={14} />}
+          trend={m.admin_overview_trend_storage_usage()}
         />
         <Link to="/admin/posts" search={{ status: "DRAFT" }}>
           <StatCard
-            label="草稿箱"
+            label={m.admin_overview_stat_drafts()}
             value={stats.drafts.toString()}
-            icon={<Activity size={14} className="w-[14px] h-[14px]" />}
-            trend="进行中"
+            icon={<Activity size={14} />}
+            trend={m.admin_overview_trend_in_progress()}
           />
         </Link>
       </div>
@@ -204,7 +199,7 @@ function DashboardOverview() {
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-mono uppercase tracking-widest text-muted-foreground">
-              流量概览
+              {m.admin_overview_traffic_title()}
             </h2>
             {umamiUrl && (
               <a
@@ -213,7 +208,7 @@ function DashboardOverview() {
                 rel="noopener noreferrer"
                 className="text-[10px] font-mono text-muted-foreground/60 hover:text-foreground flex items-center gap-1 transition-colors uppercase tracking-widest"
               >
-                打开统计 <ArrowRight size={10} className="w-[10px] h-[10px]" />
+                {m.admin_overview_open_analytics()} <ArrowRight size={10} />
               </a>
             )}
           </div>
@@ -222,30 +217,30 @@ function DashboardOverview() {
           {overview && (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <MetricItem
-                label="访客数"
+                label={m.admin_overview_metric_visitors()}
                 value={overview.visitors.value}
                 prev={overview.visitors.prev}
-                icon={<Users size={12} className="w-[12px] h-[12px]" />}
+                icon={<Users size={12} />}
               />
               <MetricItem
-                label="浏览量"
+                label={m.admin_overview_metric_page_views()}
                 value={overview.pageViews.value}
                 prev={overview.pageViews.prev}
-                icon={<Eye size={12} className="w-[12px] h-[12px]" />}
+                icon={<Eye size={12} />}
               />
               <MetricItem
-                label="总访问"
+                label={m.admin_overview_metric_visits()}
                 value={overview.visits.value}
                 prev={overview.visits.prev}
-                icon={<MousePointerClick size={12} className="w-[12px] h-[12px]" />}
+                icon={<MousePointerClick size={12} />}
               />
               <MetricItem
-                label="跳出率"
+                label={m.admin_overview_metric_bounce_rate()}
                 value={overview.bounces.value}
                 prev={overview.bounces.prev}
                 total={overview.visits.value}
                 format="percent"
-                icon={<Activity size={12} className="w-[12px] h-[12px]" />}
+                icon={<Activity size={12} />}
               />
             </div>
           )}
@@ -255,14 +250,14 @@ function DashboardOverview() {
             {!umamiUrl ? (
               <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-3">
                 <div className="bg-muted/20 p-4 rounded-full">
-                  <Activity className="w-[24px] h-[24px] opacity-40" size={24} />
+                  <Activity className="opacity-40" size={24} />
                 </div>
                 <div className="text-center space-y-1">
                   <p className="text-sm font-mono text-foreground">
-                    统计未配置
+                    {m.admin_overview_analytics_unconfigured()}
                   </p>
                   <p className="text-[10px] text-muted-foreground font-mono">
-                    请配置 UMAMI_URL 环境变量
+                    {m.admin_overview_analytics_unconfigured_desc()}
                   </p>
                 </div>
               </div>
@@ -270,9 +265,9 @@ function DashboardOverview() {
               <TrafficChart data={traffic} />
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                <Activity className="w-[32px] h-[32px] opacity-20" size={32} />
+                <Activity className="opacity-20" size={32} />
                 <p className="text-[10px] font-mono uppercase tracking-widest">
-                  暂无流量数据
+                  {m.admin_overview_no_traffic()}
                 </p>
               </div>
             )}
@@ -284,7 +279,7 @@ function DashboardOverview() {
           {/* Top Pages */}
           <div className="space-y-4">
             <h2 className="text-sm font-mono uppercase tracking-widest text-muted-foreground">
-              热门内容
+              {m.admin_overview_top_pages_title()}
             </h2>
             <div className="border border-border/30 bg-background p-4 space-y-4">
               {topPages && topPages.length > 0 ? (
@@ -310,7 +305,7 @@ function DashboardOverview() {
                 ))
               ) : (
                 <div className="text-[10px] font-mono text-muted-foreground">
-                  暂无数据
+                  {m.admin_overview_no_top_pages()}
                 </div>
               )}
             </div>
@@ -319,7 +314,7 @@ function DashboardOverview() {
           {/* Activity Log */}
           <div className="space-y-4">
             <h2 className="text-sm font-mono uppercase tracking-widest text-muted-foreground">
-              系统日志
+              {m.admin_overview_activity_title()}
             </h2>
             <div className="border border-border/30 bg-background p-4 min-h-50">
               <div className="space-y-4">
@@ -349,7 +344,7 @@ function DashboardOverview() {
                   })
                 ) : (
                   <div className="text-[10px] font-mono text-muted-foreground">
-                    暂无活动
+                    {m.admin_overview_no_activity()}
                   </div>
                 )}
               </div>
@@ -360,7 +355,7 @@ function DashboardOverview() {
 
       {lastUpdated && (
         <div className="text-[9px] font-mono text-muted-foreground/30 text-center pt-8 uppercase tracking-widest">
-          最后更新: {lastUpdatedTime}
+          {m.admin_overview_last_updated({ time: lastUpdatedTime })}
         </div>
       )}
     </div>

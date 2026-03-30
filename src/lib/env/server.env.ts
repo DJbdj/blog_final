@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const domainRegex = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
+const localeSchema = z.enum(["zh", "en"]);
 const domainSchema = z
   .string()
   .regex(domainRegex, "Must be a valid domain (e.g., www.example.com)");
@@ -9,6 +10,7 @@ const serverEnvSchema = z.object({
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.url(),
   ADMIN_EMAIL: z.email(),
+  LOCALE: localeSchema.catch("zh"),
   GITHUB_CLIENT_ID: z.string(),
   GITHUB_CLIENT_SECRET: z.string(),
   CLOUDFLARE_ZONE_ID: z.string(),
@@ -22,12 +24,10 @@ const serverEnvSchema = z.object({
       (v) => v === undefined || domainRegex.test(v),
       "Must be a valid domain (e.g., cdn.example.com)",
     ),
-  ENVIRONMENT: z.enum(["dev", "prod", "test"]).optional(),
+  ENVIRONMENT: z.string().optional(),
   VITE_UMAMI_WEBSITE_ID: z.string().optional(),
   UMAMI_SRC: z.string().optional(),
-  UMAMI_API_KEY: z.string().optional(),
-  UMAMI_USERNAME: z.string().optional(),
-  UMAMI_PASSWORD: z.string().optional(),
+  PAGEVIEW_SALT: z.string().optional(),
   TURNSTILE_SECRET_KEY: z.string().optional(),
   GITHUB_TOKEN: z.string().optional(),
 });

@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { blogConfig } from "@/blog.config";
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
 import { useTheme } from "@/components/common/theme-provider";
+import { LanguageSwitcher } from "./language-switcher";
 
 interface NavItem {
   label: string;
@@ -66,7 +67,7 @@ export function Navbar({ navOptions, user, isLoading, onMenuClick }: NavbarProps
     <header className={`zlu-navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="zlu-navbar-inner">
         <Link to="/" className="zlu-logo">
-          {blogConfig.title}
+          {import.meta.env.VITE_BLOG_NAME || blogConfig.name}
           {import.meta.env.DEV && <span>.dev</span>}
         </Link>
 
@@ -111,6 +112,9 @@ export function Navbar({ navOptions, user, isLoading, onMenuClick }: NavbarProps
               {themeIcons[userTheme]}
             </button>
           </div>
+
+          {/* Language Switcher */}
+          <LanguageSwitcher />
 
           <button
             onClick={onMenuClick}

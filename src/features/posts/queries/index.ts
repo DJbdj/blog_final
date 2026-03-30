@@ -1,21 +1,26 @@
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
+import type {
+  GetPostsCountInput,
+  GetPostsInput,
+} from "@/features/posts/schema/posts.schema";
+import {
+  PostItemSchema,
+  PostListResponseSchema,
+  PostWithTocSchema,
+} from "@/features/posts/schema/posts.schema";
+import { apiClient } from "@/lib/api-client";
+import { isSSR } from "@/lib/utils";
+import {
+  getPostRevisionFn,
+  listPostRevisionsFn,
+} from "../api/post-revisions.admin.api";
 import { findPostByIdFn } from "../api/posts.admin.api";
 import {
   findPostBySlugFn,
   getPostsCursorFn,
   getRelatedPostsFn,
+  getFeaturedPostsFn,
 } from "../api/posts.public.api";
-import type {
-  GetPostsCountInput,
-  GetPostsInput,
-} from "@/features/posts/posts.schema";
-import {
-  PostItemSchema,
-  PostListResponseSchema,
-  PostWithTocSchema,
-} from "@/features/posts/posts.schema";
-import { apiClient } from "@/lib/api-client";
-import { isSSR } from "@/lib/utils";
 
 export const POSTS_KEYS = {
   all: ["posts"] as const,
@@ -26,6 +31,8 @@ export const POSTS_KEYS = {
   featured: ["posts", "featured"] as const,
   adminLists: ["posts", "admin-list"] as const,
   counts: ["posts", "count"] as const,
+  revisions: ["posts", "revisions"] as const,
+  revisionDetails: ["posts", "revision-detail"] as const,
 
   // Child keys (functions for specific queries)
   list: (filters?: { tagName?: string }) => ["posts", "list", filters] as const,
@@ -35,6 +42,9 @@ export const POSTS_KEYS = {
   adminList: (params: GetPostsInput) =>
     ["posts", "admin-list", params] as const,
   count: (params: GetPostsCountInput) => ["posts", "count", params] as const,
+  revisionList: (postId: number) => ["posts", "revisions", postId] as const,
+  revisionDetail: (postId: number, revisionId: number) =>
+    ["posts", "revision-detail", postId, revisionId] as const,
 };
 
 export function featuredPostsQuery(limit: number) {
@@ -42,14 +52,15 @@ export function featuredPostsQuery(limit: number) {
     queryKey: [...POSTS_KEYS.featured, limit],
     queryFn: async () => {
       if (isSSR) {
-        const result = await getPostsCursorFn({ data: { limit } });
-        return result.items;
+        const result = await getFeaturedPostsFn({ data: { limit } });
+        // Validate the result with schema in SSR
+        return PostItemSchema.array().parse(result);
       }
-      const res = await apiClient.posts.$get({
+      const res = await apiClient.posts.featured.$get({
         query: { limit: String(limit) },
       });
-      if (!res.ok) throw new Error("Failed to fetch posts");
-      return PostListResponseSchema.parse(await res.json()).items;
+      if (!res.ok) throw new Error("Failed to fetch featured posts");
+      return PostItemSchema.array().parse(await res.json());
     },
   });
 }
@@ -82,6 +93,27 @@ export function postsInfiniteQueryOptions(
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     initialPageParam: undefined as number | undefined,
+  });
+}
+
+export function recentPostsQuery(limit: number) {
+  return queryOptions({
+    queryKey: [...POSTS_KEYS.lists, "recent", limit],
+    queryFn: async () => {
+      if (isSSR) {
+        const result = await getPostsCursorFn({
+          data: { limit, cursor: undefined },
+        });
+        // Validate and return items
+        const parsed = PostListResponseSchema.parse(result);
+        return parsed.items;
+      }
+      const res = await apiClient.posts.$get({
+        query: { limit: String(limit) },
+      });
+      if (!res.ok) throw new Error("Failed to fetch recent posts");
+      return PostListResponseSchema.parse(await res.json()).items;
+    },
   });
 }
 
@@ -120,5 +152,20 @@ export function relatedPostsQuery(slug: string, limit?: number) {
       if (!res.ok) throw new Error("Failed to fetch related posts");
       return PostItemSchema.array().parse(await res.json());
     },
+  });
+}
+
+export function postRevisionListQuery(postId: number) {
+  return queryOptions({
+    queryKey: POSTS_KEYS.revisionList(postId),
+    queryFn: () => listPostRevisionsFn({ data: { postId } }),
+  });
+}
+
+export function postRevisionDetailQuery(postId: number, revisionId: number) {
+  return queryOptions({
+    queryKey: POSTS_KEYS.revisionDetail(postId, revisionId),
+    queryFn: async () =>
+      (await getPostRevisionFn({ data: { postId, revisionId } })) ?? null,
   });
 }

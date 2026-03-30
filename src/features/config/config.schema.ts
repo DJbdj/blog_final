@@ -1,20 +1,12 @@
 import { z } from "zod";
-
-const notificationWebhookEventTypeSchema = z.enum([
-  "comment.admin_root_created",
-  "comment.admin_pending_review",
-  "comment.reply_to_admin_published",
-  "friend_link.submitted",
-]);
-
-const webhookEndpointSchema = z.object({
-  id: z.string(),
-  name: z.string().min(1),
-  url: z.string().url(),
-  enabled: z.boolean(),
-  secret: z.string().min(1),
-  events: z.array(notificationWebhookEventTypeSchema),
-});
+import { blogConfig } from "@/blog.config";
+import {
+  createSiteConfigInputFormSchema,
+  type SiteConfigInput,
+  SiteConfigInputSchema,
+} from "@/features/config/site-config.schema";
+import { webhookEndpointSchema } from "@/features/webhook/webhook.schema";
+import type { Messages } from "@/lib/i18n";
 
 export const SystemConfigSchema = z.object({
   email: z
@@ -44,62 +36,21 @@ export const SystemConfigSchema = z.object({
       webhooks: z.array(webhookEndpointSchema).optional(),
     })
     .optional(),
-  site: z
-    .object({
-      title: z.string().optional(),
-      author: z.string().optional(),
-      description: z.string().optional(),
-      social: z
-        .object({
-          github: z.string().optional(),
-          email: z.string().optional(),
-        })
-        .optional(),
-      theme: z
-        .object({
-          default: z
-            .object({
-              navBarName: z.string().optional(),
-              background: z
-                .object({
-                  homeImage: z.string().optional(),
-                  globalImage: z.string().optional(),
-                  light: z
-                    .object({
-                      opacity: z.number().optional(),
-                    })
-                    .optional(),
-                  dark: z
-                    .object({
-                      opacity: z.number().optional(),
-                    })
-                    .optional(),
-                  backdropBlur: z.number().optional(),
-                  transitionDuration: z.number().optional(),
-                })
-                .optional(),
-            })
-            .optional(),
-          fuwari: z
-            .object({
-              homeBg: z.string().optional(),
-              avatar: z.string().optional(),
-              primaryHue: z.number().optional(),
-            })
-            .optional(),
-          zlu: z
-            .object({
-              homeImage: z.string().optional(),
-              avatar: z.string().optional(),
-            })
-            .optional(),
-        })
-        .optional(),
-    })
-    .optional(),
+  site: SiteConfigInputSchema.optional(),
 });
 
+export const createSystemConfigFormSchema = (messages: Messages) =>
+  z.object({
+    email: SystemConfigSchema.shape.email,
+    notification: SystemConfigSchema.shape.notification,
+    site: createSiteConfigInputFormSchema(messages).optional(),
+  });
+
 export type SystemConfig = z.infer<typeof SystemConfigSchema>;
+export type {
+  SiteConfig,
+  SiteConfigInput,
+} from "@/features/config/site-config.schema";
 
 export const DEFAULT_CONFIG: SystemConfig = {
   email: {
@@ -119,9 +70,9 @@ export const DEFAULT_CONFIG: SystemConfig = {
     },
     webhooks: [],
   },
+  site: blogConfig satisfies SiteConfigInput,
 };
 
 export const CONFIG_CACHE_KEYS = {
   system: ["system"] as const,
-  isEmailConfigured: ["isEmailConfigured"] as const,
 } as const;

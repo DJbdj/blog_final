@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { uploadSiteAssetFn } from "@/features/config/api/config.api";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 interface AssetUploadFieldProps {
   name: string;
@@ -38,7 +39,7 @@ export function AssetUploadField({
   readOnly,
   error,
 }: AssetUploadFieldProps) {
-  const { register, watch } = useFormContext();
+  const { register, setValue, watch } = useFormContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const value = watch(name);
@@ -49,16 +50,14 @@ export function AssetUploadField({
       const formData = new FormData();
       formData.append("file", file);
       formData.append("assetPath", assetPath);
-      // @ts-expect-error - FormData is dynamic
-      const result = await uploadSiteAssetFn({ data: formData });
-      return result as { url: string };
+      return uploadSiteAssetFn({ data: formData });
     },
     onSuccess: (result) => {
-      register(name).onChange({ target: { value: result.url } });
-      toast.success("资源上传成功");
+      setValue(name, result.url, { shouldDirty: true });
+      toast.success(m.settings_asset_upload_success());
     },
     onError: (err) => {
-      toast.error("资源上传失败", {
+      toast.error(m.settings_asset_upload_fail(), {
         description: err instanceof Error ? err.message : undefined,
       });
     },
@@ -117,7 +116,9 @@ export function AssetUploadField({
                 <Upload size={14} />
               )}
               <span>
-                {isUploading ? "上传中" : "上传"}
+                {isUploading
+                  ? m.settings_asset_uploading()
+                  : m.settings_asset_upload_btn()}
               </span>
             </button>
           </div>

@@ -1,10 +1,13 @@
-import { renderToStaticMarkup } from "react-dom/server";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
+import { renderToStaticMarkup } from "react-dom/server";
 import { AuthEmail } from "@/features/email/templates/AuthEmail";
-import { authConfig } from "@/lib/auth/auth.config";
+import { createAuthConfig } from "@/lib/auth/auth.config";
 import * as authSchema from "@/lib/db/schema/auth.table";
 import { serverEnv } from "@/lib/env/server.env";
+import type { Locale } from "@/lib/i18n";
+import { m } from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 async function checkEmailRateLimit(
   env: Env,
@@ -26,6 +29,7 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
     BETTER_AUTH_SECRET,
     BETTER_AUTH_URL,
     ADMIN_EMAIL,
+    LOCALE,
     GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET,
   } = serverEnv(env);
@@ -38,8 +42,16 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
     return env.PASSWORD_HASHER.get(id);
   }
 
+  function getAuthEmailLocale(): Locale {
+    try {
+      return getLocale();
+    } catch {
+      return LOCALE;
+    }
+  }
+
   return betterAuth({
-    ...authConfig,
+    ...createAuthConfig(),
     socialProviders: {
       github: {
         clientId: GITHUB_CLIENT_ID,
@@ -54,6 +66,22 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         verify: (params: { hash: string; password: string }) =>
           getPasswordHasher().verify(params),
       },
+      // 发送验证邮件
+      sendVerificationEmail: async ({ user, url }) => {
+        const locale = getAuthEmailLocale();
+        const emailHtml = renderToStaticMarkup(
+          AuthEmail({ locale, type: "verify-email", url }),
+        );
+
+        await env.QUEUE.send({
+          type: "EMAIL",
+          data: {
+            to: user.email,
+            subject: m.email_auth_verification_subject({}, { locale }),
+            html: emailHtml,
+          },
+        });
+      },
       sendResetPassword: async ({ user, url }) => {
         // Per-email rate limit: 3 per hour — silently skip if exceeded
         const allowed = await checkEmailRateLimit(
@@ -63,45 +91,22 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         );
         if (!allowed) return;
 
+        const locale = getAuthEmailLocale();
         const emailHtml = renderToStaticMarkup(
-          AuthEmail({ type: "reset-password", url }),
+          AuthEmail({ locale, type: "reset-password", url }),
         );
 
         await env.QUEUE.send({
           type: "EMAIL",
           data: {
             to: user.email,
-            subject: "重置密码",
+            subject: m.email_auth_reset_subject({}, { locale }),
             html: emailHtml,
           },
         });
       },
     },
-    emailVerification: {
-      sendVerificationEmail: async ({ user, url }) => {
-        // Per-email rate limit: 3 per hour — silently skip if exceeded
-        const allowed = await checkEmailRateLimit(
-          env,
-          "email-verify",
-          user.email,
-        );
-        if (!allowed) return;
-
-        const emailHtml = renderToStaticMarkup(
-          AuthEmail({ type: "verification", url }),
-        );
-
-        await env.QUEUE.send({
-          type: "EMAIL",
-          data: {
-            to: user.email,
-            subject: "验证您的邮箱",
-            html: emailHtml,
-          },
-        });
-      },
-      autoSignInAfterVerification: true,
-    },
+    // 邮箱验证：管理员自动验证，普通用户需要邮件验证
     database: drizzleAdapter(db, {
       provider: "sqlite",
       schema: authSchema,
@@ -111,9 +116,10 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         create: {
           before: async (user) => {
             if (user.email === ADMIN_EMAIL) {
-              return { data: { ...user, role: "admin" } };
+              return { data: { ...user, role: "admin", emailVerified: true } };
             }
-            return { data: user };
+            // 普通用户不自动验证，需要等待邮件验证
+            return { data: { ...user, emailVerified: false } };
           },
         },
       },

@@ -7,9 +7,10 @@ import { DesktopMenu } from "./desktop-menu";
 import { Footer } from "./footer";
 import { MobileMenu } from "./mobile-menu";
 import { Navbar } from "./navbar";
+import { RightSidebarProvider, RightSidebarContent } from "../contexts/right-sidebar-context";
 import type { PublicLayoutProps } from "@/features/theme/contract/layouts";
 
-export function PublicLayout({
+function LayoutContent({
   children,
   navOptions,
   user,
@@ -100,32 +101,21 @@ export function PublicLayout({
             {children}
           </div>
 
-          {/* Right Sidebar - Announcements & Tags */}
-          <aside className="zlu-right-sidebar">
-            <div className="zlu-sidebar-card">
-              <h3 className="zlu-sidebar-title">公告</h3>
-              <p className="text-sm text-[var(--zlu-text-secondary)]">
-                欢迎来到我的博客！这里记录我的技术学习心得和生活感悟。
-              </p>
-            </div>
-
-            <div className="zlu-sidebar-card">
-              <h3 className="zlu-sidebar-title">热门文章</h3>
-              <div className="space-y-2">
-                {/* Will be populated by widget */}
-              </div>
-            </div>
-
-            <div className="zlu-sidebar-card">
-              <h3 className="zlu-sidebar-title">标签</h3>
-              <div className="flex flex-wrap gap-2">
-                {/* Will be populated by widget */}
-              </div>
-            </div>
+          {/* Right Sidebar - 由页面决定内容 */}
+          <aside className="zlu-right-sidebar hidden xl:block">
+            <RightSidebarContent />
           </aside>
         </div>
       </main>
       <Footer navOptions={navOptions} />
     </div>
+  );
+}
+
+export function PublicLayout(props: PublicLayoutProps) {
+  return (
+    <RightSidebarProvider>
+      <LayoutContent {...props} />
+    </RightSidebarProvider>
   );
 }

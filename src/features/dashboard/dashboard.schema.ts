@@ -35,11 +35,10 @@ export const DashboardResponseSchema = z.object({
         traffic: z.array(TrafficDataSchema),
         overview: z
           .object({
-            visitors: MetricSchema,
             pageViews: MetricSchema,
+            visitors: MetricSchema,
             visits: MetricSchema,
             bounces: MetricSchema,
-            totalTime: MetricSchema,
           })
           .optional(),
         topPages: z

@@ -1,4 +1,4 @@
-import { generateKey } from "@/features/media/media.utils";
+import { generateKey } from "@/features/media/utils/media.utils";
 
 export async function putToR2(env: Env, image: File) {
   const key = generateKey(image.name);
@@ -32,31 +32,19 @@ export async function getFromR2(env: Env, key: string) {
 }
 
 /**
- * Upload site asset (favicon, theme images, etc.) to R2
- * @param env - Environment variables
- * @param file - The file to upload
- * @param assetPath - The asset path (e.g., "favicon/favicon.svg", "themes/default/home-image.webp")
- * @returns The URL of the uploaded asset
+ * Upload a site asset (favicon, theme images) to R2 with a fixed key.
+ * No DB record; overwrites in place on re-upload.
  */
 export async function putSiteAsset(
   env: Env,
   file: File,
   assetPath: string,
-): Promise<{ url: string; key: string }> {
-  const contentType = file.type;
-  const url = `/images/asset/${assetPath}`;
-
-  await env.R2.put(assetPath, file.stream(), {
+): Promise<{ key: string; url: string }> {
+  const key = `asset/${assetPath}`;
+  await env.R2.put(key, file.stream(), {
     httpMetadata: {
-      contentType,
-    },
-    customMetadata: {
-      originalName: file.name,
+      contentType: file.type,
     },
   });
-
-  return {
-    key: assetPath,
-    url,
-  };
+  return { key, url: `/images/${key}` };
 }

@@ -1,9 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
 import { Github as GithubIcon } from "lucide-react";
-import { useMemo } from "react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
-import { config } from "@/features/theme/themes/magic/config";
 import { blogConfig } from "@/blog.config";
 import { formatDate } from "@/lib/utils";
 
@@ -91,14 +89,9 @@ function PostCard({ post, featured = false }: { post: any; featured?: boolean })
   );
 }
 
-export function HomePage({ posts }: HomePageProps) {
-  const featuredPosts = useMemo(() => {
-    return posts.slice(0, config.home.featuredPostsLimit);
-  }, [posts]);
-
-  const recentPosts = useMemo(() => {
-    return posts.slice(config.home.featuredPostsLimit);
-  }, [posts]);
+export function HomePage({ posts, tags: _tags }: HomePageProps) {
+  // Note: tags parameter is available but not used in this theme
+  // posts 是精选文章列表
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
@@ -111,7 +104,7 @@ export function HomePage({ posts }: HomePageProps) {
       </section>
 
       {/* Featured Posts */}
-      {featuredPosts.length > 0 && (
+      {posts.length > 0 ? (
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -132,36 +125,16 @@ export function HomePage({ posts }: HomePageProps) {
 
           {/* Horizontal Scroll Featured Posts */}
           <div className="magic-featured-scroll flex gap-4 overflow-x-auto pb-4 -mx-4 px-4">
-            {featuredPosts.map((post) => (
+            {posts.map((post) => (
               <PostCard key={post.id} post={post} featured />
             ))}
           </div>
         </section>
+      ) : (
+        <section className="text-center py-12">
+          <p className="text-muted-foreground">暂无精选文章</p>
+        </section>
       )}
-
-      {/* Recent Posts */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">最新文章</h2>
-          <Link to="/posts" className="text-primary hover:underline flex items-center gap-1">
-            查看全部
-            <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        {/* Grid Layout */}
-        {recentPosts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">暂无文章</p>
-          </div>
-        )}
-      </section>
 
       {/* Footer CTA */}
       <section className="text-center py-8 border-t border-border mt-16">

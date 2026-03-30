@@ -31,6 +31,7 @@ function toRevisionSnapshot(
     summary: post.summary,
     slug: post.slug,
     status: post.status,
+    pinnedAt: post.pinnedAt ? post.pinnedAt.toISOString() : null,
     publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
     readTimeInMinutes: post.readTimeInMinutes,
     contentJson: post.contentJson,
@@ -47,6 +48,7 @@ async function hashSnapshot(snapshot: PostRevisionSnapshot) {
     slug: snapshot.slug,
     publishedAt: snapshot.publishedAt,
     readTimeInMinutes: snapshot.readTimeInMinutes,
+    pinnedAt: snapshot.pinnedAt,
   });
 }
 
