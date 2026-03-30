@@ -106,6 +106,15 @@ html.dark {
   transition: background-color var(--zlu-transition-normal), color var(--zlu-transition-normal);
 }
 
+/* Light mode - transparent background for Pexels blur effect */
+html.light {
+  background: transparent;
+}
+
+html.light body {
+  background: transparent;
+}
+
 /* Pexels Background - Light Mode Only */
 /* Uses ::before pseudo-element on body for fixed background behind content */
 
@@ -370,6 +379,13 @@ html.light .zlu-sidebar-card {
   position: relative;
 }
 
+html.light .zlu-featured-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.5);
+}
+
 .zlu-featured-card::before {
   content: "";
   position: absolute;
@@ -454,6 +470,13 @@ html.light .zlu-sidebar-card {
   margin-bottom: 1.25rem;
   box-shadow: var(--zlu-shadow-sm);
   position: relative;
+}
+
+html.light .zlu-post-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.5);
 }
 
 .zlu-post-card::before {
@@ -830,6 +853,13 @@ html.light .zlu-footer {
   border-radius: var(--zlu-radius-lg);
   padding: 2.5rem;
   position: relative;
+}
+
+html.light .zlu-article {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.5);
 }
 
 .zlu-article::before {
