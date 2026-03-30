@@ -1,5 +1,51 @@
 import { useEffect, useState } from "react";
-import { useDailyBackground } from "@/features/pexels/queries/pexels.query";
+
+// 风景图片列表 - 固定集合
+const LANDSCAPE_IMAGES = [
+  {
+    src: "https://images.pexels.com/photos/1001821/pexels-photo-1001821.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Johannes PLATZ",
+    url: "https://www.pexels.com/photo/mountain-lake-at-sunset-1001821/",
+  },
+  {
+    src: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Pixabay",
+    url: "https://www.pexels.com/photo/body-of-water-view-417074/",
+  },
+  {
+    src: "https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Negar Photo",
+    url: "https://www.pexels.com/photo/mountain-with-snow-capped-peaks-167699/",
+  },
+  {
+    src: "https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Kevin Bidwell",
+    url: "https://www.pexels.com/photo/body-of-water-during-daytime-1287145/",
+  },
+  {
+    src: "https://images.pexels.com/photos/2861356/pexels-photo-2861356.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Leonardo Silveira",
+    url: "https://www.pexels.com/photo/aerial-photography-of-forest-2861356/",
+  },
+  {
+    src: "https://images.pexels.com/photos/1579739/pexels-photo-1579739.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Jeffry Surianto",
+    url: "https://www.pexels.com/photo/landscape-photography-of-trees-1579739/",
+  },
+  {
+    src: "https://images.pexels.com/photos/1118868/pexels-photo-1118868.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Júlia Marques",
+    url: "https://www.pexels.com/photo/foggy-forest-1118868/",
+  },
+  {
+    src: "https://images.pexels.com/photos/2662432/pexels-photo-2662432.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    photographer: "Daniel Frank",
+    url: "https://www.pexels.com/photo/aerial-view-of-beach-2662432/",
+  },
+];
+
+// 轮换间隔 - 每 30 分钟切换一次
+const ROTATION_INTERVAL = 30 * 60 * 1000;
 
 /**
  * 检查当前是否为浅色模式
@@ -12,12 +58,19 @@ function isLightMode(): boolean {
   );
 }
 
+/**
+ * 根据时间获取当前应该显示的图片索引
+ * 使用时间戳确保同一时间段内图片一致
+ */
+function getCurrentImageIndex(): number {
+  const now = new Date();
+  const timeSlot = Math.floor(now.getTime() / ROTATION_INTERVAL);
+  return timeSlot % LANDSCAPE_IMAGES.length;
+}
+
 export function BackgroundLayer() {
   // 跟踪当前是否为浅色模式
   const [currentLightMode, setCurrentLightMode] = useState(() => isLightMode());
-
-  // 获取 Pexels 每日精选背景（仅在浅色模式下启用）
-  const { data: pexelsBackground } = useDailyBackground(currentLightMode);
 
   // 监听主题变化
   useEffect(() => {
@@ -38,12 +91,12 @@ export function BackgroundLayer() {
     return () => observer.disconnect();
   }, []);
 
-  // 应用 Pexels 背景到 body::before 伪元素
+  // 应用风景背景到 body::before 伪元素
   useEffect(() => {
     // 获取或创建样式元素
-    let styleEl = document.getElementById('pexels-background-style') as HTMLStyleElement;
+    let styleEl = document.getElementById('landscape-background-style') as HTMLStyleElement;
 
-    if (!pexelsBackground || !currentLightMode) {
+    if (!currentLightMode) {
       // 清除背景
       document.documentElement.style.backgroundColor = '';
       document.body.style.backgroundColor = '';
@@ -52,10 +105,13 @@ export function BackgroundLayer() {
         styleEl.remove();
       }
       // 隐藏署名
-      const link = document.querySelector('.pexels-credit') as HTMLElement;
+      const link = document.querySelector('.landscape-credit') as HTMLElement;
       if (link) link.style.display = 'none';
       return;
     }
+
+    // 获取当前图片
+    const currentImage = LANDSCAPE_IMAGES[getCurrentImageIndex()];
 
     // 设置 HTML 和 body 背景为透明
     document.documentElement.style.backgroundColor = 'transparent';
@@ -64,7 +120,7 @@ export function BackgroundLayer() {
     // 创建或更新伪元素样式
     if (!styleEl) {
       styleEl = document.createElement('style');
-      styleEl.id = 'pexels-background-style';
+      styleEl.id = 'landscape-background-style';
       document.head.appendChild(styleEl);
     }
 
@@ -76,7 +132,7 @@ export function BackgroundLayer() {
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: url("${pexelsBackground.src.landscape}");
+        background-image: url("${currentImage.src}");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -89,21 +145,21 @@ export function BackgroundLayer() {
     `;
 
     // 添加或更新摄影师署名
-    let link = document.querySelector('.pexels-credit') as HTMLAnchorElement;
+    let link = document.querySelector('.landscape-credit') as HTMLAnchorElement;
     if (!link) {
       link = document.createElement('a');
-      link.href = pexelsBackground.url;
+      link.href = currentImage.url;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-      link.className = 'pexels-credit';
+      link.className = 'landscape-credit';
       link.style.cssText = 'position:fixed;bottom:1rem;right:1rem;font-size:0.75rem;color:#6b7280;opacity:0.5;transition:opacity 0.2s;z-index:9999;pointer-events:auto;text-decoration:none;';
       link.onmouseenter = () => link.style.opacity = '1';
       link.onmouseleave = () => link.style.opacity = '0.5';
       document.body.appendChild(link);
     }
 
-    link.href = pexelsBackground.url;
-    link.textContent = `Photo by ${pexelsBackground.photographer} on Pexels`;
+    link.href = currentImage.url;
+    link.textContent = `Photo by ${currentImage.photographer}`;
     link.style.display = 'block';
 
     return () => {
@@ -113,10 +169,10 @@ export function BackgroundLayer() {
       if (styleEl) {
         styleEl.remove();
       }
-      const link = document.querySelector('.pexels-credit') as HTMLElement;
+      const link = document.querySelector('.landscape-credit') as HTMLElement;
       if (link) link.style.display = 'none';
     };
-  }, [pexelsBackground, currentLightMode]);
+  }, [currentLightMode]);
 
   return null;
 }
