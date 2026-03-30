@@ -81,8 +81,8 @@ export function BackgroundLayer() {
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        filter: blur(8px);
-        transform: scale(1.05);
+        filter: blur(4px);
+        transform: scale(1.02);
         z-index: -1;
         pointer-events: none;
       }
