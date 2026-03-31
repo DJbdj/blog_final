@@ -1,43 +1,14 @@
 import { useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { useLandscapeImage } from "@/features/background/queries/background.query";
 import type { DefaultThemeBackground } from "@/features/config/site-config.schema";
 
-// 风景图片列表 - 固定集合
-const LANDSCAPE_IMAGES = [
-  {
-    src: "https://images.pexels.com/photos/1001821/pexels-photo-1001821.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-    photographer: "Johannes PLATZ",
-    url: "https://www.pexels.com/photo/mountain-lake-at-sunset-1001821/",
-  },
-  {
-    src: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-    photographer: "Pixabay",
-    url: "https://www.pexels.com/photo/body-of-water-view-417074/",
-  },
-  {
-    src: "https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-    photographer: "Negar Photo",
-    url: "https://www.pexels.com/photo/mountain-with-snow-capped-peaks-167699/",
-  },
-  {
-    src: "https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-    photographer: "Kevin Bidwell",
-    url: "https://www.pexels.com/photo/body-of-water-during-daytime-1287145/",
-  },
-  {
-    src: "https://images.pexels.com/photos/2861356/pexels-photo-2861356.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-    photographer: "Leonardo Silveira",
-    url: "https://www.pexels.com/photo/aerial-photography-of-forest-2861356/",
-  },
-  {
-    src: "https://images.pexels.com/photos/1579739/pexels-photo-1579739.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-    photographer: "Jeffry Surianto",
-    url: "https://www.pexels.com/photo/landscape-photography-of-trees-1579739/",
-  },
-];
-
-// 轮换间隔 - 每 30 分钟切换一次
-const ROTATION_INTERVAL = 30 * 60 * 1000;
+const baseStyle: React.CSSProperties = {
+  position: "fixed",
+  inset: 0,
+  pointerEvents: "none",
+  zIndex: 0,
+};
 
 /**
  * 检查当前是否为浅色模式
@@ -49,22 +20,6 @@ function isLightMode(): boolean {
     html.classList.contains("light") && !html.classList.contains("system")
   );
 }
-
-/**
- * 根据时间获取当前应该显示的图片索引
- */
-function getCurrentImageIndex(): number {
-  const now = new Date();
-  const timeSlot = Math.floor(now.getTime() / ROTATION_INTERVAL);
-  return timeSlot % LANDSCAPE_IMAGES.length;
-}
-
-const baseStyle: React.CSSProperties = {
-  position: "fixed",
-  inset: 0,
-  pointerEvents: "none",
-  zIndex: 0,
-};
 
 export function BackgroundLayer({
   background,
@@ -84,6 +39,11 @@ export function BackgroundLayer({
   // 跟踪当前是否为浅色模式
   const [currentLightMode, setCurrentLightMode] = useState(() => isLightMode());
 
+  // 获取风景图片（仅在无自定义图片且为浅色模式时使用）
+  const { data: landscapeImage } = useLandscapeImage(
+    !hasAnyImage && currentLightMode
+  );
+
   // 监听主题变化
   useEffect(() => {
     const checkTheme = () => {
@@ -99,13 +59,8 @@ export function BackgroundLayer({
     return () => observer.disconnect();
   }, []);
 
-  // 获取当前风景图片（仅在无自定义图片且为浅色模式时使用）
-  const currentLandscape = !hasAnyImage && currentLightMode
-    ? LANDSCAPE_IMAGES[getCurrentImageIndex()]
-    : null;
-
   useEffect(() => {
-    if ((!background || !hasAnyImage || !isHomepage) && !currentLandscape)
+    if ((!background || !hasAnyImage || !isHomepage) && !landscapeImage)
       return;
 
     const handleScroll = () => {
@@ -119,10 +74,10 @@ export function BackgroundLayer({
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [background, hasAnyImage, isHomepage, currentLandscape]);
+  }, [background, hasAnyImage, isHomepage, landscapeImage]);
 
   // 确定使用哪个背景图片
-  const effectiveHomeImage = currentLandscape?.src || background?.homeImage;
+  const effectiveHomeImage = landscapeImage?.src.landscape || background?.homeImage;
   const effectiveGlobalImage = background?.globalImage;
   const hasEffectiveImage = Boolean(effectiveHomeImage || effectiveGlobalImage);
 
@@ -167,15 +122,15 @@ export function BackgroundLayer({
       )}
 
       {/* 摄影师署名（仅在使用风景轮换图片时显示） */}
-      {currentLandscape && currentLightMode && (
+      {landscapeImage && currentLightMode && (
         <a
-          href={currentLandscape.url}
+          href={landscapeImage.url}
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-4 right-4 text-xs text-gray-500 opacity-50 hover:opacity-100 transition-opacity z-10"
           style={{ pointerEvents: "auto" }}
         >
-          Photo by {currentLandscape.photographer}
+          Photo by {landscapeImage.photographer}
         </a>
       )}
 
