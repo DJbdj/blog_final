@@ -528,6 +528,60 @@ export async function getPublicPostsByIds(db: DB, ids: Array<number>) {
 }
 
 /**
+ * Get all published posts for archive display
+ * Returns posts grouped by date with tags
+ */
+export async function getArchivePosts(db: DB) {
+  const posts = await db
+    .select({
+      id: PostsTable.id,
+      title: PostsTable.title,
+      slug: PostsTable.slug,
+      publishedAt: PostsTable.publishedAt,
+      coverImage: PostsTable.coverImage,
+    })
+    .from(PostsTable)
+    .where(
+      and(
+        eq(PostsTable.status, "published"),
+        isNotNull(PostsTable.publishedAt),
+      ),
+    )
+    .orderBy(desc(PostsTable.publishedAt), desc(PostsTable.id));
+
+  // Fetch tags for all posts
+  if (posts.length > 0) {
+    const postIds = posts.map((p) => p.id);
+    const tagsResults = await db
+      .select({
+        postId: PostTagsTable.postId,
+        tag: {
+          id: TagsTable.id,
+          name: TagsTable.name,
+        },
+      })
+      .from(PostTagsTable)
+      .innerJoin(TagsTable, eq(PostTagsTable.tagId, TagsTable.id))
+      .where(inArray(PostTagsTable.postId, postIds));
+
+    // Map tags back to posts
+    const tagsByPostId = new Map<number, Array<typeof tagsResults[0]["tag"]>>();
+    for (const result of tagsResults) {
+      const existing = tagsByPostId.get(result.postId) ?? [];
+      existing.push(result.tag);
+      tagsByPostId.set(result.postId, existing);
+    }
+
+    return posts.map((post) => ({
+      ...post,
+      tags: tagsByPostId.get(post.id) ?? [],
+    }));
+  }
+
+  return posts;
+}
+
+/**
  * Fetch full post data (including tags and content) for export or other detailed use cases.
  * Uses Drizzle relational queries for efficiency.
  */

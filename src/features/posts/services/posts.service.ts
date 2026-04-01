@@ -510,3 +510,33 @@ export async function startPostProcessWorkflow(
     ]);
   }
 }
+
+export async function getArchivePosts(
+  context: DbContext & { executionCtx: ExecutionContext },
+) {
+  const fetcher = async () => {
+    return await PostRepo.getArchivePosts(context.db);
+  };
+
+  const version = await CacheService.getVersion(context, "posts:archive");
+  const cacheKey = ["posts", "archive", version] as const;
+
+  return await CacheService.get(
+    context,
+    cacheKey,
+    z.array(
+      PostItemSchema.extend({
+        tags: z.array(
+          z.object({
+            id: z.number(),
+            name: z.string(),
+          }),
+        ),
+      }),
+    ),
+    fetcher,
+    {
+      ttl: "1d",
+    },
+  );
+}

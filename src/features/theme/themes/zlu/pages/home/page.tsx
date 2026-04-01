@@ -5,6 +5,7 @@ import { Calendar, Clock, Star } from "lucide-react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { extendedConfig } from "@/features/theme/themes/zlu/config";
 import { DefaultSidebarContent } from "@/features/theme/themes/zlu/components/default-sidebar-content";
+import { ArchiveSection } from "@/features/theme/themes/zlu/components/archive-section";
 import { formatDate } from "@/lib/utils";
 import { useState } from "react";
 
@@ -81,7 +82,7 @@ function FeaturedPostCard({ post }: { post: any }) {
   );
 }
 
-export function HomePage({ posts, tags }: HomePageProps) {
+export function HomePage({ posts, tags, archivePosts }: HomePageProps) {
   // posts 是精选文章列表
 
   return (
@@ -106,6 +107,9 @@ export function HomePage({ posts, tags }: HomePageProps) {
             <p className="text-[var(--zlu-text-tertiary)]">暂无精选文章</p>
           </div>
         )}
+
+        {/* Archive Section */}
+        <ArchiveSection posts={archivePosts} />
       </div>
     </>
   );

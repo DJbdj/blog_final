@@ -1794,4 +1794,274 @@ html.light .zlu-article-content pre::-webkit-scrollbar-thumb {
   border-bottom-color: var(--zlu-primary);
 }
 
+/* Archive Section - Tree/Constellation Style Visualization */
+.zlu-archive-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--zlu-bg-secondary);
+  border: 1px solid var(--zlu-border);
+  border-radius: var(--zlu-radius-lg);
+  overflow: hidden;
+}
+
+html.light .zlu-archive-section {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.5);
+}
+
+.zlu-archive-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--zlu-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zlu-archive-header svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--zlu-primary);
+}
+
+.zlu-archive-canvas {
+  position: relative;
+  min-height: 200px;
+  padding: 1rem 0;
+  overflow-x: auto;
+}
+
+.zlu-archive-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.zlu-archive-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  position: relative;
+  min-width: 60px;
+}
+
+.zlu-archive-node {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--zlu-bg-tertiary);
+  border: 2px solid var(--zlu-border);
+  cursor: pointer;
+  transition: all var(--zlu-transition-fast);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.zlu-archive-node:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 3px rgba(77, 128, 230, 0.15);
+}
+
+/* Tag-based border colors */
+.zlu-archive-node[data-tag-color="blue"] {
+  border-color: #3b82f6;
+}
+
+.zlu-archive-node[data-tag-color="red"] {
+  border-color: #ef4444;
+}
+
+.zlu-archive-node[data-tag-color="green"] {
+  border-color: #22c55e;
+}
+
+.zlu-archive-node[data-tag-color="purple"] {
+  border-color: #a855f7;
+}
+
+.zlu-archive-node[data-tag-color="orange"] {
+  border-color: #f97316;
+}
+
+.zlu-archive-node[data-tag-color="teal"] {
+  border-color: #14b8a6;
+}
+
+.zlu-archive-node[data-tag-color="pink"] {
+  border-color: #ec4899;
+}
+
+.zlu-archive-node[data-tag-color="yellow"] {
+  border-color: #eab308;
+}
+
+.zlu-archive-node[data-tag-color="gray"] {
+  border-color: var(--zlu-text-tertiary);
+}
+
+.zlu-archive-node[data-tag-color="indigo"] {
+  border-color: #6366f1;
+}
+
+/* Multiple nodes in same column - add vertical offset */
+.zlu-archive-column .zlu-archive-node + .zlu-archive-node {
+  margin-top: 0.75rem;
+}
+
+/* Random vertical offsets for natural look */
+.zlu-archive-column:nth-child(odd) .zlu-archive-node:first-child {
+  transform: translateY(0);
+}
+
+.zlu-archive-column:nth-child(3n) .zlu-archive-node:first-child {
+  transform: translateY(4px);
+}
+
+.zlu-archive-column:nth-child(5n) .zlu-archive-node:first-child {
+  transform: translateY(-4px);
+}
+
+/* Archive node link */
+.zlu-archive-node-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* Date label below node */
+.zlu-archive-date {
+  font-size: 0.625rem;
+  color: var(--zlu-text-tertiary);
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 0.25rem;
+  font-family: monospace;
+  letter-spacing: 0.02em;
+}
+
+/* Connection lines container */
+.zlu-archive-connections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Connection line SVG */
+.zlu-archive-connections svg {
+  width: 100%;
+  height: 100%;
+}
+
+.zlu-archive-connection-line {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.zlu-archive-connection-line[data-color="gray"] {
+  stroke: var(--zlu-text-tertiary);
+  stroke-dasharray: 4 4;
+  opacity: 0.5;
+}
+
+.zlu-archive-connection-line[data-color="blue"] {
+  stroke: #3b82f6;
+}
+
+.zlu-archive-connection-line[data-color="red"] {
+  stroke: #ef4444;
+}
+
+.zlu-archive-connection-line[data-color="green"] {
+  stroke: #22c55e;
+}
+
+.zlu-archive-connection-line[data-color="purple"] {
+  stroke: #a855f7;
+}
+
+.zlu-archive-connection-line[data-color="orange"] {
+  stroke: #f97316;
+}
+
+.zlu-archive-connection-line[data-color="teal"] {
+  stroke: #14b8a6;
+}
+
+.zlu-archive-connection-line[data-color="pink"] {
+  stroke: #ec4899;
+}
+
+.zlu-archive-connection-line[data-color="yellow"] {
+  stroke: #eab308;
+}
+
+.zlu-archive-connection-line[data-color="indigo"] {
+  stroke: #6366f1;
+}
+
+/* Archive tooltip */
+.zlu-archive-tooltip {
+  position: absolute;
+  background: var(--zlu-bg-elevated);
+  border: 1px solid var(--zlu-border);
+  border-radius: var(--zlu-radius-md);
+  padding: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--zlu-text-primary);
+  box-shadow: var(--zlu-shadow-md);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--zlu-transition-fast);
+  z-index: 50;
+  max-width: 200px;
+}
+
+.zlu-archive-node:hover + .zlu-archive-tooltip,
+.zlu-archive-tooltip:hover {
+  opacity: 1;
+}
+
+.zlu-archive-tooltip-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zlu-archive-tooltip-tags {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  font-size: 0.6875rem;
+  color: var(--zlu-text-secondary);
+}
+
+/* Empty state */
+.zlu-archive-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--zlu-text-tertiary);
+}
+
+.zlu-archive-empty svg {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
 

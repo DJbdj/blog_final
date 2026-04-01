@@ -44,6 +44,11 @@ const route = app
       setCacheHeaders(c.res.headers, "public");
       return c.json(result);
     },
-  );
+  )
+  .get("/archive", async (c) => {
+    const result = await PostService.getArchivePosts(getServiceContext(c));
+    setCacheHeaders(c.res.headers, "public");
+    return c.json(result);
+  });
 
 export default route;

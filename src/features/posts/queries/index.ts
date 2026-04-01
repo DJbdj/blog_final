@@ -20,6 +20,7 @@ import {
   getPostsCursorFn,
   getRelatedPostsFn,
   getFeaturedPostsFn,
+  getArchivePostsFn,
 } from "../api/posts.public.api";
 
 export const POSTS_KEYS = {
@@ -29,6 +30,7 @@ export const POSTS_KEYS = {
   lists: ["posts", "list"] as const,
   details: ["posts", "detail"] as const,
   featured: ["posts", "featured"] as const,
+  archive: ["posts", "archive"] as const,
   adminLists: ["posts", "admin-list"] as const,
   counts: ["posts", "count"] as const,
   revisions: ["posts", "revisions"] as const,
@@ -61,6 +63,21 @@ export function featuredPostsQuery(limit: number) {
       });
       if (!res.ok) throw new Error("Failed to fetch featured posts");
       return PostItemSchema.array().parse(await res.json());
+    },
+  });
+}
+
+export function archivePostsQuery() {
+  return queryOptions({
+    queryKey: POSTS_KEYS.archive,
+    queryFn: async () => {
+      if (isSSR) {
+        const result = await getArchivePostsFn();
+        return result;
+      }
+      const res = await apiClient.posts.archive.$get();
+      if (!res.ok) throw new Error("Failed to fetch archive posts");
+      return res.json();
     },
   });
 }
