@@ -72,6 +72,7 @@ export async function getPosts(
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,
+      coverImage: PostsTable.coverImage,
     })
     .from(PostsTable)
     .limit(Math.min(limit, 50))
@@ -164,6 +165,7 @@ export async function getPostsCursor(
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,
+      coverImage: PostsTable.coverImage,
     })
     .from(PostsTable)
     .$dynamic();
@@ -455,6 +457,7 @@ export async function getFeaturedPosts(
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,
+      coverImage: PostsTable.coverImage,
     })
     .from(PostsTable)
     .where(
@@ -516,6 +519,7 @@ export async function getPublicPostsByIds(db: DB, ids: Array<number>) {
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
       updatedAt: PostsTable.updatedAt,
+      coverImage: PostsTable.coverImage,
     })
     .from(PostsTable)
     .where(and(inArray(PostsTable.id, ids), whereClause));

@@ -6,18 +6,43 @@ import type { HomePageProps } from "@/features/theme/contract/pages";
 import { extendedConfig } from "@/features/theme/themes/zlu/config";
 import { DefaultSidebarContent } from "@/features/theme/themes/zlu/components/default-sidebar-content";
 import { formatDate } from "@/lib/utils";
+import { useState } from "react";
+
+// 从 Pexels 每日精选图获取默认封面
+const PEXELS_DAILY_COVER = "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg";
+
+function ImageWithFallback({
+  coverImageKey,
+  alt
+}: {
+  coverImageKey?: string | null;
+  alt: string
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  // 如果有 coverImageKey 且没有错误，显示文章内的图片
+  const imageUrl = coverImageKey && !hasError
+    ? `/images/${coverImageKey}?quality=80&width=400`
+    : PEXELS_DAILY_COVER;
+
+  return (
+    <img
+      src={imageUrl}
+      alt={alt}
+      className="zlu-featured-image"
+      loading="lazy"
+      onError={() => setHasError(true)}
+    />
+  );
+}
 
 function FeaturedPostCard({ post }: { post: any }) {
-  const imageUrl = post.coverImage || "/images/default-featured.jpg";
-
   return (
     <article className="zlu-featured-card">
       <div className="overflow-hidden">
-        <img
-          src={imageUrl}
+        <ImageWithFallback
+          coverImageKey={post.coverImage}
           alt={post.title}
-          className="zlu-featured-image"
-          loading="lazy"
         />
       </div>
       <div className="zlu-featured-content">

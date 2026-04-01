@@ -28,6 +28,7 @@
     "auth:generate-schema": "bunx @better-auth/cli generate --config auth-cli.ts --output src/lib/db/schema/auth.table.ts",
     "mcp:inspect": "bunx -y @modelcontextprotocol/inspector",
     "create-theme": "bun scripts/create-theme.ts",
+    "wrangler:prepare": "bun scripts/prepare-wrangler-config.ts",
     "release": "export GITHUB_TOKEN=$(gh auth token) && release-it"
   },
   "dependencies": {
@@ -94,6 +95,7 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.6",
+    "tldts": "^7.0.27",
     "tw-animate-css": "^1.3.6",
     "vite-tsconfig-paths": "^6.0.4",
     "workers-ai-provider": "^3.1.1",

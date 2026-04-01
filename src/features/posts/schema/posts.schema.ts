@@ -14,12 +14,14 @@ const coercedDate = z.union([z.date(), z.string().pipe(z.coerce.date())]);
 const coercedDateNullable = coercedDate.nullable();
 
 export const PostSelectSchema = createSelectSchema(PostsTable, {
-  publishedAt: coercedDateNullable,
+  publishedAt: coercedDate,
   createdAt: coercedDate,
   updatedAt: coercedDate,
   pinnedAt: coercedDateNullable,
 }).omit({
+  contentJson: true,
   publicContentJson: true,
+  coverImage: true,
 });
 export const PostInsertSchema = createInsertSchema(PostsTable);
 export const PostUpdateSchema = createUpdateSchema(PostsTable, {
@@ -29,10 +31,9 @@ export const PostUpdateSchema = createUpdateSchema(PostsTable, {
   publicContentJson: true,
 });
 
-export const PostItemSchema = PostSelectSchema.omit({
-  contentJson: true,
-}).extend({
+export const PostItemSchema = PostSelectSchema.extend({
   tags: z.array(TagSelectSchema).optional(),
+  coverImage: z.string().nullable().optional(),
 });
 export const PostListResponseSchema = z.object({
   items: z.array(PostItemSchema),
@@ -40,6 +41,8 @@ export const PostListResponseSchema = z.object({
 });
 export const PostWithTocSchema = PostSelectSchema.extend({
   tags: z.array(TagSelectSchema).optional(),
+  contentJson: NullableJsonContentSchema.optional(),
+  coverImage: z.string().nullable().optional(),
   toc: z.array(
     z.object({
       id: z.string(),
@@ -117,8 +120,9 @@ export type UpdatePostInput = z.infer<typeof UpdatePostInputSchema>;
 export type DeletePostInput = z.infer<typeof DeletePostInputSchema>;
 export type PreviewSummaryInput = z.infer<typeof PreviewSummaryInputSchema>;
 export type StartPostProcessInput = z.infer<typeof StartPostProcessInputSchema>;
-export type PostListItem = Omit<Post, "contentJson" | "publicContentJson"> & {
+export type PostListItem = Omit<Post, "contentJson" | "publicContentJson" | "coverImage"> & {
   tags?: Array<Tag>;
+  coverImage?: string | null;
 };
 
 export type PostListResponse = z.infer<typeof PostListResponseSchema>;

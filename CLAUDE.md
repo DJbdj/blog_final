@@ -181,12 +181,275 @@ console.error(
 
 ## 其他事项
 
-- 除非我明确说明，任何情况不要执行git操作
-- 为你配置了MCP服务器chrome-devtools,你可以通过这个来获取页面效果
-- 你可以访问blog.djbdj.space来获得上次更改后的效果。注意，只有在我手动git提交后才能应用更改，也就是说，你在下一次对话才能通过网址看到本次的更改
-- 有时我会给你一些文件（比如截图/源码更新包等）让你学习，这些文件会放在项目的clearn目录下
-- 有时候我会给你一些资源（如背景图片、字体文件），这些文件会放在项目的src_personal目录下
+- 除非我明确说明，任何情况不要执行 git 操作
+- 为你配置了 MCP 服务器 chrome-devtools，你可以通过这个来获取页面效果
+- 你可以访问 blog.djbdj.space 来获得上次更改后的效果。注意，只有在我手动 git 提交后才能应用更改，也就是说，你在下一次对话才能通过网址看到本次的更改
+- 有时我会给你一些文件（比如截图/源码更新包等）让你学习，这些文件会放在项目的 clearn 目录下
+- 有时候我会给你一些资源（如背景图片、字体文件），这些文件会放在项目的 src_personal 目录下
 - 你可以用测试管理员的账户。账号：yfanyuhan@189.cn 密码：lyh52000
-- 你可以查看README.md来学习该项目的开发流程
-- 如果要在本地构建，则调用对应的agent进行构建及后续测试
-- 项目托管在cloudflare上，变量CLOUDFLARE_API_TOKEN=cfut_6TElxtJ56ytcBEtISFILqcbqeyOYw8WBFtqACMcS12c24807。权限参考模板Edit Cloudflare Workers，你可以用这个尝试远程部署
+- 你可以查看 README.md 来学习该项目的开发流程
+- 如果要在本地构建，则调用对应的 agent 进行构建及后续测试
+- 项目托管在 cloudflare 上，变量 CLOUDFLARE_API_TOKEN=cfut_6TElxtJ56ytcBEtISFILqcbqeyOYw8WBFtqACMcS12c24807。权限参考模板 Edit Cloudflare Workers，你可以用这个尝试远程部署
+
+---
+
+## Figma MCP 集成规则
+
+本章节定义如何将 Figma 设计稿翻译为此项目的代码，涵盖组件组织、样式约定、设计令牌、资源处理和必需的 Figma-to-code 工作流。
+
+### 必需工作流（不可跳过）
+
+1. **首先运行** `get_design_context` 获取目标节点的 structured representation
+2. 如果响应过大或被截断，运行 `get_metadata` 获取高层节点映射，然后仅 re-fetch 所需节点
+3. **运行** `get_screenshot` 获取视觉参考
+4. **仅在获取两者后** 开始实现：下载所需资源，开始代码实现
+5. 将 Figma MCP 输出（通常为 React + Tailwind）转换为此项目的约定和样式
+6. **验证** 1:1 视觉对齐 Figma 截图后方可标记完成
+
+### 实现规则
+
+- 将 Figma MCP 输出视为设计和行为的参考，**不是最终代码**
+- 使用 Tailwind CSS v4 进行样式设计（项目使用 `@tailwindcss/vite`）
+- 复用现有组件时从 `src/components/ui/` 导入
+- 主题特定组件位于 `src/features/theme/themes/<theme-name>/components/`
+- 页面组件位于 `src/features/theme/themes/<theme-name>/pages/`
+- 始终使用项目的设计令牌（CSS 变量），不要硬编码颜色/间距值
+- 遵循现有的路由、状态管理和数据获取模式
+- 努力实现与 Figma 设计的 1:1 视觉一致性
+
+---
+
+## 组件组织规则
+
+### UI 组件位置
+
+- **通用 UI 组件**: `src/components/ui/` - Button, Card, Input, Badge 等基础组件
+- **通用组件**: `src/components/common/` - ThemeProvider, ThemeToggle, ErrorPage 等
+- **管理组件**: `src/components/admin/` - AdminSidebar, AdminPagination 等管理界面组件
+- **内容组件**: `src/components/content/` - MathFormula 等内容渲染组件
+- **功能特定组件**: `src/features/<feature>/components/` - 该功能专属的组件
+
+### 主题组件结构
+
+```
+themes/<name>/
+├── layouts/        # public-layout.tsx, auth-layout.tsx, user-layout.tsx
+├── pages/          # 主题专属页面实现
+├── components/     # 主题专属组件（内容渲染器、背景等）
+├── styles/         # CSS 主题变量和组件样式
+└── index.ts        # 主题导出（名称、布局、页面）
+```
+
+### 组件命名约定
+
+- **IMPORTANT**: 组件名称使用 PascalCase（如 `FeaturedPostCard`, `DefaultSidebarContent`）
+- 组件文件与其导出的主要组件同名
+- 每个组件应接受 `className` 属性用于样式组合
+- 变体属性使用联合类型：`variant: 'primary' | 'secondary' | 'ghost'`
+
+---
+
+## 样式规则
+
+### CSS 框架
+
+- **使用 Tailwind CSS v4** 进行样式设计
+- 项目使用 `@tailwindcss/vite` 插件
+- 自定义 CSS 变量定义在各主题的 `styles/index.css` 中
+- 主题 CSS 变量作用域为 `html.light` 和 `html.dark` 类
+
+### ZLu 主题设计令牌
+
+**IMPORTANT**: ZLu 主题使用以下 CSS 变量（位于 `src/features/theme/themes/zlu/styles/index.css`）：
+
+```css
+/* 主色调 */
+--zlu-primary: #4d80e6;        /* Light mode */
+--zlu-primary-hover: #3a6fd6;
+--zlu-primary-glow: rgba(77, 128, 230, 0.15);
+
+/* 背景色 */
+--zlu-bg-primary: #ffffff;     /* Light mode */
+--zlu-bg-secondary: #f9f9f9;
+--zlu-bg-tertiary: #f2f3f5;
+--zlu-bg-elevated: #ffffff;
+
+/* 文字颜色 */
+--zlu-text-primary: #1a1a1a;
+--zlu-text-secondary: #666666;
+--zlu-text-tertiary: #999999;
+
+/* 边框颜色 */
+--zlu-border: #e8e8e8;
+--zlu-border-muted: #f0f0f0;
+
+/* 圆角 */
+--zlu-radius-sm: 6px;
+--zlu-radius-md: 10px;
+--zlu-radius-lg: 14px;
+--zlu-radius-xl: 20px;
+
+/* 过渡 */
+--zlu-transition-fast: 150ms ease;
+--zlu-transition-normal: 250ms ease;
+--zlu-transition-slow: 350ms ease;
+```
+
+**IMPORTANT**: 不要硬编码颜色值 - 始终使用 `var(--zlu-*)` 令牌
+
+### 重要样式类名约定
+
+- **布局**: `.zlu-layout`, `.zlu-navbar`, `.zlu-footer`
+- **卡片**: `.zlu-post-card`, `.zlu-featured-card`, `.zlu-sidebar-card`
+- **内容**: `.zlu-article`, `.zlu-article-content`, `.zlu-toc`
+- **表单**: `.zlu-input`, `.zlu-button`, `.zlu-label`
+- **导航**: `.zlu-nav-item`, `.zlu-menu-item`, `.zlu-tag`
+
+### 毛玻璃效果
+
+ZLu 主题使用 backdrop-filter 实现毛玻璃效果：
+
+```css
+/* 侧边栏毛玻璃 */
+.zlu-left-sidebar {
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Light mode 调整 */
+html.light .zlu-left-sidebar {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px) saturate(180%);
+}
+```
+
+---
+
+## 资源处理规则
+
+### 图片资源
+
+- **IMPORTANT**: 如果 Figma MCP 服务器返回 localhost 来源的图片，直接使用该来源
+- **不要** 导入/创建新的图标包 - 所有资源应包含在 Figma 输出中
+- **不要** 使用或创建占位符（如果有 localhost 来源）
+- 文章封面图片路径：`/images/<key>?quality=80&width=400`
+- 使用 `useState` 实现图片加载失败的 fallback
+
+### 图标
+
+- 使用 `lucide-react` 图标库
+- 图标尺寸通过 `w-* h-*` Tailwind 类控制
+- 示例：`<Star className="w-5 h-5" fill="currentColor" />`
+
+---
+
+## 项目特定约定
+
+### TanStack Start 约定
+
+- 页面组件使用 `"use client"` 指令（当需要客户端交互时）
+- 使用 `Link` 组件进行客户端导航
+- Server functions 使用 `createServerFn` 创建
+- 中间件模式：`dbMiddleware` → `sessionMiddleware` → `authMiddleware` → `adminMiddleware`
+
+### 错误处理
+
+- 服务函数返回 `Result<TData, { reason: string }>` 而不是抛出异常
+- 使用 `ok()` 和 `err()` 辅助函数
+- 调用者使用穷尽 switch 处理错误
+
+### 缓存模式
+
+- 缓存键在 `*.schema.ts` 文件中定义为工厂函数
+- 多层缓存：CDN → KV → D1
+
+### 可访问性标准
+
+- 所有交互元素必须有适当的 aria 标签
+- 图片必须有 alt 属性
+- 颜色对比度必须满足 WCAG AA 标准
+
+### 性能考虑
+
+- 图片使用 `loading="lazy"` 进行懒加载
+- 使用 TanStack Query 进行数据获取和缓存
+- 骨架屏组件：使用 `.zlu-skeleton` 类和 `.zlu-skeleton-shimmer` 动画
+
+---
+
+## 示例：实现 Figma 卡片组件
+
+```tsx
+// 1. 获取设计上下文和截图后
+// 2. 将 Figma 输出转换为此项目约定
+
+interface FeaturedCardProps {
+  title: string;
+  excerpt?: string;
+  coverImage?: string | null;
+  date?: string;
+  readTime?: number;
+  featured?: boolean;
+}
+
+export function FeaturedCard({
+  title,
+  excerpt,
+  coverImage,
+  date,
+  readTime,
+  featured
+}: FeaturedCardProps) {
+  const [hasError, setHasError] = useState(false);
+  const imageUrl = coverImage && !hasError
+    ? `/images/${coverImage}?quality=80&width=400`
+    : DEFAULT_COVER;
+
+  return (
+    <article className="zlu-featured-card">
+      <div className="overflow-hidden">
+        <img
+          src={imageUrl}
+          alt={title}
+          className="zlu-featured-image"
+          loading="lazy"
+          onError={() => setHasError(true)}
+        />
+      </div>
+      <div className="zlu-featured-content">
+        {featured && (
+          <span className="inline-flex items-center gap-1 text-xs text-[var(--zlu-primary)]">
+            <Star className="w-3 h-3" fill="currentColor" />
+            精选
+          </span>
+        )}
+        <h3 className="zlu-featured-title-text">
+          <Link to="/post/$slug" params={{ slug: slug }}>
+            {title}
+          </Link>
+        </h3>
+        {excerpt && (
+          <p className="text-xs text-[var(--zlu-text-tertiary)] line-clamp-2 mb-3">
+            {excerpt}
+          </p>
+        )}
+        <div className="zlu-featured-meta">
+          {date && (
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3 h-3" />
+              {date}
+            </span>
+          )}
+          {readTime && (
+            <span className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              {readTime} 分钟
+            </span>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+```

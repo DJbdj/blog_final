@@ -13,6 +13,7 @@ import {
 } from "@/features/posts/workflows/helpers";
 import * as SearchService from "@/features/search/service/search.service";
 import { getDb } from "@/lib/db";
+import { updatePostCoverImage } from "@/features/posts/data/post-cover.data";
 
 interface Params {
   postId: number;
@@ -98,7 +99,16 @@ export class PostProcessWorkflow extends WorkflowEntrypoint<Env, Params> {
     );
     if (!updatedPost) return;
 
-    // 3. Persist the highlighted public snapshot used by SSR/read paths.
+    // 3. Extract and save cover image
+    await step.do("extract cover image", async () => {
+      const db = getDb(this.env);
+      const post = await PostRepo.findPostById(db, postId);
+      if (!post) return;
+
+      await updatePostCoverImage(db, postId, post.contentJson);
+    });
+
+    // 4. Persist the highlighted public snapshot used by SSR/read paths.
     await step.do("build public content", async () => {
       const db = getDb(this.env);
       const post = await PostRepo.findPostById(db, postId);
@@ -111,7 +121,7 @@ export class PostProcessWorkflow extends WorkflowEntrypoint<Env, Params> {
       await PostRepo.updatePublicContentSnapshot(db, postId, publicContentJson);
     });
 
-    // 4. Update search index (skip for future posts — ScheduledPublishWorkflow handles it)
+    // 5. Update search index (skip for future posts — ScheduledPublishWorkflow handles it)
     const isFuturePost = !!event.payload.isFuturePost;
 
     if (!isFuturePost) {
@@ -120,12 +130,12 @@ export class PostProcessWorkflow extends WorkflowEntrypoint<Env, Params> {
       });
     }
 
-    // 5. Invalidate caches
+    // 6. Invalidate caches
     await step.do("invalidate caches", async () => {
       await invalidatePostCaches(this.env, updatedPost.slug);
     });
 
-    // 6. Update sync hash in KV
+    // 7. Update sync hash in KV
     await step.do("update sync hash", async () => {
       const p = await fetchPost(this.env, postId);
       if (!p) return;

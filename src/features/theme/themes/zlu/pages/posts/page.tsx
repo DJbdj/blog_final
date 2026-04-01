@@ -2,22 +2,46 @@
 
 import { Link } from "@tanstack/react-router";
 import { Calendar, Clock, Filter } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { PostsPageProps } from "@/features/theme/contract/pages";
 import { useRightSidebar } from "@/features/theme/themes/zlu/contexts/right-sidebar-context";
 import { formatDate } from "@/lib/utils";
 
-function PostCard({ post }: { post: any }) {
-  const imageUrl = post.coverImage || "/images/default-post.jpg";
+// 从 Pexels 每日精选图获取默认封面
+const PEXELS_DAILY_COVER = "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg";
 
+function ImageWithFallback({
+  coverImageKey,
+  alt
+}: {
+  coverImageKey?: string | null;
+  alt: string
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  // 如果有 coverImageKey 且没有错误，显示文章内的图片
+  const imageUrl = coverImageKey && !hasError
+    ? `/images/${coverImageKey}?quality=80&width=400`
+    : PEXELS_DAILY_COVER;
+
+  return (
+    <img
+      src={imageUrl}
+      alt={alt}
+      className="zlu-post-card-image"
+      loading="lazy"
+      onError={() => setHasError(true)}
+    />
+  );
+}
+
+function PostCard({ post }: { post: any }) {
   return (
     <article className="zlu-post-card horizontal">
       <div className="overflow-hidden">
-        <img
-          src={imageUrl}
+        <ImageWithFallback
+          coverImageKey={post.coverImage}
           alt={post.title}
-          className="zlu-post-card-image"
-          loading="lazy"
         />
       </div>
       <div className="zlu-post-card-content">
