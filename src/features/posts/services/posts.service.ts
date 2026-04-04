@@ -45,16 +45,16 @@ function stripPublicContentJson<T extends { publicContentJson?: unknown }>(
   return rest;
 }
 
-export async function getFeaturedPosts(
+export async function getPinnedPosts(
   context: DbContext & { executionCtx: ExecutionContext },
   limit: number,
 ) {
   const fetcher = async () => {
-    return await PostRepo.getFeaturedPosts(context.db, { limit });
+    return await PostRepo.getPinnedPosts(context.db, { limit });
   };
 
-  const version = await CacheService.getVersion(context, CACHE_NAMESPACES.POSTS_FEATURED);
-  const cacheKey = POSTS_CACHE_KEYS.featured(version, limit);
+  const version = await CacheService.getVersion(context, CACHE_NAMESPACES.POSTS_PINNED);
+  const cacheKey = POSTS_CACHE_KEYS.pinned(version);
 
   return await CacheService.get(
     context,
@@ -352,10 +352,10 @@ export async function updatePost(
     );
   }
 
-  // Invalidate featured posts cache if pinned status changed
+  // Invalidate pinned posts cache if pinned status changed
   if (data.data.pinnedAt !== undefined) {
     context.executionCtx.waitUntil(
-      CacheService.bumpVersion(context, CACHE_NAMESPACES.POSTS_FEATURED),
+      CacheService.bumpVersion(context, CACHE_NAMESPACES.POSTS_PINNED),
     );
   }
 

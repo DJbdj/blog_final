@@ -19,7 +19,7 @@ import {
   findPostBySlugFn,
   getPostsCursorFn,
   getRelatedPostsFn,
-  getFeaturedPostsFn,
+  getPinnedPostsFn,
   getArchivePostsFn,
 } from "../api/posts.public.api";
 
@@ -29,7 +29,7 @@ export const POSTS_KEYS = {
   // Parent keys (static arrays for prefix invalidation)
   lists: ["posts", "list"] as const,
   details: ["posts", "detail"] as const,
-  featured: ["posts", "featured"] as const,
+  pinned: ["posts", "pinned"] as const,
   archive: ["posts", "archive"] as const,
   adminLists: ["posts", "admin-list"] as const,
   counts: ["posts", "count"] as const,
@@ -49,19 +49,19 @@ export const POSTS_KEYS = {
     ["posts", "revision-detail", postId, revisionId] as const,
 };
 
-export function featuredPostsQuery(limit: number) {
+export function pinnedPostsQuery(limit: number) {
   return queryOptions({
-    queryKey: [...POSTS_KEYS.featured, limit],
+    queryKey: [...POSTS_KEYS.pinned, limit],
     queryFn: async () => {
       if (isSSR) {
-        const result = await getFeaturedPostsFn({ data: { limit } });
+        const result = await getPinnedPostsFn({ data: { limit } });
         // Validate the result with schema in SSR
         return PostItemSchema.array().parse(result);
       }
-      const res = await apiClient.posts.featured.$get({
+      const res = await apiClient.posts.pinned.$get({
         query: { limit: String(limit) },
       });
-      if (!res.ok) throw new Error("Failed to fetch featured posts");
+      if (!res.ok) throw new Error("Failed to fetch pinned posts");
       return PostItemSchema.array().parse(await res.json());
     },
   });

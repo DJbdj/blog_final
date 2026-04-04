@@ -26,7 +26,6 @@ export const PostsTable = sqliteTable(
     }).$type<JSONContent>(),
     coverImage: text("cover_image"), // 封面图片 key，用于文章卡片显示
     status: text("status", { enum: POST_STATUSES }).notNull().default("draft"),
-    featured: integer({ mode: "boolean" }).notNull().default(false),
     publishedAt: integer("published_at", { mode: "timestamp" }),
     pinnedAt: integer("pinned_at", { mode: "timestamp" }),
     createdAt,

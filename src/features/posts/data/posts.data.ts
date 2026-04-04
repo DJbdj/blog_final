@@ -67,7 +67,6 @@ export async function getPosts(
       readTimeInMinutes: PostsTable.readTimeInMinutes,
       slug: PostsTable.slug,
       status: PostsTable.status,
-      featured: PostsTable.featured,
       pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
@@ -160,7 +159,6 @@ export async function getPostsCursor(
       readTimeInMinutes: PostsTable.readTimeInMinutes,
       slug: PostsTable.slug,
       status: PostsTable.status,
-      featured: PostsTable.featured,
       pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
@@ -436,7 +434,7 @@ export async function getRelatedPostIds(
   return matchingPosts.map((p) => p.id);
 }
 
-export async function getFeaturedPosts(
+export async function getPinnedPosts(
   db: DB,
   options: {
     limit?: number;
@@ -452,7 +450,6 @@ export async function getFeaturedPosts(
       readTimeInMinutes: PostsTable.readTimeInMinutes,
       slug: PostsTable.slug,
       status: PostsTable.status,
-      featured: PostsTable.featured,
       pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,
@@ -466,7 +463,7 @@ export async function getFeaturedPosts(
         eq(PostsTable.status, "published"),
       ),
     )
-    .orderBy(desc(PostsTable.pinnedAt), desc(PostsTable.publishedAt))
+    .orderBy(desc(PostsTable.pinnedAt))
     .limit(limit);
 
   // Fetch tags for all posts
@@ -514,7 +511,6 @@ export async function getPublicPostsByIds(db: DB, ids: Array<number>) {
       readTimeInMinutes: PostsTable.readTimeInMinutes,
       slug: PostsTable.slug,
       status: PostsTable.status,
-      featured: PostsTable.featured,
       pinnedAt: PostsTable.pinnedAt,
       publishedAt: PostsTable.publishedAt,
       createdAt: PostsTable.createdAt,

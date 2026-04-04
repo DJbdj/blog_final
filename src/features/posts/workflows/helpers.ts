@@ -17,7 +17,7 @@ export async function invalidatePostCaches(env: Env, slug: string) {
     CacheService.deleteKey({ env }, POSTS_CACHE_KEYS.detail(version, slug)),
     purgePostCDNCache(env, slug),
     CacheService.bumpVersion({ env }, "posts:list"),
-    CacheService.bumpVersion({ env }, "posts:featured"),
+    CacheService.bumpVersion({ env }, "posts:pinned"),
     CacheService.deleteKey({ env }, TAGS_CACHE_KEYS.publicList),
   ]);
 }

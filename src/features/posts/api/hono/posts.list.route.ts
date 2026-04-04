@@ -28,7 +28,7 @@ const route = app
     },
   )
   .get(
-    "/featured",
+    "/pinned",
     zValidator(
       "query",
       z.object({
@@ -37,7 +37,7 @@ const route = app
     ),
     async (c) => {
       const data = c.req.valid("query");
-      const result = await PostService.getFeaturedPosts(
+      const result = await PostService.getPinnedPosts(
         getServiceContext(c),
         data.limit,
       );

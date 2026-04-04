@@ -8,7 +8,7 @@ import * as PostService from "@/features/posts/services/posts.service";
 import { dbMiddleware } from "@/lib/middlewares";
 import { z } from "zod";
 
-const GetFeaturedPostsInputSchema = z.object({
+const GetPinnedPostsInputSchema = z.object({
   limit: z.number().optional(),
 });
 
@@ -19,11 +19,11 @@ export const getPostsCursorFn = createServerFn()
     return await PostService.getPostsCursor(context, data);
   });
 
-export const getFeaturedPostsFn = createServerFn()
+export const getPinnedPostsFn = createServerFn()
   .middleware([dbMiddleware])
-  .inputValidator(GetFeaturedPostsInputSchema)
+  .inputValidator(GetPinnedPostsInputSchema)
   .handler(async ({ data, context }) => {
-    return await PostService.getFeaturedPosts(context, data.limit ?? 4);
+    return await PostService.getPinnedPosts(context, data.limit ?? 4);
   });
 
 export const findPostBySlugFn = createServerFn()

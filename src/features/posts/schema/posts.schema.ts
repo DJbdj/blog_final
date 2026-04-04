@@ -27,6 +27,7 @@ export const PostInsertSchema = createInsertSchema(PostsTable);
 export const PostUpdateSchema = createUpdateSchema(PostsTable, {
   contentJson: NullableJsonContentSchema.optional(),
   publicContentJson: NullableJsonContentSchema.optional(),
+  pinnedAt: coercedDateNullable.optional(),
 }).omit({
   publicContentJson: true,
 });
@@ -136,6 +137,5 @@ export const POSTS_CACHE_KEYS = {
   related: (slug: string, limit?: number) =>
     ["posts", "related-ids", slug, limit] as const,
   syncHash: (id: number) => `post_hash:${id}` as const,
-  featured: (version: string, limit: number) =>
-    ["posts", "featured", version, limit] as const,
+  pinned: (version: string) => [version, "posts", "pinned"] as const,
 } as const;
