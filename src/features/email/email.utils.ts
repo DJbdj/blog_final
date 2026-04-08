@@ -1,9 +1,5 @@
-import { Resend } from "resend";
 import type { EmailUnsubscribeType } from "@/lib/db/schema";
 
-export function createEmailClient({ apiKey }: { apiKey: string }) {
-  return new Resend(apiKey);
-}
 export async function generateUnsubscribeToken(
   secret: string,
   userId: string,
