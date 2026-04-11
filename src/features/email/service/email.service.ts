@@ -1,3 +1,4 @@
+import { type AuthType, WorkerMailer } from "worker-mailer";
 import * as ConfigService from "@/features/config/service/config.service";
 import * as EmailData from "@/features/email/data/email.data";
 import type { TestEmailConnectionInput } from "@/features/email/email.schema";
@@ -7,6 +8,48 @@ import { isNotInProduction, serverEnv } from "@/lib/env/server.env";
 import { err, ok } from "@/lib/errors";
 import { m } from "@/paraglide/messages";
 import { type AuthType, WorkerMailer } from "worker-mailer";
+
+type ConfiguredEmailConfig = {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  senderAddress: string;
+  senderName?: string;
+};
+
+function resolveTransportSecurity(port: number) {
+  return {
+    secure: port === 465,
+    startTls: port !== 465,
+  };
+}
+
+function getSmtpAuthTypes(): AuthType[] {
+  return ["plain", "login", "cram-md5"];
+}
+
+function isEmailConfigured(
+  email:
+    | {
+        host?: string;
+        port?: number;
+        username?: string;
+        password?: string;
+        senderAddress?: string;
+        senderName?: string;
+      }
+    | null
+    | undefined,
+): email is ConfiguredEmailConfig {
+  return !!(
+    email?.host?.trim() &&
+    email.port &&
+    email.username?.trim() &&
+    email.password?.trim() &&
+    email.senderAddress?.trim()
+  );
+}
 
 type ConfiguredEmailConfig = {
   host: string;

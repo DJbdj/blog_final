@@ -202,13 +202,17 @@ export function ArchiveSection({ posts }: ArchiveSectionProps) {
             const offsetX = (dx / distance) * radius;
             const offsetY = (dy / distance) * radius;
 
+            // 节点层有 canvasPadding 的 paddingTop，需要在 y 坐标上加上这个偏移
+            const nodeYWithPadding = conn.from.y + canvasPadding;
+            const nextNodeYWithPadding = conn.to.y + canvasPadding;
+
             // 起点：from 圆心 + 半径偏移（圆心在节点中心）
             const startX = conn.from.x + offsetX;
-            const startY = conn.from.y + offsetY;
+            const startY = nodeYWithPadding + offsetY;
 
             // 终点：to 圆心 - 半径偏移
             const endX = conn.to.x - offsetX;
-            const endY = conn.to.y - offsetY;
+            const endY = nextNodeYWithPadding - offsetY;
 
             return (
               <path

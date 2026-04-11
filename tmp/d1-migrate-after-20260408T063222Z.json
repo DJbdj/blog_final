@@ -1,0 +1,14 @@
+{
+  "posts": {
+    "Total queries executed": 1,
+    "Rows read": 6,
+    "Rows written": 0,
+    "Database size (MB)": 0.53
+  },
+  "comments": {
+    "Total queries executed": 1,
+    "Rows read": 1,
+    "Rows written": 0,
+    "Database size (MB)": 0.53
+  }
+}
