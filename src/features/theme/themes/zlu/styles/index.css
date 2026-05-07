@@ -326,20 +326,37 @@ html.light .zlu-sidebar-card {
 /* Featured Posts - Enhanced Card Style */
 .zlu-featured-section {
   margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: var(--zlu-bg-secondary);
+  border: 1px solid var(--zlu-border);
+  border-radius: var(--zlu-radius-lg);
+  overflow: hidden;
+}
+
+html.light .zlu-featured-section {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(232, 232, 232, 0.5);
+}
+
+html.dark .zlu-featured-section {
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(38, 38, 38, 0.5);
 }
 
 .zlu-featured-title {
   font-size: 1rem;
   font-weight: 600;
   color: var(--zlu-text-primary);
-  margin-bottom: 1.25rem;
+  margin-bottom: 2rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  /* 增强与背景的对比度 */
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 16px rgba(255, 255, 255, 0.6);
 }
 
 .zlu-featured-scroll {

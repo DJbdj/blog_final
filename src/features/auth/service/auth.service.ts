@@ -13,5 +13,12 @@ export async function getIsEmailConfigured(
   context: DbContext & { executionCtx: ExecutionContext },
 ) {
   const config = await ConfigService.getSystemConfig(context);
-  return !!(config?.email?.apiKey && config.email.senderAddress);
+  const email = config?.email;
+  return !!(
+    email?.host?.trim() &&
+    email.port &&
+    email.username?.trim() &&
+    email.password?.trim() &&
+    email.senderAddress?.trim()
+  );
 }
