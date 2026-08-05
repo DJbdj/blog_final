@@ -43,7 +43,7 @@ export async function getRecentComments(db: DB, limit = 5) {
               where: eq(UserTable.id, comment.userId),
             })
           : Promise.resolve(null),
-        db.query.posts.findFirst({
+        db.query.PostsTable.findFirst({
           where: eq(PostsTable.id, comment.postId),
         }),
       ]);

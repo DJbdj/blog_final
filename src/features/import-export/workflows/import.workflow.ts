@@ -13,6 +13,7 @@ import {
   importSinglePost,
 } from "@/features/import-export/workflows/import-helpers";
 import { serverEnv } from "@/lib/env/server.env";
+import type { Locale } from "@/lib/i18n";
 import { m } from "@/paraglide/messages";
 
 export class ImportWorkflow extends WorkflowEntrypoint<
@@ -214,7 +215,7 @@ export class ImportWorkflow extends WorkflowEntrypoint<
 
   private async fetchZipFiles(
     r2Key: string,
-    locale: "zh" | "en",
+    locale: Locale,
   ): Promise<Record<string, Uint8Array>> {
     const r2Object = await this.env.R2.get(r2Key);
     if (!r2Object) {

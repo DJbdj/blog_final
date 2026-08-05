@@ -3,14 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import { m } from "@/paraglide/messages";
 import { getLocale, setLocale } from "@/paraglide/runtime";
 
+const LOCALES = [
+  { code: "zh", label: "简体中文" },
+  { code: "zh-TW", label: "繁體中文" },
+  { code: "en", label: "English" },
+  { code: "ja", label: "日本語" },
+] as const;
+
 export function LanguageSwitcher({ className = "" }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const currentLocale = getLocale();
 
-  const handleLanguageChange = (locale: "zh" | "en") => {
-    setLocale(locale);
+  const handleLanguageChange = (locale: string) => {
+    setLocale(locale as typeof currentLocale);
   };
 
   useEffect(() => {
@@ -50,26 +57,19 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
 
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-32 bg-popover border border-border/30 z-50 py-1 animate-in fade-in zoom-in-95 duration-200 rounded-md shadow-lg overflow-hidden">
-          <button
-            onClick={() => handleLanguageChange("zh")}
-            className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-              currentLocale === "zh"
-                ? "text-foreground bg-accent/50 font-medium"
-                : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
-            }`}
-          >
-            中文
-          </button>
-          <button
-            onClick={() => handleLanguageChange("en")}
-            className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-              currentLocale === "en"
-                ? "text-foreground bg-accent/50 font-medium"
-                : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
-            }`}
-          >
-            English
-          </button>
+          {LOCALES.map((locale) => (
+            <button
+              key={locale.code}
+              onClick={() => handleLanguageChange(locale.code)}
+              className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                currentLocale === locale.code
+                  ? "text-foreground bg-accent/50 font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
+              }`}
+            >
+              {locale.label}
+            </button>
+          ))}
         </div>
       )}
     </div>

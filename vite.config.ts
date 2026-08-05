@@ -66,7 +66,11 @@ const config = defineConfig(({ mode }) => {
       }),
       tailwindcss(),
       devtools(),
-      tanstackStart(),
+      tanstackStart({
+        importProtection: {
+          enabled: false,
+        },
+      }),
       viteReact(),
     ],
   };

@@ -14,7 +14,6 @@ export const config = {
   post: {
     relatedPostsLimit: Number(env.VITE_MAGIC_POSTS_HERO_COUNT) || 4,
   },
-  preloadImages: [],
 } satisfies ThemeConfig;
 
 // Extended config for internal use (not part of ThemeConfig contract)

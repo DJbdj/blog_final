@@ -1,12 +1,10 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { AUTH_KEYS } from "@/features/auth/queries";
-import { usePreviousLocation } from "@/hooks/use-previous-location";
 import { authClient } from "@/lib/auth/auth.client";
 import { getRegisterAuthErrorMessage } from "@/lib/auth/auth-errors";
 import type { Messages } from "@/lib/i18n";
@@ -46,8 +44,6 @@ export function useRegisterForm(options: UseRegisterFormOptions) {
   } = options;
 
   const [isSuccess, setIsSuccess] = useState(false);
-  const navigate = useNavigate();
-  const previousLocation = usePreviousLocation();
   const queryClient = useQueryClient();
   const registerSchema = createRegisterSchema(m);
 

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
 import {
   DeletePostInputSchema,
   FindPostByIdInputSchema,
@@ -81,9 +82,10 @@ export const uploadMarkdownFn = createServerFn({
   method: "POST",
 })
   .middleware([adminMiddleware])
+  .inputValidator(z.object({ content: z.string(), fileName: z.string() }))
   .handler(async ({ data }) => {
     try {
-      const { content, fileName } = data as { content: string; fileName: string };
+      const { content, fileName } = data;
 
       if (!content) {
         throw new Error("No content provided");

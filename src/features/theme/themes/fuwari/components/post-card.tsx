@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { ClientOnly, Link } from "@tanstack/react-router";
 import { Calendar, ChevronRight, Tag } from "lucide-react";
 import type { PostItem } from "@/features/posts/schema/posts.schema";
 import { formatDate } from "@/lib/utils";
@@ -34,7 +34,9 @@ export function PostCard({ post }: PostCardProps) {
               dateTime={post.publishedAt?.toISOString()}
               className="text-sm font-medium"
             >
-              {formatDate(post.publishedAt)}
+              <ClientOnly fallback="-">
+                {formatDate(post.publishedAt)}
+              </ClientOnly>
             </time>
           </div>
           {tagNames.length > 0 && (

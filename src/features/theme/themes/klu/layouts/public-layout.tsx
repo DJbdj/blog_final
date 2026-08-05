@@ -16,6 +16,9 @@ import {
 } from "lucide-react";
 import { blogConfig } from "@/blog.config";
 
+const githubUrl = blogConfig.social.find((s) => s.platform === "github")?.url;
+const emailUrl = blogConfig.social.find((s) => s.platform === "email")?.url;
+
 interface SidebarProps {
   navOptions: Array<{ label: string; to: string; id: string }>;
   user?: { name: string; image?: string | null; role?: string | null };
@@ -183,9 +186,9 @@ function Sidebar({
         {!isMobile && (
           <div className="mt-auto pt-8 pb-4">
             <div className="flex items-center gap-2 px-3">
-              {blogConfig.social.github && (
+              {githubUrl && (
                 <a
-                  href={blogConfig.social.github}
+                  href={githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg text-[var(--klu-text-muted)] hover:text-[var(--klu-text-primary)] hover:bg-[var(--klu-bg-tertiary)] transition-all"
@@ -194,9 +197,9 @@ function Sidebar({
                   <Github size={18} />
                 </a>
               )}
-              {blogConfig.social.email && (
+              {emailUrl && (
                 <a
-                  href={`mailto:${blogConfig.social.email}`}
+                  href={`mailto:${emailUrl}`}
                   className="p-2 rounded-lg text-[var(--klu-text-muted)] hover:text-[var(--klu-text-primary)] hover:bg-[var(--klu-bg-tertiary)] transition-all"
                   aria-label="Email"
                 >

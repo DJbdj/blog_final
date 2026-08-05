@@ -228,23 +228,23 @@ describe("PostService", () => {
       await PostService.findPostBySlug(adminContext, { slug: "version-test" });
       await waitForBackgroundTasks(adminContext.executionCtx);
 
-      // Get current version (implicit v1 before any bump)
+      // Get current version (implicit v0 before any bump)
       const oldVersion = await CacheService.getVersion(
         adminContext,
         "posts:detail",
       );
-      expect(oldVersion).toBe("v1");
+      expect(oldVersion).toBe("v0");
 
-      // Bump version twice to go from implicit v1 -> v1 (stored) -> v2
-      await CacheService.bumpVersion(adminContext, "posts:detail");
+      // Bump version to generate a new random generation token
       await CacheService.bumpVersion(adminContext, "posts:detail");
 
-      // Verify version changed
+      // Verify version changed to a new v<generation> token
       const newVersion = await CacheService.getVersion(
         adminContext,
         "posts:detail",
       );
-      expect(newVersion).toBe("v2");
+      expect(newVersion).not.toBe(oldVersion);
+      expect(newVersion).toMatch(/^v[0-9a-f-]+$/i);
 
       // New cache key doesn't exist yet (old one is stale)
       const newCacheKey = `${newVersion}:post:version-test`;
@@ -258,8 +258,8 @@ describe("PostService", () => {
         adminContext,
         "posts:detail",
       );
-      // Should be v1 since each test has isolated storage
-      expect(version).toBe("v1");
+      // Should be v0 since each test has isolated storage and no bump occurred
+      expect(version).toBe("v0");
     });
   });
 

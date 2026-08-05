@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { blogConfig } from "@/blog.config";
 
+const githubUrl = blogConfig.social.find((s) => s.platform === "github")?.url;
+const emailUrl = blogConfig.social.find((s) => s.platform === "email")?.url;
+
 interface FooterProps {
   navOptions: Array<{ label: string; to: string; id: string }>;
 }
@@ -27,9 +30,9 @@ export function Footer({ navOptions }: FooterProps) {
         <div className="zlu-footer-section">
           <h4>链接</h4>
           <div className="zlu-footer-links">
-            {blogConfig.social.github && (
+            {githubUrl && (
               <a
-                href={blogConfig.social.github}
+                href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="zlu-footer-link"
@@ -37,8 +40,8 @@ export function Footer({ navOptions }: FooterProps) {
                 GitHub
               </a>
             )}
-            {blogConfig.social.email && (
-              <a href={`mailto:${blogConfig.social.email}`} className="zlu-footer-link">
+            {emailUrl && (
+              <a href={`mailto:${emailUrl}`} className="zlu-footer-link">
                 Email
               </a>
             )}

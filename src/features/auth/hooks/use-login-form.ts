@@ -38,6 +38,8 @@ export function useLoginForm(options: UseLoginFormOptions) {
   const [loginStep, setLoginStep] = useState<"IDLE" | "VERIFYING" | "SUCCESS">(
     "IDLE",
   );
+  const [rootError, setRootError] = useState<string | undefined>(undefined);
+  const [isUnverifiedEmail, setIsUnverifiedEmail] = useState(false);
 
   const navigate = useNavigate();
   const previousLocation = usePreviousLocation();
@@ -99,9 +101,13 @@ export function useLoginForm(options: UseLoginFormOptions) {
       const description =
         getLoginAuthErrorMessage(error, m) ?? m.auth_error_default_desc();
 
+      const unverified = isEmailNotVerifiedError(error);
+      setRootError(description);
+      setIsUnverifiedEmail(unverified);
+
       toast.error(m.login_error_default(), {
         description,
-        action: isEmailNotVerifiedError(error)
+        action: unverified
           ? {
               label: m.login_resend_verification(),
               onClick: () => {
@@ -113,6 +119,8 @@ export function useLoginForm(options: UseLoginFormOptions) {
       return;
     }
 
+    setRootError(undefined);
+    setIsUnverifiedEmail(false);
     queryClient.removeQueries({ queryKey: AUTH_KEYS.session });
     setLoginStep("SUCCESS");
 
@@ -169,6 +177,9 @@ export function useLoginForm(options: UseLoginFormOptions) {
     loginStep,
     isSubmitting: form.formState.isSubmitting,
     loginSchema,
+    rootError,
+    isUnverifiedEmail,
+    handleResendVerification,
   };
 }
 

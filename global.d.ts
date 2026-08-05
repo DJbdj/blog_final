@@ -1,5 +1,6 @@
 import type { OAuthHelpers } from "@cloudflare/workers-oauth-provider";
 import type { DB as DBType } from "@/lib/db";
+import type { Locale } from "@/lib/i18n";
 import type {
   Auth as AuthType,
   Session as SessionType,
@@ -33,14 +34,14 @@ declare global {
     taskId: string;
     postIds?: Array<number>;
     status?: "draft" | "published";
-    locale?: "zh" | "en";
+    locale?: Locale;
   }
 
   interface ImportWorkflowParams {
     taskId: string;
     r2Key: string;
     mode: "native" | "markdown";
-    locale?: "zh" | "en";
+    locale?: Locale;
   }
 
   interface Env extends Cloudflare.Env {

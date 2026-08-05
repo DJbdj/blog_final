@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Loader2, Send, Bold, Italic, Link as LinkIcon } from "lucide-react";
 import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import type { JSONContent } from "@tiptap/react";
-import { commentExtensions } from "@/features/comments/components/editor/config";
+import { getCommentExtensions } from "@/features/comments/components/editor/config";
 
 interface CommentEditorProps {
   onSubmit: (content: JSONContent) => Promise<void>;
@@ -20,7 +20,7 @@ export function KluCommentEditor({
   const [isFocused, setIsFocused] = useState(false);
 
   const editor = useEditor({
-    extensions: commentExtensions,
+    extensions: getCommentExtensions(),
     content: "",
     autofocus: autoFocus ? "end" : false,
     editorProps: {

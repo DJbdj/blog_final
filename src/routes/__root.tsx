@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import theme from "@theme";
+import type { ThemeComponents } from "@/features/theme/contract/components";
 import { ThemeProvider } from "@/components/common/theme-provider";
 import { siteConfigQuery } from "@/features/config/queries";
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
@@ -119,7 +120,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html
       lang={locale}
       suppressHydrationWarning
-      style={theme.getDocumentStyle?.(siteConfig)}
+      style={(theme as ThemeComponents).getDocumentStyle?.(siteConfig)}
     >
       <head>
         <HeadContent />

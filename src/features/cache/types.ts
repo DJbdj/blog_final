@@ -6,6 +6,7 @@ export const CACHE_NAMESPACES = {
   POSTS_LIST: "posts:list",
   POSTS_DETAIL: "posts:detail",
   POSTS_PINNED: "posts:pinned",
+  POSTS_ARCHIVE: "posts:archive",
   FRIEND_LINKS_LIST: "friend-links:list",
 } as const;
 

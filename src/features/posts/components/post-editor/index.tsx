@@ -37,7 +37,9 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
   }));
 
   // Track imported markdown content
-  const [importedMarkdown, setImportedMarkdown] = useState<string | null>(null);
+  const [importedMarkdown, setImportedMarkdown] = useState<
+    JSONContent | string | null
+  >(null);
 
   // Sync state when initialData updates (e.g. after background refetch/invalidation)
   const [prevInitialDataId, setPrevInitialDataId] = useState(initialData.id);
@@ -117,7 +119,7 @@ export function PostEditor({ initialData, onSave }: PostEditorProps) {
     setPost((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const handleMarkdownImport = useCallback((content: string, fileName?: string) => {
+  const handleMarkdownImport = useCallback((content: JSONContent | string, _fileName?: string) => {
     // Store imported markdown to trigger editor re-render with new content
     setImportedMarkdown(content);
     // Force editor re-render

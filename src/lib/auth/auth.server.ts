@@ -1,3 +1,5 @@
+import { createAuthMiddleware } from "@better-auth/core/api";
+import { APIError } from "@better-auth/core/error";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -58,6 +60,23 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         clientSecret: GITHUB_CLIENT_SECRET,
       },
     },
+    hooks: {
+      before: createAuthMiddleware(async (ctx) => {
+        if (ctx.path !== "/sign-up/email") return;
+
+        const email =
+          typeof ctx.body?.email === "string" ? ctx.body.email.trim() : "";
+        if (!email) return;
+
+        const allowed = await checkEmailRateLimit(env, "email-signup", email);
+        if (allowed) return;
+
+        throw APIError.from("BAD_REQUEST", {
+          code: "RATE_LIMITED",
+          message: "Too many sign up attempts",
+        });
+      }),
+    },
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
@@ -65,22 +84,6 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
         hash: (password: string) => getPasswordHasher().hash(password),
         verify: (params: { hash: string; password: string }) =>
           getPasswordHasher().verify(params),
-      },
-      // 发送验证邮件
-      sendVerificationEmail: async ({ user, url }) => {
-        const locale = getAuthEmailLocale();
-        const emailHtml = renderToStaticMarkup(
-          AuthEmail({ locale, type: "verify-email", url }),
-        );
-
-        await env.QUEUE.send({
-          type: "EMAIL",
-          data: {
-            to: user.email,
-            subject: m.email_auth_verification_subject({}, { locale }),
-            html: emailHtml,
-          },
-        });
       },
       sendResetPassword: async ({ user, url }) => {
         // Per-email rate limit: 3 per hour — silently skip if exceeded
@@ -101,6 +104,24 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
           data: {
             to: user.email,
             subject: m.email_auth_reset_subject({}, { locale }),
+            html: emailHtml,
+          },
+        });
+      },
+    },
+    emailVerification: {
+      // 发送验证邮件
+      sendVerificationEmail: async ({ user, url }) => {
+        const locale = getAuthEmailLocale();
+        const emailHtml = renderToStaticMarkup(
+          AuthEmail({ locale, type: "verify-email", url }),
+        );
+
+        await env.QUEUE.send({
+          type: "EMAIL",
+          data: {
+            to: user.email,
+            subject: m.email_auth_verification_subject({}, { locale }),
             html: emailHtml,
           },
         });

@@ -91,8 +91,8 @@ function PostsSidebar({
   posts,
 }: {
   tags: any[];
-  selectedTag: string;
-  onTagClick: (tag: string) => void;
+  selectedTag?: string;
+  onTagClick: (tag?: string) => void;
   posts: any[];
 }) {
   const { setContent } = useRightSidebar();

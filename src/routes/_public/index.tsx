@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import theme from "@theme";
 import { siteDomainQuery } from "@/features/config/queries";
 import { pinnedPostsQuery, archivePostsQuery } from "@/features/posts/queries";
+import type { ArchivePost } from "@/features/theme/contract/pages/home";
 import { tagsQueryOptions } from "@/features/tags/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 
@@ -44,7 +45,7 @@ function HomeRoute() {
 
   // 首页只展示置顶文章
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <theme.HomePage posts={safePinnedPosts} tags={safeTags as any} archivePosts={safeArchivePosts} />;
+  return <theme.HomePage posts={safePinnedPosts} tags={safeTags as any} archivePosts={safeArchivePosts as ArchivePost[]} />;
 }
 
 function HomePageSkeleton() {

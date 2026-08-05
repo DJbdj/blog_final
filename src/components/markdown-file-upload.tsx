@@ -1,11 +1,12 @@
 import { useCallback, useRef, useState } from "react";
 import { Upload, FileText, X, Loader2 } from "lucide-react";
+import type { JSONContent } from "@tiptap/react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { uploadMarkdownFn } from "@/features/posts/api/posts.admin.api";
 
 interface MarkdownFileUploadProps {
-  onContentLoad: (content: string, fileName?: string) => void;
+  onContentLoad: (content: JSONContent | string, fileName?: string) => void;
   disabled?: boolean;
 }
 

@@ -2,3 +2,5 @@
 @import "./styles/shared.css";
 @import "tw-animate-css";
 @import "./features/theme/themes/zlu/styles/index.css";
+
+@source not "../dist/**/*";

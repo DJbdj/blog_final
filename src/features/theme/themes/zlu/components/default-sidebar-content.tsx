@@ -1,11 +1,9 @@
 "use client";
 
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Megaphone, TrendingUp, Tag, ChevronRight } from "lucide-react";
 import { useRightSidebar } from "@/features/theme/themes/zlu/contexts/right-sidebar-context";
-import type { PostPageProps } from "@/features/theme/contract/pages";
-import { formatDate } from "@/lib/utils";
 
 // 默认公告内容
 function NoticeCard() {

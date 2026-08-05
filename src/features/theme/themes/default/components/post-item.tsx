@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { ClientOnly, Link } from "@tanstack/react-router";
 import { memo } from "react";
 import type { PostItem as PostItemType } from "@/features/posts/schema/posts.schema";
 import { formatDate } from "@/lib/utils";
@@ -22,7 +22,9 @@ export const PostItem = memo(({ post }: PostItemProps) => {
               dateTime={post.publishedAt?.toISOString()}
               className="whitespace-nowrap"
             >
-              {formatDate(post.publishedAt)}
+              <ClientOnly fallback="-">
+                {formatDate(post.publishedAt)}
+              </ClientOnly>
             </time>
             {post.tags && post.tags.length > 0 && (
               <>

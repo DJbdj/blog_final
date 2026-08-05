@@ -14,11 +14,13 @@ export interface LoginFormData {
   isSubmitting: boolean;
   turnstileProps: TurnstileProps;
   turnstilePending: boolean;
+  rootError?: string;
+  isUnverifiedEmail?: boolean;
+  handleResendVerification?: () => Promise<void>;
 }
 
 export interface SocialLoginData {
   isLoading: boolean;
-  turnstilePending: boolean;
   handleGithubLogin: () => Promise<void>;
 }
 

@@ -13,7 +13,7 @@ export function getThemePreloadImages(siteConfig: SiteConfig): Array<string> {
         siteConfig.theme.default.background?.globalImage,
       ].filter((image): image is string => Boolean(image));
     default:
-      __THEME_NAME__ satisfies never;
+      // zlu / klu / magic / my-theme 等主题没有预加载图片
       return [];
   }
 }

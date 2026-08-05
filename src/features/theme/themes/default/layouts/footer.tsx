@@ -1,4 +1,4 @@
-import { Link, useRouteContext } from "@tanstack/react-router";
+import { ClientOnly, Link, useRouteContext } from "@tanstack/react-router";
 import type { NavOption } from "@/features/theme/contract/layouts";
 import { m } from "@/paraglide/messages";
 
@@ -8,6 +8,8 @@ interface FooterProps {
 
 export function Footer({ navOptions }: FooterProps) {
   const { siteConfig } = useRouteContext({ from: "__root__" });
+  const githubUrl = siteConfig.social.find((s) => s.platform === "github")?.url;
+  const emailUrl = siteConfig.social.find((s) => s.platform === "email")?.url;
 
   return (
     <footer className="border-t border-border/40 bg-background/50 py-16 mt-32">
@@ -18,10 +20,12 @@ export function Footer({ navOptions }: FooterProps) {
             [ {siteConfig.theme.default.navBarName} ]
           </span>
           <span className="font-mono text-[10px] text-muted-foreground tracking-widest uppercase">
-            {m.footer_copyright({
-              year: new Date().getFullYear().toString(),
-              author: siteConfig.author,
-            })}
+            <ClientOnly fallback="-">
+              {m.footer_copyright({
+                year: new Date().getFullYear().toString(),
+                author: siteConfig.author,
+              })}
+            </ClientOnly>
           </span>
         </div>
 
@@ -37,7 +41,7 @@ export function Footer({ navOptions }: FooterProps) {
             </Link>
           ))}
           <a
-            href={siteConfig.social.github}
+            href={githubUrl}
             target="_blank"
             rel="noreferrer"
             className="hover:text-foreground transition-colors"
@@ -45,7 +49,7 @@ export function Footer({ navOptions }: FooterProps) {
             Github
           </a>
           <a
-            href={`mailto:${siteConfig.social.email}`}
+            href={`mailto:${emailUrl}`}
             className="hover:text-foreground transition-colors"
           >
             Email

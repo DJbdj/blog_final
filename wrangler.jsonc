@@ -40,6 +40,11 @@
       "id": "3e6e9b2beca2452d9b539d2ff1359e91",
       "remote": true
     },
+    {
+      "binding": "OAUTH_KV",
+      "id": "3e6e9b2beca2452d9b539d2ff1359e91",
+      "remote": true
+    },
   ],
   "workflows": [
     {
@@ -127,6 +132,9 @@
       "kv_namespaces": [
         {
           "binding": "KV",
+        },
+        {
+          "binding": "OAUTH_KV",
         },
       ],
       "r2_buckets": [

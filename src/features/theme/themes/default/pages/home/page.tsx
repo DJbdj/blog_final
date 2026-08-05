@@ -7,6 +7,8 @@ import { m } from "@/paraglide/messages";
 export function HomePage({ posts, tags: _tags }: HomePageProps) {
   // Note: tags parameter is available but not used in this theme
   const { siteConfig } = useRouteContext({ from: "__root__" });
+  const githubUrl = siteConfig.social.find((s) => s.platform === "github")?.url;
+  const emailUrl = siteConfig.social.find((s) => s.platform === "email")?.url;
 
   return (
     <div className="flex flex-col w-full max-w-3xl mx-auto px-6 md:px-0 py-12 md:py-20 space-y-20">
@@ -32,7 +34,7 @@ export function HomePage({ posts, tags: _tags }: HomePageProps) {
 
         <div className="flex items-center gap-6 text-muted-foreground">
           <a
-            href={siteConfig.social.github}
+            href={githubUrl}
             target="_blank"
             rel="noreferrer"
             className="hover:text-foreground transition-colors"
@@ -50,7 +52,7 @@ export function HomePage({ posts, tags: _tags }: HomePageProps) {
             <Rss size={20} strokeWidth={1.5} />
           </a>
           <a
-            href={`mailto:${siteConfig.social.email}`}
+            href={`mailto:${emailUrl}`}
             className="hover:text-foreground transition-colors"
             aria-label={m.send_email()}
           >

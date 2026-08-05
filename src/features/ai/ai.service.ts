@@ -39,7 +39,7 @@ export async function moderateComment(
     };
   },
 ): Promise<ModerationResult> {
-  const workersAI = createWorkersAI({ binding: context.env.AI });
+  const workersAI = createWorkersAI({ binding: context.env.AI as Ai });
 
   const result = await generateText({
     model: workersAI(TEXT_MODEL),
@@ -98,7 +98,7 @@ ${content.comment}
 }
 
 export async function summarizeText(context: { env: Env }, text: string) {
-  const workersAI = createWorkersAI({ binding: context.env.AI });
+  const workersAI = createWorkersAI({ binding: context.env.AI as Ai });
 
   const result = await generateText({
     model: workersAI(TEXT_MODEL),
@@ -138,7 +138,7 @@ export async function generateTags(
   },
   existingTags: Array<string> = [],
 ) {
-  const workersAI = createWorkersAI({ binding: context.env.AI });
+  const workersAI = createWorkersAI({ binding: context.env.AI as Ai });
 
   const result = await generateText({
     model: workersAI(TEXT_MODEL),

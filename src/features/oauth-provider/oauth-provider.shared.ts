@@ -51,6 +51,18 @@ export const OAUTH_DEFAULT_CLIENT_SCOPES: OAuthScope[] = [
   ...flattenBlogScopes(OAUTH_DEFAULT_BLOG_SCOPE_SELECTION),
 ];
 
+export function resolveOAuthRequestedScopes(
+  scopes: readonly string[] | null | undefined,
+): OAuthScope[] {
+  if (scopes == null) {
+    return [...OAUTH_DEFAULT_CLIENT_SCOPES];
+  }
+
+  return scopes.filter((scope): scope is OAuthScope =>
+    OAUTH_PROVIDER_SCOPES.includes(scope as OAuthScope),
+  );
+}
+
 export function getOAuthAuthorizationServerUrl(baseURL: string) {
   return new URL(baseURL).origin;
 }

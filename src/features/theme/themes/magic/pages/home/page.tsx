@@ -3,6 +3,9 @@ import { Mail, Rss, ArrowRight, Calendar, Tag, Eye } from "lucide-react";
 import { Github as GithubIcon } from "lucide-react";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { blogConfig } from "@/blog.config";
+
+const githubUrl = blogConfig.social.find((s) => s.platform === "github")?.url;
+const emailUrl = blogConfig.social.find((s) => s.platform === "email")?.url;
 import { formatDate } from "@/lib/utils";
 
 function PostCard({ post, featured = false }: { post: any; featured?: boolean }) {
@@ -140,7 +143,7 @@ export function HomePage({ posts, tags: _tags }: HomePageProps) {
       <section className="text-center py-8 border-t border-border mt-16">
         <div className="flex items-center justify-center gap-6">
           <a
-            href={blogConfig.social.github}
+            href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
@@ -158,7 +161,7 @@ export function HomePage({ posts, tags: _tags }: HomePageProps) {
             <Rss size={20} />
           </a>
           <a
-            href={`mailto:${blogConfig.social.email}`}
+            href={`mailto:${emailUrl}`}
             className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
             aria-label="Email"
           >

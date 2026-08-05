@@ -1,5 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { serverEnv } from "@/lib/env/server.env";
 
 declare global {
   interface KVNamespace {
@@ -49,7 +48,9 @@ export const getRandomCoverImageFn = createServerFn({ method: "GET" })
         { headers: { Authorization: apiKey } }
       );
       if (!searchResponse.ok) return null;
-      const searchData = await searchResponse.json();
+      const searchData = (await searchResponse.json()) as {
+        photos?: Array<{ src: { large: string; landscape: string }; url: string; photographer: string }>;
+      };
       if (!searchData.photos || searchData.photos.length === 0) return null;
       const photo = searchData.photos[Math.floor(Math.random() * searchData.photos.length)];
       const result = {
@@ -63,7 +64,9 @@ export const getRandomCoverImageFn = createServerFn({ method: "GET" })
       return result;
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      photos?: Array<{ src: { large: string; landscape: string }; url: string; photographer: string }>;
+    };
     const photos = data.photos;
 
     if (!photos || photos.length === 0) return null;

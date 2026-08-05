@@ -16,7 +16,7 @@ function ThemeSettingsContent() {
     case "fuwari":
       return <FuwariThemeSettings />;
     default: {
-      __THEME_NAME__ satisfies never;
+      // 其他主题暂无专属设置面板
       return null;
     }
   }

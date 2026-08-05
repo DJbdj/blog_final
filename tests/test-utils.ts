@@ -124,7 +124,9 @@ export function createTestContext(
     ReturnType<Env["POST_AUTO_SNAPSHOT_WORKFLOW"]["createBatch"]>
   >);
 
-  vi.spyOn(context.env.QUEUE, "send").mockResolvedValue();
+  vi.spyOn(context.env.QUEUE, "send").mockResolvedValue(
+    {} as Awaited<ReturnType<Env["QUEUE"]["send"]>>,
+  );
 
   vi.spyOn(context.env.SCHEDULED_PUBLISH_WORKFLOW, "get").mockResolvedValue({
     ...mockWorkflowInstance,

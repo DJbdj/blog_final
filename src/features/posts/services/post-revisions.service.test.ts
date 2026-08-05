@@ -64,6 +64,7 @@ describe("PostRevisionService", () => {
       summary: "Snapshot summary",
       slug: "versioned-post",
       status: "draft",
+      pinnedAt: null,
       publishedAt: null,
       readTimeInMinutes: 3,
       contentJson: {
@@ -401,6 +402,7 @@ describe("PostRevisionService", () => {
       summary: "Before workflow",
       slug: "published-revision",
       status: "published",
+      pinnedAt: null,
       publishedAt: publishedAt.toISOString(),
       readTimeInMinutes: 1,
       contentJson: {

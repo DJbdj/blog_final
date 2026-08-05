@@ -16,6 +16,7 @@ export interface PostRevisionSnapshot {
   summary: string | null;
   slug: string;
   status: PostStatus;
+  pinnedAt: string | null;
   publishedAt: string | null;
   readTimeInMinutes: number;
   contentJson: JSONContent | null;

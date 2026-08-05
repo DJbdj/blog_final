@@ -1,5 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { serverEnv } from "@/lib/env/server.env";
 
 declare global {
   interface KVNamespace {
@@ -47,7 +46,9 @@ export const getLandscapeImageFn = createServerFn({ method: "GET" })
       return null;
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      photos?: Array<{ src: { landscape: string }; url: string; photographer: string }>;
+    };
     const photos = data.photos;
 
     if (!photos || photos.length === 0) return null;

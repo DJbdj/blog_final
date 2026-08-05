@@ -574,7 +574,7 @@ export async function getArchivePosts(db: DB) {
     }));
   }
 
-  return posts;
+  return posts.map((post) => ({ ...post, tags: [] }));
 }
 
 /**

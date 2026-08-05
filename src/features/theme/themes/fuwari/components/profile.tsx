@@ -4,6 +4,8 @@ import { m } from "@/paraglide/messages";
 
 export function Profile() {
   const { siteConfig } = useRouteContext({ from: "__root__" });
+  const githubUrl = siteConfig.social.find((s) => s.platform === "github")?.url;
+  const emailUrl = siteConfig.social.find((s) => s.platform === "email")?.url;
 
   return (
     <div className="fuwari-card-base p-4">
@@ -32,7 +34,7 @@ export function Profile() {
         </div>
         <div className="flex flex-wrap gap-2 justify-center">
           <a
-            href={siteConfig.social.github}
+            href={githubUrl}
             target="_blank"
             rel="me noreferrer"
             aria-label="GitHub"
@@ -50,7 +52,7 @@ export function Profile() {
             <Rss size={20} strokeWidth={1.5} />
           </a>
           <a
-            href={`mailto:${siteConfig.social.email}`}
+            href={`mailto:${emailUrl}`}
             aria-label="Email"
             className="fuwari-btn-regular rounded-lg h-10 w-10 active:scale-90 hover:text-(--fuwari-primary) transition-colors"
           >

@@ -14,7 +14,7 @@ const coercedDate = z.union([z.date(), z.string().pipe(z.coerce.date())]);
 const coercedDateNullable = coercedDate.nullable();
 
 export const PostSelectSchema = createSelectSchema(PostsTable, {
-  publishedAt: coercedDate,
+  publishedAt: coercedDateNullable,
   createdAt: coercedDate,
   updatedAt: coercedDate,
   pinnedAt: coercedDateNullable,
@@ -42,7 +42,7 @@ export const PostListResponseSchema = z.object({
 });
 export const PostWithTocSchema = PostSelectSchema.extend({
   tags: z.array(TagSelectSchema).optional(),
-  contentJson: NullableJsonContentSchema.optional(),
+  contentJson: NullableJsonContentSchema,
   coverImage: z.string().nullable().optional(),
   toc: z.array(
     z.object({
@@ -53,10 +53,21 @@ export const PostWithTocSchema = PostSelectSchema.extend({
   ),
 }).nullable();
 
+export function normalizePostTagName(
+  tagName: string | undefined,
+): string | undefined {
+  return tagName === "" ? undefined : tagName;
+}
+
+export const PostTagNameSchema = z
+  .string()
+  .transform(normalizePostTagName)
+  .optional();
+
 export const GetPostsCursorInputSchema = z.object({
   cursor: z.number().optional(),
   limit: z.number().optional(),
-  tagName: z.string().optional(),
+  tagName: PostTagNameSchema,
 });
 
 export const FindPostBySlugInputSchema = z.object({
@@ -103,8 +114,8 @@ export const UpdatePostInputSchema = z.object({
 
 export const DeletePostInputSchema = z.object({ id: z.number() });
 
-export const PreviewSummaryInputSchema = PostSelectSchema.pick({
-  contentJson: true,
+export const PreviewSummaryInputSchema = z.object({
+  contentJson: NullableJsonContentSchema,
 });
 
 export const StartPostProcessInputSchema = z.object({
@@ -131,8 +142,10 @@ export type PostItem = z.infer<typeof PostItemSchema>;
 export type PostWithToc = z.infer<typeof PostWithTocSchema>;
 
 export const POSTS_CACHE_KEYS = {
-  list: (version: string, limit: number, cursor: number, tagName: string) =>
-    ["posts", "list", version, limit, cursor, tagName] as const,
+  list: (version: string, limit: number, cursor: number, tagName?: string) =>
+    tagName === undefined
+      ? (["posts", "list", version, limit, cursor, "all"] as const)
+      : (["posts", "list", version, limit, cursor, "tag", tagName] as const),
   detail: (version: string, slug: string) => [version, "post", slug] as const,
   related: (slug: string, limit?: number) =>
     ["posts", "related-ids", slug, limit] as const,

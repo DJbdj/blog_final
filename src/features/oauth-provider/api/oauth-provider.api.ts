@@ -6,7 +6,10 @@ import {
   GetOAuthClientMetadataInputSchema,
   OAuthScopeListSchema,
 } from "../../oauth-clients/schema/oauth-client.schema";
-import { OAUTH_PROVIDER_CONSENT_PAGE } from "../oauth-provider.shared";
+import {
+  OAUTH_PROVIDER_CONSENT_PAGE,
+  resolveOAuthRequestedScopes,
+} from "../oauth-provider.shared";
 
 const CompleteOAuthConsentInputSchema = z.object({
   accept: z.boolean(),
@@ -35,6 +38,9 @@ export const completeOAuthConsentFn = createServerFn({
   .handler(async ({ context, data }) => {
     const { getOAuthHelpers } = await import("../oauth-provider.config");
     const oauth = getOAuthHelpers(context.env);
+    const grantedScopes = data.accept
+      ? resolveOAuthRequestedScopes(data.scope)
+      : [];
     const consentUrl = new URL(
       `${OAUTH_PROVIDER_CONSENT_PAGE}?${data.oauthQuery}`,
       serverEnv(context.env).BETTER_AUTH_URL,
@@ -58,12 +64,12 @@ export const completeOAuthConsentFn = createServerFn({
       },
       props: {
         clientId: request.clientId,
-        scopes: data.scope,
+        scopes: grantedScopes,
         subject: context.session.user.id,
         userId: context.session.user.id,
       },
       request,
-      scope: data.scope,
+      scope: grantedScopes,
       userId: context.session.user.id,
     });
   });

@@ -58,6 +58,9 @@ export interface ThemeComponents {
   /** 搜索页组件 */
   SearchPage: React.ComponentType<SearchPageProps>;
 
+  /** 搜索页骨架屏（可选） */
+  SearchPageSkeleton?: React.ComponentType;
+
   /** 提交友链页组件 */
   SubmitFriendLinkPage: React.ComponentType<SubmitFriendLinkPageProps>;
 

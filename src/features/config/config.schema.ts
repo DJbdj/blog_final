@@ -55,7 +55,7 @@ export type {
   SiteConfigInput,
 } from "@/features/config/site-config.schema";
 
-export const DEFAULT_CONFIG: SystemConfig = {
+export const DEFAULT_CONFIG = {
   email: {
     host: "",
     port: 465,
@@ -77,7 +77,7 @@ export const DEFAULT_CONFIG: SystemConfig = {
     webhooks: [],
   },
   site: blogConfig satisfies SiteConfigInput,
-};
+} satisfies SystemConfig;
 
 export const CONFIG_CACHE_KEYS = {
   system: ["system"] as const,

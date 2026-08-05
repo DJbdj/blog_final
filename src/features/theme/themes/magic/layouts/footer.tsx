@@ -2,6 +2,9 @@ import { Link } from "@tanstack/react-router";
 import type { NavOption } from "@/features/theme/contract/layouts";
 import { blogConfig } from "@/blog.config";
 
+const githubUrl = blogConfig.social.find((s) => s.platform === "github")?.url;
+const emailUrl = blogConfig.social.find((s) => s.platform === "email")?.url;
+
 interface FooterProps {
   navOptions: Array<NavOption>;
 }
@@ -31,7 +34,7 @@ export function Footer({ navOptions }: FooterProps) {
               </Link>
             ))}
             <a
-              href={blogConfig.social.github}
+              href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
@@ -39,7 +42,7 @@ export function Footer({ navOptions }: FooterProps) {
               GitHub
             </a>
             <a
-              href={`mailto:${blogConfig.social.email}`}
+              href={`mailto:${emailUrl}`}
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Email
